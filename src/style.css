@@ -23,10 +23,11 @@ body {
   height: 100%;
 }
 
-/*#app {*/
-/*  max-width: 1280px;*/
-/*  margin: 0 auto;*/
-/*}*/
+#app {
+  /*max-width: 1280px;*/
+  min-width: 100%;
+  /*margin: 0 auto;*/
+}
 
 @media (prefers-color-scheme: light) {
   :root {

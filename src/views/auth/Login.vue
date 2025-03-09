@@ -5,12 +5,12 @@
 <template>
   <div id="root" class="flex-grow flex items-center justify-center w-screen h-screen">
     <div class="w-full max-w-2xl p-4 md:p-8 bg-base-200 rounded-box shadow-lg">
-      <h1 class="text-3xl font-bold text-center">Đăng ký</h1>
+      <h1 class="text-3xl font-bold text-center">Đăng nhập</h1>
 
       <div class="text-center mt-2">
         <h3 class="text-base-content/80 text-sm">
-          Đã có tài khoản?
-          <a class="text-primary ms-1 hover:underline" href="">Đăng nhập</a>
+          Chưa có tài khoản?
+          <a class="text-primary hover:underline" href="">Đăng ký</a>
         </h3>
       </div>
 
@@ -34,31 +34,25 @@
           </label>
         </fieldset>
 
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend">Nhập lại mật khẩu</legend>
-          <label class="input w-full focus:outline-0">
-            <font-awesome-icon icon="fa-solid fa-key"/>
-            <input type="password" class="grow focus:outline-0" placeholder="Nhập lại mật khẩu"/>
-            <button class="btn btn-xs btn-ghost btn-circle">
-              <font-awesome-icon icon="fa-solid fa-eye"/>
-            </button>
-          </label>
-        </fieldset>
+        <div class="text-end mt-2">
+          <a class="label-text text-base-content/80 text-xs hover:underline" href="" data-discover="true">Quên mật
+            khẩu?</a>
+        </div>
 
-        <a class="btn btn-primary btn-wide max-w-full mt-4 md:mt-6">
-          Đăng ký
+        <a class="btn btn-primary btn-wide max-w-full mt-4 md:mt-6" href="/dashboard">
+          Đăng nhập
         </a>
       </div>
 
       <div class="divider">Hoặc</div>
 
       <button class="btn btn-neutral btn-wide max-w-full flex items-center justify-center gap-2">
-        <img class="size-6" alt="" src="../assets/brand-logo/google-color.svg">
+        <img class="size-6" alt="" src="../../assets/brand-logo/google-color.svg">
         Tiếp tục với Google
       </button>
 
       <button class="btn btn-neutral btn-wide max-w-full flex items-center justify-center gap-2 mt-2">
-        <img class="size-6" alt="" src="../assets/brand-logo/facebook-color.svg">
+        <img class="size-6" alt="" src="../../assets/brand-logo/facebook-color.svg">
         Tiếp tục với Facebook
       </button>
     </div>
