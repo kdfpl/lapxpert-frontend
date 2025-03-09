@@ -1,10 +1,10 @@
 <template>
-    <div class="h-screen bg-gray-400 flex gap-3">
+    <div class="h-screen bg-gray-300 flex">
       <!-- Sidebar cố định -->
-      <Sidebar class="rounded-lg p-4" />
+      <Sidebar class=" p-4" />
   
       <!-- Nội dung mở rộng -->
-      <div class="bg-gray-100 flex-grow p-4">
+      <div class="bg-gray-100 h-100vh  flex-grow px-2">
         <router-view />
       </div>
     </div>

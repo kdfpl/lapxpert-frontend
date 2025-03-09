@@ -3,11 +3,17 @@ import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import Profile from "../views/Profile.vue";
 import SanPham from "../views/SanPham.vue";
+import Ram from "../views/Ram.vue";
 const routes = [
     {
         path: '/',
         name: 'Home',
         component: Home,
+    },
+    {
+        path: '/ram',
+        name: 'Ram',
+        component: Ram,
     },
     {
         path: '/profile',

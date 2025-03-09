@@ -21,7 +21,7 @@ const menuItems = ref([
     link: "/san-pham",
     subItems: [
       { name: "Sản phẩm", link: "/san-pham" },
-      { name: "Ram", link: "#" },
+      { name: "Ram", link: "/ram" },
       { name: "Màn hình", link: "#" },
       { name: "CPU", link: "#" },
       { name: "GPU", link: "#" },
@@ -171,12 +171,12 @@ const toggleSubMenu = (index) => {
       </li>
     </ul>
 
-    <footer class="absolute bottom-4 cursor-pointer">
+    <footer class="text-red-500 cursor-pointer">
       <div
         class="flex items-center m-0 hover:bg-gray-300 border-0 rounded-2xl cursor-pointer"
         @click="toggleSubMenu(index)"
       >
-        <div class="border-r border-gray-800 p-4">
+        <div class="border-r border-red-500 p-4">
           <component :is="Power" class="w-6 h-6" />
         </div>
         <div
