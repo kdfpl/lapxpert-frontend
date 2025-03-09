@@ -15,6 +15,7 @@ import Disk from "../views/product/Disk.vue";
 import Display from "../views/product/Display.vue";
 import Color from "../views/product/Color.vue";
 import Profile from "../views/user/Profile.vue";
+import Saleoff from "../views/shop/Saleoff.vue";
 
 const routes = [
     {
@@ -46,6 +47,11 @@ const routes = [
                 path: '/invoice',
                 name: 'Invoice',
                 component: Invoice,
+            },
+            {
+                path: '/saleoff',
+                name: 'Saleoff',
+                component: Saleoff,
             },
             {
                 path: '/voucher',

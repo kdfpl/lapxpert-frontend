@@ -79,6 +79,14 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
                     </li>
 
                     <li>
+                      <RouterLink to="/saleoff"
+                         class="block rounded-lg px-4 py-2 text-sm font-medium  hover:bg-gray-100 hover:text-primary text-gray-700">
+                        <font-awesome-icon icon="fa-solid fa-ticket" class="size-5"/>
+                        Đợt giảm giá
+                      </RouterLink>
+                    </li>
+
+                    <li>
                       <RouterLink to="/voucher"
                          class="block rounded-lg px-4 py-2 text-sm font-medium  hover:bg-gray-100 hover:text-primary text-gray-700">
                         <font-awesome-icon icon="fa-solid fa-ticket" class="size-5"/>
