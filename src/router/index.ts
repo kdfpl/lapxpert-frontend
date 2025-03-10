@@ -16,6 +16,8 @@ import Display from "../views/product/Display.vue";
 import Color from "../views/product/Color.vue";
 import Profile from "../views/user/Profile.vue";
 import Saleoff from "../views/shop/Saleoff.vue";
+import AddProduct from "../views/product/AddProduct.vue";
+import DataDisplay from "../views/DataDisplay.vue";
 
 const routes = [
     {
@@ -23,6 +25,11 @@ const routes = [
         name: 'Dashboard',
         component: Dashboard,
         children: [
+            {
+                path: '/monitor',
+                name: 'Monitor',
+                component: DataDisplay,
+            },
             {
                 path: '/profile',
                 name: 'Profile',
@@ -62,6 +69,11 @@ const routes = [
                 path: '/product',
                 name: 'Product',
                 component: Product,
+            },
+            {
+                path: '/add-product',
+                name: 'AddProduct',
+                component: AddProduct,
             },
             {
                 path: '/cpu',
