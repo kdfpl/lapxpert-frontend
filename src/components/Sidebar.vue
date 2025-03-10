@@ -9,6 +9,8 @@ import {
   AlignJustify,
   ShoppingCart,
   Power,
+  SquarePercent ,
+  BookUser 
 } from "lucide-vue-next";
 
 // Danh sách menu
@@ -35,8 +37,8 @@ const menuItems = ref([
     icon: ContactRound,
     link: "#",
     subItems: [
-      { name: "Nhân viên", link: "#" },
-      { name: "Khách hàng", link: "#" },
+      { name: "Nhân viên", link: "/NhanVien" },
+      { name: "Khách hàng", link: "/KhachHang" },
     ],
   },
   {
@@ -47,6 +49,11 @@ const menuItems = ref([
       { name: "Hoá đơn", link: "#" },
       { name: "Giảm giá", link: "#" },
     ],
+  },
+  {
+    name: "Giảm giá",
+    icon: SquarePercent,
+    link: "/GiamGia"
   },
 ]);
 

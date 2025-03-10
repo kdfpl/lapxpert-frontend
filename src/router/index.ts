@@ -11,13 +11,31 @@ import gpu from "../views/list/gpu.vue";
 import oCung from "../views/list/oCung.vue";
 import pin from "../views/list/pin.vue";
 import color from "../views/list/color.vue";
+import GiamGia from "../views/GiamGia.vue";
+import KhachHang from "../views/KhachHang.vue";
+import NhanVien from "../views/NhanVien.vue";
 
 
 const routes = [
     {
+        path: '/GiamGia',
+        name: 'GiamGia',
+        component: GiamGia,
+    },
+    {
         path: '/',
         name: 'Home',
         component: Home,
+    },
+    {
+        path: '/KhachHang',
+        name: 'KhachHang',
+        component: KhachHang,
+    },
+    {
+        path: '/NhanVien',
+        name: 'NhanVien',
+        component: NhanVien,
     },
     {
         path: '/color',

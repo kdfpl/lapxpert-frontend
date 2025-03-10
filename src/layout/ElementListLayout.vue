@@ -38,7 +38,7 @@ const searchLength = computed(() => search.value.length);
         <input
           v-model="search"
           type="search"
-          class="w-full px-5 py-1 rounded-full bg-white text-gray-900 focus:outline-none"
+          class="w-full px-5 py-1 border-0 bg-white text-gray-900 focus:outline-none"
           placeholder="search"
         />
       </div>
