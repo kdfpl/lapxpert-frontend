@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @plugin "daisyui" {
-  themes: bumblebee --default, dim --prefersdark, cupcake, light, wireframe, nord, corporate;
+  themes: all;
 }
 
 :root {
@@ -40,4 +40,27 @@ body {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.sidebar a {
+  color: var(--color-base-content);
+}
+
+.sidebar summary {
+  color: var(--color-base-content);
+}
+
+.sidebar a.router-link-exact-active {
+  background-color: var(--color-primary);
+  color: var(--color-primary-content);
+  text-decoration: none;
+}
+
+.sidebar a.router-link-exact-active:hover {
+  color: var(--color-primary-content);
+}
+
+.sidebar a:hover {
+  color: var(--color-base-content);
+  text-decoration: none;
 }
