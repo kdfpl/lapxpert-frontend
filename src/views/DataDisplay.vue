@@ -14,7 +14,7 @@
                 <div class="mt-3 flex items-center gap-2">
                   <p class="text-2xl font-semibold">1.435.533.222</p>
                   <div class="badge badge-soft badge-success badge-sm gap-0.5 px-1 font-medium">
-                    <font-awesome-icon icon="fa-solid fa-angles-up"/>
+                    <span class="icon-[iconamoon--arrow-up-2-bold]"></span>
                     10.8%
                   </div>
                 </div>
@@ -36,7 +36,7 @@
                 <div class="mt-3 flex items-center gap-2">
                   <p class="text-2xl font-semibold">43.868</p>
                   <div class="badge badge-soft badge-success badge-sm gap-0.5 px-1 font-medium">
-                    <font-awesome-icon icon="fa-solid fa-angles-up"/>
+                    <span class="icon-[iconamoon--arrow-up-2-bold]"></span>
                     30.8%
                   </div>
                 </div>
@@ -58,7 +58,7 @@
                 <div class="mt-3 flex items-center gap-2">
                   <p class="text-2xl font-semibold">5.310</p>
                   <div class="badge badge-soft badge-success badge-sm gap-0.5 px-1 font-medium">
-                    <font-awesome-icon icon="fa-solid fa-angles-up"/>
+                    <span class="icon-[iconamoon--arrow-up-2-bold]"></span>
                     10.8%
                   </div>
                 </div>
@@ -80,7 +80,7 @@
                 <div class="mt-3 flex items-center gap-2">
                   <p class="text-2xl font-semibold">40.392</p>
                   <div class="badge badge-soft badge-success badge-sm gap-0.5 px-1 font-medium">
-                    <font-awesome-icon icon="fa-solid fa-angles-up"/>
+                    <span class="icon-[iconamoon--arrow-up-2-bold]"></span>
                     30.8%
                   </div>
                 </div>

@@ -4,9 +4,8 @@
 
 <template>
   <div id="root">
-    <div class="w-full min-h-[760px] flex flex-col items-center justify-end rounded-box shadow-lg z-0"
-         style="background-image: url('https://picsum.photos/1920/1080?grayscale')">
-      <div class="w-full h-[620px] flex flex-col items-center justify-center bg-base-100 rounded-box shadow-2xl">
+    <div class="w-full min-h-[760px] flex flex-col">
+      <div class="w-full min-h-[760px] flex flex-col items-center justify-center bg-base-100 rounded-box shadow-2xl">
         <div class="flex items-center justify-between w-full px-10 mt-10 gap-50">
           <div class="join grow">
             <input class="input focus:border-0 join-item w-full bg-base-300" placeholder="Cpu...">
