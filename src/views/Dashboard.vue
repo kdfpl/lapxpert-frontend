@@ -8,7 +8,7 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
     <div class="size-full">
       <div class="flex">
         <!--sidebar-->
-        <div class="flex h-screen w-80 flex-col justify-between border-e border-base-100 bg-base-100 shadow-lg sidebar">
+        <div class="flex h-screen w-80 flex-col justify-between border-e border-base-100 bg-base-100 shadow-2xl sidebar">
           <div class="px-4 py-6">
             <a class="grid h-16 w-full place-content-center rounded-lg" href="/dashboard" data-discover="true">
               <img src="../assets/brand-logo/lapxpert-logo.png" alt="">
