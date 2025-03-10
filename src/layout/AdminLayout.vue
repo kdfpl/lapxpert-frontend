@@ -4,7 +4,7 @@
       <Sidebar class=" p-4" />
   
       <!-- Nội dung mở rộng -->
-      <div class="bg-gray-100 h-100vh  flex-grow px-2">
+      <div class="bg-gray-100 h-fit h-full   flex-grow px-2">
         <router-view />
       </div>
     </div>

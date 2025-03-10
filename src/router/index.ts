@@ -3,7 +3,16 @@ import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import Profile from "../views/Profile.vue";
 import SanPham from "../views/SanPham.vue";
-import Ram from "../views/Ram.vue";
+import RamCRUD from "../views/crud/RamCRUD.vue";
+import Ram from "../views/list/Ram.vue";
+import ManHInh from "../views/list/ManHInh.vue";
+import CPU from "../views/list/cpu.vue";
+import gpu from "../views/list/gpu.vue";
+import oCung from "../views/list/oCung.vue";
+import pin from "../views/list/pin.vue";
+import color from "../views/list/color.vue";
+
+
 const routes = [
     {
         path: '/',
@@ -11,9 +20,44 @@ const routes = [
         component: Home,
     },
     {
+        path: '/color',
+        name: 'color',
+        component: color,
+    },
+    {
+        path: '/pin',
+        name: 'pin',
+        component: pin,
+    },
+    {
+        path: '/oCung',
+        name: 'oCung',
+        component: oCung,
+    },
+    {
+        path: '/gpu',
+        name: 'gpu',
+        component: gpu,
+    },
+    {
         path: '/ram',
         name: 'Ram',
         component: Ram,
+    },
+    {
+        path: '/RamCRUD',
+        name: 'RamCRUD',
+        component: RamCRUD,
+    },
+    {
+        path: '/cpu',
+        name: 'CPU',
+        component: CPU,
+    },
+    {
+        path: '/manHInh',
+        name: 'ManHInh',
+        component: ManHInh,
     },
     {
         path: '/profile',

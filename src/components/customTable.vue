@@ -1,17 +1,21 @@
 <script setup>
-import { ref, computed, defineProps, watch } from "vue";
+import { ref, computed, defineProps, watch, defineEmits } from "vue";
 
 // Nhận props
 const props = defineProps({
   headers: { type: Array, required: true },
   data: { type: Array, required: true },
+  func: { type: Function, required: false },
+  rowHeight: { type: String, default: "h-24" }, 
 });
+
+const emit = defineEmits(["row-click", "add-row"]);
 
 // Trạng thái
 const currentPage = ref(1);
-const itemsPerPage = ref(10);
+const itemsPerPage = ref(5);
 
-// Cập nhật lại trang khi số dòng hiển thị thay đổi
+// Cập nhật trang khi số dòng hiển thị thay đổi
 watch(itemsPerPage, () => {
   currentPage.value = 1;
 });
@@ -30,6 +34,14 @@ const setPage = (page) => {
   if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page;
   }
+};
+
+// Gọi hàm động nếu có
+const handleRowClick = (row) => {
+  if (props.func) {
+    props.func(row);
+  }
+  emit("row-click", row);
 };
 </script>
 
@@ -51,15 +63,19 @@ const setPage = (page) => {
       <table class="w-full border-collapse">
         <thead>
           <tr class="bg-gray-100">
-            <th v-for="(header, index) in props.headers" :key="index" class="px-4  h-25 py-2 text-left">
+            <th v-for="(header, index) in props.headers" :key="index" class="px-4 py-2 text-left" :class="rowHeight">
               {{ header }}
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(row, rowIndex) in paginatedData" :key="rowIndex" class="border-t">
-            <td v-for="(cell, cellIndex) in row" :key="cellIndex" class="px-4  h-25 py-2">
-              {{ cell }}
+          <tr 
+            v-for="(row, rowIndex) in paginatedData" 
+            :key="rowIndex" 
+            class="border-t cursor-pointer hover:bg-gray-200"
+            @click="handleRowClick(row)"
+          >
+            <td v-for="(cell, cellIndex) in row" :key="cellIndex"  v-html="cell" class="px-4 py-2" :class="rowHeight">
             </td>
           </tr>
         </tbody>

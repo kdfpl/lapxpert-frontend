@@ -22,12 +22,12 @@ const menuItems = ref([
     subItems: [
       { name: "Sản phẩm", link: "/san-pham" },
       { name: "Ram", link: "/ram" },
-      { name: "Màn hình", link: "#" },
-      { name: "CPU", link: "#" },
-      { name: "GPU", link: "#" },
-      { name: "Ổ cứng", link: "#" },
-      { name: "Màu Sắc", link: "#" },
-      { name: "Pin", link: "#" },
+      { name: "Màn hình", link: "/manHInh" },
+      { name: "CPU", link: "/cpu" },
+      { name: "GPU", link: "/gpu" },
+      { name: "Ổ cứng", link: "/oCung" },
+      { name: "Màu Sắc", link: "/color" },
+      { name: "Pin", link: "/pin" },
     ],
   },
   {
@@ -61,7 +61,6 @@ const toggleSubMenu = (index) => {
 
 <template>
   <div
-    @mouseenter="!isShow ? (isShow = true) : null"
     :class="[isShow ? 'w-90 py-4' : 'w-20 p-2']"
     class="h-full bg-white transition-all duration-300 ease-in-out overflow-hidden"
   >
