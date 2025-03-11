@@ -17,7 +17,7 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
             <ul class="menu rounded-box mt-6 w-full">
               <li>
                 <RouterLink to="/monitor">
-                  <font-awesome-icon icon="fa-solid fa-house" class="size-5"/>
+                  <span class="icon-[material-symbols--dashboard-outline-rounded] size-5"></span>
                   Thống kê
                 </RouterLink>
               </li>
@@ -25,8 +25,8 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
               <li>
                 <details open>
                   <summary>
+                    <span class="icon-[stash--shop] size-5"></span>
                     <span class="text-sm font-medium">
-                      <font-awesome-icon icon="fa-solid fa-cash-register" class="size-5"/>
                       Bán hàng
                     </span>
                   </summary>
@@ -34,28 +34,28 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
                   <ul>
                     <li>
                       <RouterLink to="/order">
-                        <font-awesome-icon icon="fa-solid fa-truck" class="size-5"/>
+                        <span class="icon-[hugeicons--delivery-truck-02] size-5"></span>
                         Đơn hàng
                       </RouterLink>
                     </li>
 
                     <li>
                       <RouterLink to="/invoice">
-                        <font-awesome-icon icon="fa-solid fa-file-invoice" class="size-5"/>
+                        <span class="icon-[hugeicons--invoice-02] size-5"></span>
                         Hóa đơn
                       </RouterLink>
                     </li>
 
                     <li>
                       <RouterLink to="/saleoff">
-                        <font-awesome-icon icon="fa-solid fa-ticket" class="size-5"/>
+                        <span class="icon-[solar--sale-square-broken] size-5"></span>
                         Đợt giảm giá
                       </RouterLink>
                     </li>
 
                     <li>
                       <RouterLink to="/voucher">
-                        <font-awesome-icon icon="fa-solid fa-ticket" class="size-5"/>
+                        <span class="icon-[hugeicons--sale-tag-02] size-5"></span>
                         Giảm giá
                       </RouterLink>
                     </li>
@@ -66,57 +66,57 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
               <li>
                 <details open>
                   <summary>
+                    <span class="icon-[ph--laptop-light] size-5"></span>
                     <span class="text-sm font-medium">
-                      <font-awesome-icon icon="fa-solid fa-laptop" class="size-5"/>
                       Sản phẩm
                     </span>
                   </summary>
                   <ul>
                     <li>
                       <RouterLink to="/product">
-                        <font-awesome-icon icon="fa-solid fa-list" class="size-5"/>
+                        <span class="icon-[solar--list-line-duotone] size-5"></span>
                         Danh sách sản phẩm
                       </RouterLink>
                     </li>
                     <li>
                       <RouterLink to="/add-product">
-                        <font-awesome-icon icon="fa-solid fa-plus" class="size-5"/>
+                        <span class="icon-[material-symbols--add-rounded] size-5"></span>
                         Thêm sản phẩm
                       </RouterLink>
                     </li>
                     <li>
                       <RouterLink to="/cpu">
-                        <font-awesome-icon icon="fa-solid fa-microchip" class="size-5"/>
+                        <span class="icon-[ep--cpu] size-5"></span>
                         CPU
                       </RouterLink>
                     </li>
                     <li>
                       <RouterLink to="/ram">
-                        <font-awesome-icon icon="fa-solid fa-memory" class="size-5"/>
+                        <span class="icon-[ph--memory-light] size-5"></span>
                         RAM
                       </RouterLink>
                     </li>
                     <li>
                       <RouterLink to="/gpu">
-                        <font-awesome-icon icon="fa-solid fa-microchip" class="size-5"/>
+                        <span class="icon-[ph--graphics-card-thin] size-5"></span>
                         GPU
                       </RouterLink>
                     </li>
                     <li>
                       <RouterLink to="/disk">
-                        <font-awesome-icon icon="fa-solid fa-hard-drive" class="size-5"/>
+                        <span class="icon-[clarity--hard-disk-line] size-5"></span>
                         Ổ cứng
                       </RouterLink>
                     </li>
                     <li>
                       <RouterLink to="/display">
-                        <font-awesome-icon icon="fa-solid fa-display" class="size-5"/>
+                        <span class="icon-[solar--display-broken] size-5"></span>
                         Màn hình
                       </RouterLink>
                     </li>
                     <li>
                       <RouterLink to="/color">
-                        <font-awesome-icon icon="fa-solid fa-palette" class="size-5"/>
+                        <span class="icon-[qlementine-icons--color-swatch-24] size-5"></span>
                         Màu sắc
                       </RouterLink>
                     </li>
@@ -127,8 +127,8 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
               <li>
                 <details open>
                   <summary>
+                    <span class="icon-[material-symbols--group-outline] size-5"></span>
                     <span class="text-sm font-medium">
-                      <font-awesome-icon icon="fa-solid fa-users" class="size-5"/>
                       Người dùng
                     </span>
                   </summary>
@@ -136,14 +136,14 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
                   <ul>
                     <li>
                       <RouterLink to="/user">
-                        <font-awesome-icon icon="fa-solid fa-user" class="size-5"/>
+                        <span class="icon-[solar--user-id-linear] size-5"></span>
                         Nhân viên
                       </RouterLink>
                     </li>
 
                     <li>
                       <RouterLink to="/customer">
-                        <font-awesome-icon icon="fa-solid fa-user-group" class="size-5"/>
+                        <span class="icon-[hugeicons--ai-user] size-5"></span>
                         Khách hàng
                       </RouterLink>
                     </li>
