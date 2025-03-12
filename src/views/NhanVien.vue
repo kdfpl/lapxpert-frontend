@@ -51,82 +51,32 @@
           Thêm nhân viên
         </button>
       </div>
-  
-  
-  
-      <!-- Bảng danh sách nhân viên -->
-      <div class="overflow-x-auto">
-        <table class="w-full border-collapse border border-gray-300">
-          <thead class="bg-gray-200">
-          <tr>
-            <th class="border border-gray-300 p-2 w-10">STT</th>
-            <th class="border border-gray-300 p-2 w-20">Mã</th>
-            <th class="border border-gray-300 p-2 w-40">Họ tên</th>
-            <th class="border border-gray-300 p-2 w-32">Số điện thoại</th>
-            <th class="border border-gray-300 p-2 w-60">Địa chỉ</th>
-            <th class="border border-gray-300 p-2 w-28">Trạng Thái</th>
-            <th class="border border-gray-300 p-2 w-32">Thao Tác</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="(employee, index) in employees" :key="index" class="text-center">
-            <td class="border border-gray-300 p-2">{{ index + 1 }}</td>
-            <td class="border border-gray-300 p-2">{{ employee.code }}</td>
-            <td class="border border-gray-300 p-2">{{ employee.name }}</td>
-            <td class="border border-gray-300 p-2">{{ employee.phone }}</td>
-            <td class="border border-gray-300 p-2">{{ employee.address }}</td>
-            <td class="border border-gray-300 p-2">
-                              <span
-                                  :class="employee.status === 'Hoạt động' ? 'text-green-600 border border-green-600 px-2 py-1 rounded' : 'text-red-600 border border-red-600 px-2 py-1 rounded'">
-                                  {{ employee.status }}
-                              </span>
-            </td>
-            <td class="border border-gray-300 p-2">
-              <button class="text-black-500 hover:text-black mx-2">
-                <i class="fa-solid fa-pen"></i>
-              </button>
-              <button class="hover:text-black mx-2">
-                <i class="fa-solid fa-trash"></i>
-              </button>
-              <button class="text-black-500 hover:text-black mx-2">
-                <i class="fa-solid fa-circle-info"></i>
-              </button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-  
-      <!-- Phân trang -->
-      <div class="flex justify-between items-center mt-4">
-        <div class="flex items-center gap-2">
-          <span>Xem</span>
-          <select class="border border-gray-300 rounded-lg p-1">
-            <option>5</option>
-            <option>10</option>
-            <option>20</option>
-          </select>
-          <span>Nhân viên</span>
-        </div>
-        <div class="flex gap-2">
-          <button class="border border-gray-300 px-3 py-1 rounded"><i class="fa-solid fa-arrow-left"></i></button>
-          <button class="border border-gray-300 px-3 py-1 rounded bg-gray-200">1</button>
-          <button class="border border-gray-300 px-3 py-1 rounded">2</button>
-          <button class="border border-gray-300 px-3 py-1 rounded">3</button>
-          <button class="border border-gray-300 px-3 py-1 rounded"><i
-              class="fa-solid fa-arrow-right"></i></button>
-        </div>
-      </div>
+
+      <CustomTable :headers="headers" :data="employees" @row-click="handleRowClick" />
+      
     </div>
   </template>
   
   <script setup>
-  import { ref } from "vue";
+  import { ref, onMounted } from "vue";
+  import CustomTable from "../components/CustomTable.vue"; 
+  import { getAll} from "../service/NhanVienService.js"; 
   
-  const employees = ref([
-    { code: "Linhhm", name: "Hoàng Mai Linh", phone: "0123456789", address: "3 P. Trịnh Văn Bô, Xuân Phương, Nam Từ Liêm, Hà Nội", status: "Hoạt động" },
-    { code: "Linhhm", name: "Hoàng Mai Linh", phone: "0123456789", address: "3 P. Trịnh Văn Bô, Xuân Phương, Nam Từ Liêm, Hà Nội", status: "Nghỉ việc" },
-    { code: "Linhhm", name: "Hoàng Mai Linh", phone: "0123456789", address: "3 P. Trịnh Văn Bô, Xuân Phương, Nam Từ Liêm, Hà Nội", status: "Hoạt động" },
-    { code: "Linhhm", name: "Hoàng Mai Linh", phone: "0123456789", address: "3 P. Trịnh Văn Bô, Xuân Phương, Nam Từ Liêm, Hà Nội", status: "Nghỉ việc" },
-  ]);
+  const headers = ["Mã NV", "Họ Tên", "Email", "SĐT", "Chức Vụ", "Trạng Thái"];
+  
+  const employees = ref([]);
+  
+  const fetchEmployees = async () => {
+    const data = await getAll();
+    employees.value = data.map(nv => ({
+      maNhanVien: nv.maNhanVien,
+      hoTen: nv.hoTen,
+      email: nv.email,
+      sdt: nv.sdt,
+      chucVu: nv.chucVu?.tenChucVu || "N/A",
+      tinhTrang: nv.tinhTrang ? "Hoạt động" : "Nghỉ việc"
+    }));
+  };
+  
+  onMounted(fetchEmployees);
   </script>

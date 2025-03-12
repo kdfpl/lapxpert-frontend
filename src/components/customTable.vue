@@ -46,25 +46,32 @@ const handleRowClick = (row) => {
 </script>
 
 <template>
-  <div class="p-6 w-full bg-white rounded-lg shadow-md">
+  <div class="p-6 w-full  rounded-xl shadow-xl border border-gray-200">
     <!-- Điều chỉnh số dòng hiển thị -->
     <div class="flex justify-between items-center mb-7">
       <div class="flex items-center space-x-2">
-        <label for="entries" class="text-sm text-gray-600">Show</label>
-        <select id="entries" v-model="itemsPerPage" class="border px-2 py-1 rounded">
+        <label for="entries" class="text-sm text-black ">Show</label>
+        <select id="entries" v-model="itemsPerPage" class="border px-3 py-1 rounded-lg bg-white shadow-sm text-black">
           <option v-for="num in [5, 10, 15, 20]" :key="num" :value="num">{{ num }}</option>
         </select>
-        <span class="text-sm text-gray-600">entries per page</span>
+        <span class="text-sm text-black">entries per page</span>
       </div>
     </div>
 
     <!-- Bảng -->
-    <div class="overflow-auto">
-      <table class="w-full border-collapse">
+    <div class="overflow-auto rounded-lg shadow-md">
+      <table class="w-full  border-collapse">
         <thead>
-          <tr class="bg-gray-100">
-            <th v-for="(header, index) in props.headers" :key="index" class="px-4 py-2 text-left" :class="rowHeight">
+          <tr class=" g">
+            <th 
+              v-for="(header, index) in props.headers" 
+              :key="index" 
+              class="px-4 py-2 text-left text-black  font-semibold border-b border-[#C8C7C7] cursor-pointer" 
+              :class="rowHeight"
+              @click="sortBy(index)"
+            >
               {{ header }}
+              <span v-if="sortColumn === index">{{ sortDirection === 1 ? ' ▲' : ' ▼' }}</span>
             </th>
           </tr>
         </thead>
@@ -72,10 +79,13 @@ const handleRowClick = (row) => {
           <tr 
             v-for="(row, rowIndex) in paginatedData" 
             :key="rowIndex" 
-            class="border-t cursor-pointer hover:bg-gray-200"
+            class="border-t border-[#C8C7C7] cursor-pointer hover:bg-[#F7F7F7] hover:shadow-lg hover:h-25 transition-all duration-300 ease-in-out"
             @click="handleRowClick(row)"
           >
-            <td v-for="(cell, cellIndex) in row" :key="cellIndex"  v-html="cell" class="px-4 py-2" :class="rowHeight">
+            <td v-for="(cell, cellIndex) in row" :key="cellIndex" class="px-4 py-3 text-black border-b border-[#C8C7C7]" :class="rowHeight">
+              <div class="flex items-center space-x-4">
+                <div v-html="cell" class="flex-1"></div>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -90,19 +100,19 @@ const handleRowClick = (row) => {
       </p>
       <div class="flex space-x-2">
         <button @click="setPage(currentPage - 1)" :disabled="currentPage === 1"
-          class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">
+          class="px-3 py-1 rounded-lg border bg-white shadow-md text-gray-700 hover:bg-gray-100 transition duration-300">
           Prev
         </button>
 
         <button v-for="page in totalPages" :key="page" @click="setPage(page)"
-          class="px-3 py-1 rounded"
-          :class="currentPage === page ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'">
+          class="px-3 py-1 rounded-lg border shadow-md transition duration-300"
+          :class="currentPage === page ? 'bg-gray-400 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'">
           {{ page }}
         </button>
 
         <button @click="setPage(currentPage + 1)" :disabled="currentPage === totalPages"
-          class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">
-          Next 
+          class="px-3 py-1 rounded-lg border bg-white shadow-md text-black hover:bg-gray-100 transition duration-300">
+          Next
         </button>
       </div>
     </div>

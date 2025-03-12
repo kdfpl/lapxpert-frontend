@@ -1,10 +1,10 @@
 <template>
-  <div class="h-screen flex">
+  <div class="h-screen  flex">
     <!-- Sidebar bên trái -->
     <Sidebar />
 
     <!-- Phần Main bên phải với Scroll Panel -->
-    <div class="flex flex-col flex-grow bg-gray-100 h-screen overflow-hidden">
+    <div class="flex flex-col flex-grow bg-[#ffffff] h-screen overflow-hidden ">
       <!-- Global Bar (Cố định trên cùng) -->
       <GlobalBar class="flex-shrink-0" />
 

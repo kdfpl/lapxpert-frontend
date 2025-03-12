@@ -33,7 +33,7 @@ const searchLength = computed(() => search.value.length);
   </div>
 
   <div class="flex justify-between mt-16">
-    <div class="flex items-center max-w-md shadow-md bg-white rounded-md">
+    <div class="flex items-center max-w-md shadow-md bg-white/60 rounded-md">
       <div class="w-60">
         <input
           v-model="search"

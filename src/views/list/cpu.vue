@@ -30,5 +30,6 @@ const data = Array(20).fill([
     :image="bannerImage"
     :headers="headers"
     :data="data"
+    rowHeight="h-20"
   />
 </template>
