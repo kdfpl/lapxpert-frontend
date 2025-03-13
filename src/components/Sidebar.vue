@@ -132,6 +132,7 @@ import {
   faMemory,
   faHardDrive,
   faDisplay,
+  faBatteryEmpty,
   faPalette,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -176,6 +177,7 @@ const menuItems = ref([
           { name: "Ổ cứng", icon: faHardDrive, link: "/oCung" },
           { name: "Màn hình", icon: faDisplay, link: "/manHInh" },
           { name: "Màu sắc", icon: faPalette, link: "/color" },
+          { name: "pin", icon: faBatteryEmpty, link: "/pin" },
         ],
       },
     ],
@@ -185,8 +187,8 @@ const menuItems = ref([
     name: "Người dùng",
     icon: faUsers,
     subItems: [
-      { name: "Nhân viên", icon: faUser, link: "/KhachHang" },
-      { name: "Khách hàng", icon: faUserGroup, link: "/NhanVien" },
+      { name: "Nhân viên", icon: faUser, link: "/NhanVien" },
+      { name: "Khách hàng", icon: faUserGroup, link: "/KhachHang" },
     ],
   },
 ]);

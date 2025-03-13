@@ -1,14 +1,22 @@
 import axios from 'axios';
 
-const URL_API ="http://localhost:8080/api/nhan-vien"
+const API_URL ="http://localhost:8080/api/nhan-vien"
 
-export const getAll = async () => {
-    try {
-        const response = await axios.get(`${URL_API}/list`);
-        console.log(response);
-        return response.data;
-    } catch (error) {
-        console.error('ĐỊt mẹ lỗi :', error);
-        return [];
+export default {
+    getAllStaff() {
+      return axios.get(`${API_URL}/list`);
+    },
+    getStaffById(id) {
+      return axios.get(`${API_URL}/${id}`);
+    },
+    addCustomer(customer) {
+      return axios.post(API_URL, customer);
+    },
+    updateCustomer( customer) {
+      return axios.put(`${API_URL}/edit`, customer);
+    },
+    deleteCustomer(id) {
+      return axios.delete(`${API_URL}/${id}`);
     }
-};
+  };
+  

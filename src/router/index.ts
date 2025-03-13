@@ -14,9 +14,16 @@ import color from "../views/list/color.vue";
 import GiamGia from "../views/GiamGia.vue";
 import KhachHang from "../views/KhachHang.vue";
 import NhanVien from "../views/NhanVien.vue";
+import KhachHangCRUD from "../views/crud/KhachHangCRUD.vue";
 
 
 const routes = [
+    {
+        path: '/KhachHangCRUD/:id?',
+        name: 'KhachHangCRUD',
+        component: KhachHangCRUD,
+        props: true, 
+    },
     {
         path: '/GiamGia',
         name: 'GiamGia',
@@ -92,11 +99,11 @@ const routes = [
         name: 'Login',
         component: Login,
     }
-]
+];
 
 const router = createRouter({
     history: createWebHistory(),
     routes,
-})
+});
 
 export default router;
