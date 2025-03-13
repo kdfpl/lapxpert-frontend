@@ -1,95 +1,119 @@
 <script>
-import BarChart from "./ThongKe/BarChart.vue";
-import LineChart from "./ThongKe/LineChart1.vue";
-import LineChart1 from "./ThongKe/LineChart.vue";
+import Year from "./ThongKe/Year.vue";
+import Month from "./ThongKe/Month.vue";
+import Week from "./ThongKe/Week.vue";
+import PieChart from "./ThongKe/PieChart.vue";
+import { ref } from "vue";
 
 export default {
   components: {
-    BarChart,
-    LineChart,
-    LineChart1,
+    Year,
+    Month,
+    Week,
+    PieChart
+  },
+
+  data() {
+    return {
+      components: [Year, Month, Week],
+      selectedComponent: "Year",
+    };
   },
 };
-
-
 </script>
 <template>
   <div class="flex flex-row p-3">
     <div
-      class=" flex-none mt-2 bg-white border-white p-5 flex flex basis-1/3 mr-2">
-      <div class="mr-5 basis-64">
-        <div class="text-2xl text-[#8B658B]">25000</div>
-        <div class="text-sm mb-10">Total sell</div>
-        <div class="flex flex">
-          <div class="text-xs mr-2 text-[#7A8B8B]">Total income:</div>
-
-          <div class="text-xs text-[#7A8B8B]">222.000.000</div>
+      class="flex-none mt-2 bg-white border-white p-5 flex flex basis-1/4 mr-2">
+      <div class=" basis-64">
+        <div class="text-2xl text-[#8B658B] font-bold">1200</div>
+        <div class="text-sm mb-10">Tổng số đơn hàng</div>
+        <div >
+          <div class="text-xs  text-[#7A8B8B]"><a href="">See more</a></div>
         </div>
       </div>
-      <div class="ml-14 mt-4">
-        ICon
-        <div class="mt-12 text-xs text-[#7A8B8B]">10,25%</div>
+
+      <div class="mt-4 w-[90px]">
+        <img src="/src/assets/img/shopping-cart.png" alt="">
       </div>
     </div>
 
     <div
-      class="flex-none mt-2 bg-white border-white p-5 flex flex basis-1/3 mr-2">
-      <div class="mr-5 basis-64">
-        <div class="text-2xl text-[#CD5555]">25000</div>
-        <div class="text-sm mb-10">Total sell</div>
+      class="flex-none mt-2 bg-white border-white p-5 flex flex basis-1/4 mr-2">
+      <div class="mr-2 basis-64">
+        <div class="text-2xl text-[#CD5555] font-bold">6</div>
+        <div class="text-sm mb-10">Thành viên</div>
         <div class="flex flex">
-          <div class="text-xs mr-2 text-[#7A8B8B]">Total income:</div>
+          <div class="text-xs mr-2 text-[#7A8B8B]"><a href="">See more</a></div>
 
-          <div class="text-xs text-[#7A8B8B]">222.000.000</div>
         </div>
       </div>
-      <div class="ml-14 mt-4">
-        ICon
-        <div class="mt-12 text-xs text-[#7A8B8B]">10,25%</div>
+      <div class="ml-10 mt-4 w-[90px]">
+        <img src="/src/assets/img/group.png" alt="">
+
       </div>
     </div>
     <div
-      class="flex-none mt-2 bg-white border-white p-5 flex flex basis-1/3 mr-2">
+      class="flex-none mt-2 bg-white border-white p-5 flex flex basis-1/4 mr-2">
       <div class="mr-5 basis-64">
-        <div class="text-2xl text-[#FF1493]">25000</div>
-        <div class="text-sm mb-10">Total sell</div>
+        <div class="text-2xl text-[#FF1493] font-bold">123</div>
+        <div class="text-sm mb-10 ">Sản phẩm</div>
         <div class="flex flex">
-          <div class="text-xs mr-2 text-[#7A8B8B]">Total income:</div>
-
-          <div class="text-xs text-[#7A8B8B]">222.000.000</div>
+          <div class="text-xs mr-2 text-[#7A8B8B] "><a href="">See more</a></div>
         </div>
       </div>
-      <div class="ml-14 mt-4">
-        ICon
-        <div class="mt-12 text-xs text-[#7A8B8B]">10,25%</div>
+      <div class="ml-14 mt-4 w-[90px]">
+        <img src="/src/assets/img/box.png" alt="">
+      </div>
+    </div>
+    <div
+      class="flex-none mt-2 bg-white border-white p-5 flex flex basis-1/4 mr-2">
+      <div class="mr-5 basis-64">
+        <div class="text-2xl text-[#FFD700] font-bold">5</div>
+        <div class="text-sm mb-10 ">Đánh giá</div>
+        <div class="flex flex">
+          <div class="text-xs mr-2 text-[#7A8B8B] "><a href="">See more</a></div>
+        </div>
+      </div>
+      <div class="ml-14 mt-4 w-[90px]">
+        <img src="/src/assets/img/star.png" alt="">
       </div>
     </div>
   </div>
 
   <div class="p-3 flex flex-row">
-    <div class="bg-white flex-none  p-8 basis-3/4 mr-2 ">
+    <div class="bg-white flex-none p-8 basis-2/3  mr-3">
       <h1 class="mb-12">Biểu đồ doanh thu</h1>
       <div class="flex justify-center text-[#FFFFFF]">
         <button
-       class="px-3 py-1 rounded-l-lg bg-gray-400 ">
-                <a href="">Year</a>
-            </button>
-            <button
-       class="px-3 py-1  bg-gray-400">
-                <a href="">Month</a>
-            </button>
-            <button
-       class="px-3 py-1 rounded-r-lg bg-gray-400">
-                <a href="">Week</a>
-            </button>
+          @click="selectedComponent = 'Year'"
+          class="px-3 py-1 rounded-l-lg bg-gray-400">
+          Year
+        </button>
+        <button
+          @click="selectedComponent = 'Month'"
+          class="px-3 py-1 bg-gray-400">
+          Month
+        </button>
+        <button
+          @click="selectedComponent = 'Week'"
+          class="px-3 py-1 rounded-r-lg bg-gray-400">
+          Week
+        </button>
       </div>
-      
-      <div class="mb-5 basis-128">
-        <LineChart1 />
+
+      <div class="mb-5 basis-2/3">
+        <component :is="selectedComponent" />
+        <PolarChart/>
       </div>
     </div>
 
-    <div class="basis-1/4 bg-white">
+    <div class=" bg-white basis-1/3  flex-none p-8  mr-3"> 
+
+      <h1 class="mb-12">Biểu đồ doanh thu</h1>
+
+        <PieChart/>
     </div>
   </div>
+
 </template>
