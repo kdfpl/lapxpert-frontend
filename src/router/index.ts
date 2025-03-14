@@ -15,6 +15,7 @@ import GiamGia from "../views/GiamGia.vue";
 import KhachHang from "../views/KhachHang.vue";
 import NhanVien from "../views/NhanVien.vue";
 import KhachHangCRUD from "../views/crud/KhachHangCRUD.vue";
+import NhanVienCRUD from "../views/crud/NhanVienCRUD.vue";
 
 
 const routes = [
@@ -22,6 +23,12 @@ const routes = [
         path: '/KhachHangCRUD/:id?',
         name: 'KhachHangCRUD',
         component: KhachHangCRUD,
+        props: true, 
+    },
+    {
+        path: '/NhanVienCRUD/:id?',
+        name: 'NhanVienCRUD',
+        component: NhanVienCRUD,
         props: true, 
     },
     {

@@ -1,7 +1,9 @@
 <template>
   <div class="p-6 mx-auto bg-white rounded-xl shadow-lg border border-gray-200">
-    <div class="flex justify-between ">
-      <div class="flex items-center align-top max-w-md shadow-md bg-white/60 rounded-md">
+    <div class="flex justify-between">
+      <div
+        class="flex items-center align-top max-w-md shadow-md bg-white/60 rounded-md"
+      >
         <div class="w-60">
           <input
             v-model="search"
@@ -41,7 +43,7 @@
         <button
           class="px-6 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-gray-900 to-gray-700 shadow-xl backdrop-blur-md bg-opacity-80 border border-white/30 transition-all duration-200 ease-out hover:bg-opacity-90 hover:scale-105 active:scale-95 active:shadow-md"
         >
-          <router-link :to="link">+ THÊM</router-link>
+          <router-link to="/NhanVienCRUD">+ THÊM</router-link>
         </button>
 
         <button
@@ -56,35 +58,61 @@
   <CustomTable
     :headers="headers"
     :data="formattedData"
+    :deleteFunc="deleteNhanVien"
+    link="/NhanVienCRUD"
   />
 </template>
 
 <script setup>
-import { ref,computed, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import CustomTable from "../components/CustomTable.vue";
-import NhanVienService from "../service/NhanVienService.js";
+import NhanVienService from "../api/service/NhanVienService.js";
 
-const headers = ["STT", "Họ Tên", "Email", "SĐT", "Chức Vụ"];
+const headers = ["STT","ID", "Họ Tên", "Email", "SĐT", "Chức Vụ"];
 const NhanVienList = ref([]);
 
-// Định dạng dữ liệu
+// Xử lý dữ liệu
 const formattedData = computed(() =>
-NhanVienList.value.map((nv, index) => ({
-    stt:index + 1 ,
-    hoTen: nv.hoTen,
-    email: nv.email,
-    sdt: nv.sdt,
-    chucVu: nv.chucVu.tenChucVu
-  }))
+  Array.isArray(NhanVienList.value)
+    ? NhanVienList.value.map((nv, index) => ({
+        stt: index + 1,
+        id: nv.id,
+        hoTen: nv.hoTen,
+        email: nv.email,
+        sdt: nv.sdt,
+        chucVu: nv.chucVu.tenChucVu , 
+      }))
+    : []
 );
 
 // Hàm fetch dữ liệu từ API
 const fetchNhanVien = async () => {
   try {
-    const response = await NhanVienService.getAllStaff();
-    NhanVienList.value = response.data;
+    const data = await NhanVienService.getAllStaff();
+    if (Array.isArray(data)) {
+      NhanVienList.value = data;
+    } else {
+      console.error("Dữ liệu trả về không hợp lệ:", data);
+    }
   } catch (error) {
-    console.error("Lỗi khi lấy danh sách nhân viên:", error);
+    console.error("Lỗi khi lấy danh sách nhân viên:", error.message);
+  }
+};
+
+const deleteNhanVien = async (nv) => {
+  if (!confirm("Bạn có chắc chắn muốn xóa nhân viên này?")) return;
+
+  const nvToDelete = NhanVienList.value.find((item) => item.id === nv.id);
+  if (!nvToDelete) return;
+
+  try {
+    await NhanVienService.deleteStaff(nvToDelete.id);
+    NhanVienList.value = NhanVienList.value.filter((item) => item.id !== nv.id);
+    alert("Xóa nhân viên thành công!");
+    await fetchNhanVien();
+  } catch (error) {
+    console.error("Lỗi khi xóa nhân viên:", error);
+    alert("Có lỗi xảy ra khi xóa nhân viên!");
   }
 };
 

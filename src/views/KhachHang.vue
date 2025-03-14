@@ -38,7 +38,7 @@
   <!-- Bảng hiển thị dữ liệu -->
   <CustomTable
     :headers="headers"
-    :data="filteredData"
+    :data="formattedData"
     :deleteFunc="deleteKhachHang"
     link="/KhachHangCRUD"
   />
@@ -46,57 +46,57 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import KhachHangService from '../service/KhachHangService';
+import KhachHangService from '../api/service/KhachHangService';
 import CustomTable from '../components/CustomTable.vue';
 
 // State
 const khachHangList = ref([]);
 const search = ref('');
-const headers = ["STT", "Mã KH", "Họ tên", "Email", "SĐT"];
-
-// Xử lý dữ liệu
-const formattedData = computed(() => 
-  khachHangList.value.map((kh, index) => ({
-    stt: index + 1,
-    maKhachHang: kh.maKhachHang,
-    hoTen: kh.hoTen,
-    email: kh.email,
-    sdt: kh.sdt
-  }))
-);
-
-// Tìm kiếm khách hàng
-const filteredData = computed(() => {
-  if (!search.value) return formattedData.value;
-  return formattedData.value.filter(kh =>
-    Object.values(kh).some(val => String(val).toLowerCase().includes(search.value.toLowerCase()))
-  );
-});
+const headers = ["STT","Id" ,"Mã KH", "Họ tên", "Email", "SĐT"];
 
 // Fetch dữ liệu
 const fetchKhachHang = async () => {
   try {
-    const response = await KhachHangService.getAllCustomers();
-    khachHangList.value = response.data;
+    const data = await KhachHangService.getAllCustomers();
+    if (Array.isArray(data)) {
+      khachHangList.value = data;
+    } else {
+      console.error("Dữ liệu trả về không hợp lệ:", data);
+    }
   } catch (error) {
-    console.error('Lỗi khi lấy danh sách khách hàng:', error);
+    console.error("Lỗi khi lấy danh sách khách hàng:", error.message);
   }
 };
+
+// Xử lý dữ liệu
+const formattedData = computed(() => 
+  Array.isArray(khachHangList.value) 
+    ? khachHangList.value.map((kh, index) => ({
+        stt: index + 1,
+        id: kh.id,
+        maKhachHang: kh.maKhachHang,
+        hoTen: kh.hoTen,
+        email: kh.email,
+        sdt: kh.sdt
+      }))
+    : []
+);
 
 // Xóa khách hàng
 const deleteKhachHang = async (kh) => {
   if (!confirm('Bạn có chắc chắn muốn xóa khách hàng này?')) return;
-  
+
   const khToDelete = khachHangList.value.find(item => item.maKhachHang === kh.maKhachHang);
   if (!khToDelete) return;
 
   try {
     await KhachHangService.deleteCustomer(khToDelete.id);
-    khachHangList.value = khachHangList.value.filter(item => item.maKhachHang !== kh.maKhachHang);
+    await fetchKhachHang(); 
   } catch (error) {
     console.error('Lỗi khi xóa khách hàng:', error);
   }
 };
+
 
 
 // Khởi động component

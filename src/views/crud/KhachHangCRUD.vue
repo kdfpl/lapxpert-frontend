@@ -1,13 +1,15 @@
 <script setup>
 import { ref, computed, watchEffect, onMounted } from "vue";
-import { useRoute } from "vue-router";
-import customerService from "../../service/KhachHangService";
+import { useRoute,useRouter } from "vue-router";
+import customerService from "../../api/service/KhachHangService";
 import TabPanel from "../../components/TabPanel.vue";
 import { Check, Plus, Trash2, User, Mail, Lock, Phone } from "lucide-vue-next";
 
 const route = useRoute();
+const router = useRouter();
 const customerId = route.params.id;
-console.log(customerId)
+console.log(customerId);
+
 const tabs = [
   { label: "1. Thông tin khách hàng", key: "panel1" },
   { label: "2. Địa chỉ khách hàng", key: "panel2" },
@@ -15,8 +17,11 @@ const tabs = [
 ];
 
 const activeTab = ref("panel1");
-const khachHang = ref({ hoTen: "", email: "", sdt: "", matKhau: "" });
-const diaChiList = ref([{ thanhPho: "", quanHuyen: "", phuongXa: "", soNhaDuong: "", macDinh: true }]);
+
+const khachHang = ref({ hoTen: "", email: "", sdt: "" });
+const diaChiList = ref([
+  { thanhPho: "", quanHuyen: "", phuongXa: "", soNhaDuong: "", macDinh: true },
+]);
 const errors = ref({});
 const duplicateError = ref("");
 
@@ -25,16 +30,21 @@ onMounted(async () => {
     try {
       const response = await customerService.getCustomerById(customerId);
       if (response.data) {
-        // Gán dữ liệu từ API vào khachHang
         khachHang.value = {
           hoTen: response.data.hoTen || "",
           email: response.data.email || "",
           sdt: response.data.sdt || "",
-          matKhau: response.data.matKhau || "",
         };
 
-        // Gán dữ liệu từ API vào diaChiList
-        diaChiList.value = response.data.diaChiList || [{ thanhPho: "", quanHuyen: "", phuongXa: "", soNhaDuong: "", macDinh: true }];
+        diaChiList.value = response.data.diaChiList || [
+          {
+            thanhPho: "",
+            quanHuyen: "",
+            phuongXa: "",
+            soNhaDuong: "",
+            macDinh: true,
+          },
+        ];
       }
     } catch (error) {
       console.error("Lỗi khi tải dữ liệu khách hàng:", error);
@@ -43,25 +53,14 @@ onMounted(async () => {
 });
 
 const addDiaChi = () => {
-  diaChiList.value.push({ thanhPho: "", quanHuyen: "", phuongXa: "", soNhaDuong: "", macDinh: false });
+  diaChiList.value.push({
+    thanhPho: "",
+    quanHuyen: "",
+    phuongXa: "",
+    soNhaDuong: "",
+    macDinh: false,
+  });
 };
-
-watchEffect(async () => {
-  // Chỉ kiểm tra trùng lặp khi không có customerId (thêm mới khách hàng)
-  if (!customerId) {
-    const { email, sdt } = khachHang.value;
-    if (!email && !sdt) {
-      duplicateError.value = "";
-      return;
-    }
-    try {
-      const response = await customerService.checkDuplicate(email, sdt);
-      duplicateError.value = response.data ? "Email hoặc số điện thoại đã tồn tại!" : "";
-    } catch (error) {
-      console.error("Lỗi kiểm tra trùng lặp:", error);
-    }
-  }
-});
 
 const removeDiaChi = (index) => {
   if (diaChiList.value.length > 1) {
@@ -84,22 +83,54 @@ const thongTinHopLe = computed(() => {
     khachHang.value.hoTen &&
     khachHang.value.email &&
     khachHang.value.sdt &&
-    khachHang.value.matKhau &&
     diaChiList.value.length > 0 &&
-    diaChiList.value.every(dc => dc.thanhPho && dc.quanHuyen && dc.phuongXa && dc.soNhaDuong)
+    diaChiList.value.every(
+      (dc) => dc.thanhPho && dc.quanHuyen && dc.phuongXa && dc.soNhaDuong
+    )
   );
 });
 
-const validateAndProceed = (nextTab) => {
+const validateAndProceed = async (nextTab) => {
   errors.value = {};
-  if (activeTab.value === "panel1" && (!khachHang.value.hoTen || !khachHang.value.email || !khachHang.value.sdt || !khachHang.value.matKhau)) {
+
+  if (
+    activeTab.value === "panel1" &&
+    (!khachHang.value.hoTen || !khachHang.value.email || !khachHang.value.sdt)
+  ) {
     errors.value.khachHang = "Vui lòng nhập đầy đủ thông tin khách hàng!";
     return;
   }
+
+  if (activeTab.value === "panel1") {
+    const { email, sdt } = khachHang.value;
+
+    if (email || sdt) {
+      try {
+        const response = await customerService.checkDuplicate(
+          email,
+          sdt,
+          customerId ? customerId : 0
+        );
+
+        if (response?.data) {
+          errors.value.khachHang = "Email hoặc số điện thoại đã tồn tại!";
+          return;
+        }
+      } catch (error) {
+        console.error("Lỗi kiểm tra trùng lặp:", error);
+        errors.value.khachHang = "Lỗi khi kiểm tra trùng lặp!";
+        return;
+      }
+    }
+  }
+
+  // Kiểm tra địa chỉ trong panel2
   if (activeTab.value === "panel2" && diaChiList.value.length === 0) {
     errors.value.diaChi = "Vui lòng nhập ít nhất một địa chỉ!";
     return;
   }
+
+  // Nếu không có lỗi, cho phép chuyển tab
   activeTab.value = nextTab;
 };
 
@@ -108,20 +139,32 @@ const submitForm = async () => {
     alert("Vui lòng nhập đầy đủ thông tin khách hàng và ít nhất một địa chỉ!");
     return;
   }
+  if (
+    await customerService.checkDuplicate(
+      khachHang.value.email,
+      khachHang.value.sdt,
+      customerId ? customerId : 0
+    )
+  ) {
+    alert("Số điện thoại hoặc email đang bị trùng!");
+    return;
+  }
   try {
     const customerData = {
       ...khachHang.value,
       diaChiList: diaChiList.value,
     };
 
-    if (customerId) {
-      await customerService.updateCustomer( customerId, customerData );
+    console.log("Dữ liệu gửi đi:", customerData);
 
+    if (customerId) {
+      await customerService.updateCustomer(customerId, customerData);
       alert("Cập nhật khách hàng thành công!");
     } else {
       await customerService.addCustomer(customerData);
       alert("Thêm khách hàng thành công!");
     }
+    router.push("/KhachHang")
   } catch (error) {
     console.error("Lỗi khi gửi dữ liệu:", error);
     alert("Có lỗi xảy ra, vui lòng thử lại!");
@@ -160,6 +203,7 @@ const submitForm = async () => {
           <p v-if="errors.khachHang" class="text-red-500">
             {{ errors.khachHang }}
           </p>
+          <p v-if="duplicateError" class="text-red-500">{{ duplicateError }}</p>
         </form>
         <button
           @click="validateAndProceed('panel2')"
@@ -220,7 +264,7 @@ const submitForm = async () => {
         <div class="flex gap-1">
           <button
             @click="addDiaChi"
-            class="mt-4 px-6 py-2 rounded-lg font-semibold text-black border shadow-xl backdrop-blur-md bg-opacity-80  transition-all duration-200 ease-out hover:bg-opacity-90 hover:scale-105 active:scale-95 active:shadow-md"
+            class="mt-4 px-6 py-2 rounded-lg font-semibold text-black border shadow-xl backdrop-blur-md bg-opacity-80 transition-all duration-200 ease-out hover:bg-opacity-90 hover:scale-105 active:scale-95 active:shadow-md"
           >
             + Thêm địa chỉ
           </button>
@@ -237,7 +281,13 @@ const submitForm = async () => {
         <div class="grid grid-cols-2 gap-6">
           <div class="p-6 bg-white rounded-lg shadow-md">
             <h2 class="text-lg font-semibold">Thông tin khách hàng</h2>
-            <p v-for="(value, key) in khachHang" :key="key" class="text-gray-600">{{ key }}: {{ value || '""' }}</p>
+            <p
+              v-for="(value, key) in khachHang"
+              :key="key"
+              class="text-gray-600"
+            >
+              {{ key }}: {{ value || '""' }}
+            </p>
           </div>
           <div class="p-6 bg-white rounded-lg shadow-md">
             <h2 class="text-lg font-semibold">Địa chỉ khách hàng</h2>
