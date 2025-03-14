@@ -78,6 +78,6 @@ const searchLength = computed(() => search.value.length);
   </div>
 
   <div class="flex justify-center sticky top-[100vh] mt-5 items-center">
-    <customTable :headers="headers" :data="data" :rowHeight="rowHeight"/>
+    <customTable :headers="headers" :deleteFunc="deleteFunc" :link="linkEdit" :data="data" :rowHeight="rowHeight"/>
   </div>
 </template>
