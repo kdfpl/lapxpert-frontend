@@ -133,6 +133,7 @@ import {
   faHardDrive,
   faDisplay,
   faPalette,
+  faBatteryEmpty
 } from "@fortawesome/free-solid-svg-icons";
 
 const isCollapsed = ref(false);
@@ -175,6 +176,7 @@ const menuItems = ref([
           { name: "GPU", icon: faMicrochip, link: "/gpu" },
           { name: "Ổ cứng", icon: faHardDrive, link: "/oCung" },
           { name: "Màn hình", icon: faDisplay, link: "/manHInh" },
+          { name: "Pin", icon: faBatteryEmpty, link: "/pin" },
           { name: "Màu sắc", icon: faPalette, link: "/color" },
         ],
       },

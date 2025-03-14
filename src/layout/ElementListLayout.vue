@@ -10,7 +10,9 @@ defineProps({
     type: String,
     default: "h-24", 
   },
-  link: String
+  link: String,
+  deleteFunc: { type: Function },
+  linkEdit: { type: String },
 });
 
 const search = ref("");
@@ -26,14 +28,23 @@ const searchLength = computed(() => search.value.length);
 
     <!-- Thẻ thông tin đè lên -->
     <div
-      class="absolute bottom-[-40px] justify-center bg-white/90 left-1/2 transform -translate-x-1/2 w-[90%] md:w-[80%] lg:w-[70%] shadow-lg rounded-xl p-5 flex items-center space-x-4"
+      class="absolute bottom-[-40px] justify-between bg-white/90 left-1/2 transform -translate-x-1/2 w-[90%] md:w-[80%] lg:w-[70%] shadow-lg rounded-xl p-5 flex items-center space-x-4"
     >
       <h1 class="text-3xl font-bold">{{ title }}</h1>
+      <div class="flex space-x-3">
+      <button class="px-6 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-gray-900 to-gray-700 shadow-xl backdrop-blur-md bg-opacity-80 border border-white/30 transition-all duration-200 ease-out hover:bg-opacity-90 hover:scale-105 active:scale-95 active:shadow-md">
+        <router-link :to="link">+ THÊM</router-link>
+      </button>
+
+      <button class="px-6 py-2 rounded-lg font-semibold border text-black bg-white/20 backdrop-blur-lg shadow-lg transition-all duration-200 ease-out hover:bg-white/30 hover:border-white/60 hover:scale-105 active:scale-95 active:shadow-md">
+        XUẤT
+      </button>
+    </div>
     </div>
   </div>
 
   <div class="flex justify-between mt-16">
-    <div class="flex items-center max-w-md shadow-md bg-white rounded-md">
+    <div class="flex items-center max-w-md shadow-md bg-white/60 rounded-md">
       <div class="w-60">
         <input
           v-model="search"
@@ -63,18 +74,10 @@ const searchLength = computed(() => search.value.length);
       </div>
     </div>
 
-    <div class="flex space-x-3">
-      <button class="px-6 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-gray-900 to-gray-700 shadow-xl backdrop-blur-md bg-opacity-80 border border-white/30 transition-all duration-200 ease-out hover:bg-opacity-90 hover:scale-105 active:scale-95 active:shadow-md">
-        <router-link :to="link">+ THÊM</router-link>
-      </button>
-
-      <button class="px-6 py-2 rounded-lg font-semibold border text-black bg-white/20 backdrop-blur-lg shadow-lg transition-all duration-200 ease-out hover:bg-white/30 hover:border-white/60 hover:scale-105 active:scale-95 active:shadow-md">
-        XUẤT
-      </button>
-    </div>
+    
   </div>
 
   <div class="flex justify-center sticky top-[100vh] mt-5 items-center">
-    <customTable :headers="headers" :data="data" :rowHeight="rowHeight"/>
+    <customTable :headers="headers" :deleteFunc="deleteFunc" :link="linkEdit" :data="data" :rowHeight="rowHeight"/>
   </div>
 </template>

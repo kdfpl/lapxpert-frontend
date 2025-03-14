@@ -14,6 +14,7 @@ import color from "../views/list/color.vue";
 import GiamGia from "../views/GiamGia.vue";
 import KhachHang from "../views/KhachHang.vue";
 import NhanVien from "../views/NhanVien.vue";
+import CpuCRUD from "../views/crud/CpuCRUD.vue";
 
 
 const routes = [
@@ -66,6 +67,11 @@ const routes = [
         path: '/RamCRUD',
         name: 'RamCRUD',
         component: RamCRUD,
+    },
+    {
+        path: '/CpuCRUD/:id?',
+        name: 'CpuCRUD',
+        component: CpuCRUD,
     },
     {
         path: '/cpu',

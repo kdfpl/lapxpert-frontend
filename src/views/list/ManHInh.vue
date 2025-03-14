@@ -2,6 +2,8 @@
 import ElementListLayout from "../../layout/ElementListLayout.vue";
 import customTable from "../../components/customTable.vue";
 import bannerImage from "../../assets/img/ManhinhBanner.jpg";
+import { ref, onMounted } from "vue";
+import { getAllManHinh} from "../../service/SPCTService.js"; 
 const headers = [
   "STT",
   "Mã màn hình",
@@ -11,15 +13,20 @@ const headers = [
   "Độ phân giải",
   "Thao tác",
 ];
-const data = Array(20).fill([
-  "demo",
-  "demo",
-  "demo",
-  "demo",
-  "demo",
-  "demo",
-  "demo",
-]);
+const manHinh = ref([]);
+
+const fetchManHinh = async () => {
+    const data = await getAllManHinh();
+    manHinh.value = data.map((manHinh,i) => ({
+      stt: i+1,
+      maManHinh: manHinh.maManHinh,
+      kichThuoc: manHinh.kichThuoc,
+      tanSoQuet: manHinh.tanSoQuet,
+      loaiTamNen: manHinh.loaiTamNen,
+      doPhanGiai: manHinh.doPhanGiai,
+    }));
+  };
+  onMounted(fetchManHinh);
 </script>
 
 <template>
@@ -27,6 +34,6 @@ const data = Array(20).fill([
     title="DANH SÁCH MÀN HÌNH"
     :image="bannerImage"
     :headers="headers"
-    :data="data"
+    :data="manHinh"
   />
 </template>
