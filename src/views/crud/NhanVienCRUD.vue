@@ -56,13 +56,37 @@ const thongTinHopLe = computed(() => {
 const validateAndProceed = async (nextTab) => {
   errors.value = {};
 
-  if (!nhanVien.value.hoTen || !nhanVien.value.email || !nhanVien.value.sdt) {
-    errors.value.nhanVien = "Vui lòng nhập đầy đủ thông tin!";
+  if (
+    activeTab.value === "panel1" &&
+    (!nhanVien.value.hoTen || !nhanVien.value.email || !nhanVien.value.sdt)
+  ) {
+    errors.value.nhanVien = "Vui lòng nhập đầy đủ thông tin nhân viên!";
     return;
   }
 
-  activeTab.value = nextTab;
-};
+  if (activeTab.value === "panel1") {
+    const { email, sdt } = nhanVien.value;
+
+    if (email || sdt) {
+      try {
+        const response = await staffService.checkDuplicate(
+          email,
+          sdt,
+          staffId ? staffId : 0
+        );
+
+        if (response?.data) {
+          errors.value.nhanVien = "Email hoặc số điện thoại đã tồn tại!";
+          return;
+        }
+      } catch (error) {
+        console.error("Lỗi kiểm tra trùng lặp:", error);
+        errors.value.nhanVien = "Lỗi khi kiểm tra trùng lặp!";
+        return;
+      }
+    }
+  }
+}
 
 const submitForm = async () => {
   if (!thongTinHopLe.value) {

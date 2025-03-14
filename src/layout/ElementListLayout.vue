@@ -10,7 +10,9 @@ defineProps({
     type: String,
     default: "h-24", 
   },
-  link: String
+  link: String,
+  deleteFunc: { type: Function },
+  linkEdit: { type: String },
 });
 
 const search = ref("");

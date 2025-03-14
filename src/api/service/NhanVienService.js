@@ -23,9 +23,9 @@ const staffService = {
     }
   },
 
-  async addStaff(customer) {
+  async addStaff(staff) {
     try {
-      const response = await api.post(`${API_URL}/add`, customer);
+      const response = await api.post(`${API_URL}/add`, staff);
       return response.data;
     } catch (error) {
       console.error("Lỗi khi thêm nhân viên:", error);
@@ -33,12 +33,12 @@ const staffService = {
     }
   },
 
-  async updateStaff(customerId, customerData) {
+  async updateStaff(staffId, staffData) {
     try {
-      const response = await api.put(`${API_URL}/edit/${customerId}`, customerData);
+      const response = await api.put(`${API_URL}/edit/${staffId}`, staffData);
       return response.data;
     } catch (error) {
-      console.error(`Lỗi khi cập nhật nhân viên ID ${customerId}:`, error);
+      console.error(`Lỗi khi cập nhật nhân viên ID ${staffId}:`, error);
       throw error;
     }
   },
@@ -53,7 +53,7 @@ const staffService = {
     }
   },
 
-  async checkDuplicate(email, sdt, id = null) {
+  async checkDuplicate(email, sdt, id ) {
     try {
       return await api.get(`${API_URL}/check-duplicate/${id}/${email}/${sdt}`);
     } catch (error) {
