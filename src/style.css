@@ -5,42 +5,10 @@
   themes: all;
 }
 
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-  height: 100%;
-}
-
 #app {
   /*max-width: 1280px;*/
   min-width: 100%;
   /*margin: 0 auto;*/
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }
 
 .sidebar a {
@@ -51,7 +19,7 @@ body {
   color: var(--color-base-content);
 }
 
-.sidebar a.router-link-exact-active {
+.sidebar a.router-link-active {
   background-color: var(--color-primary);
   color: var(--color-primary-content);
   text-decoration: none;
@@ -64,4 +32,23 @@ body {
 .sidebar a:hover {
   color: var(--color-base-content);
   text-decoration: none;
+}
+
+.custom-input {
+  background-color: var(--color-base-200);
+  border: none;
+}
+
+.custom-input:focus-within {
+  border: none;
+  outline: none;
+}
+
+.logo {
+  width: 216px;
+  height: 34px;
+  background-color: var(--color-primary);
+  mask-image: url('./assets/brand-logo/lapxpert-logo.png');
+  mask-size: cover;
+  mask-repeat: no-repeat;
 }

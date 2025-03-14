@@ -2,7 +2,6 @@ import {createRouter, createWebHistory} from "vue-router";
 import Login from "../views/auth/Login.vue";
 import Register from "../views/auth/Register.vue";
 import Voucher from "../views/shop/Voucher.vue";
-import Dashboard from "../views/Dashboard.vue";
 import Invoice from "../views/shop/Invoice.vue";
 import User from "../views/user/User.vue";
 import Customer from "../views/user/Customer.vue";
@@ -18,12 +17,15 @@ import Profile from "../views/user/Profile.vue";
 import Saleoff from "../views/shop/Saleoff.vue";
 import AddProduct from "../views/product/AddProduct.vue";
 import DataDisplay from "../views/DataDisplay.vue";
+import Admin from "../views/Admin.vue";
+import AddVoucher from "../views/shop/AddVoucher.vue";
+import VoucherMain from "../views/shop/VoucherMain.vue";
 
 const routes = [
     {
-        path: '/dashboard',
-        name: 'Dashboard',
-        component: Dashboard,
+        path: '/admin',
+        name: 'Admin',
+        component: Admin,
         children: [
             {
                 path: '/monitor',
@@ -64,6 +66,18 @@ const routes = [
                 path: '/voucher',
                 name: 'Voucher',
                 component: Voucher,
+                children: [
+                  {
+                    path: '',
+                    name: 'VoucherDefault',
+                    component: VoucherMain,
+                  },
+                  {
+                    path: '/voucher/add',
+                    name: 'AddVoucher',
+                    component: AddVoucher,
+                  }
+                ],
             },
             {
                 path: '/product',

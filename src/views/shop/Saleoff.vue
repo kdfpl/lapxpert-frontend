@@ -1,187 +1,552 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
-  <div id="root">
-    <div class="w-full min-h-[760px] flex flex-col items-center justify-end rounded-box shadow-lg z-0" style="background-image: url('https://picsum.photos/1920/1080?grayscale')">
-      <div class="w-full h-[620px] flex flex-col items-center justify-center bg-base-100 rounded-box shadow-2xl">
-        <div class="flex items-center justify-between w-full px-10 mt-10 gap-50">
-          <div class="join flex-1">
-            <input class="input join-item w-full bg-base-200" placeholder="">
-            <button class="btn btn-primary btn-soft join-item">
-              <font-awesome-icon icon="fa-solid fa-magnifying-glass"/>
-              Tìm kiếm
-            </button>
-          </div>
-          <div class="flex flex-1 gap-4 min-w-0">
-            <label class="input w-1/2 bg-base-200">
-              <span class="label">Ngày bắt đầu</span>
-              <input type="date" class="w-full min-w-0">
-            </label>
+  <!-- canvas -->
+  <div class="bg-base-100 flex h-full w-full flex-col rounded-2xl p-5">
+    
+    <!-- search&filter -->
+    <div class="mb-2 flex w-full items-center justify-end gap-2">
+      <label
+        class="input input-ghost bg-base-200 focus-within:bg-base-200 grow focus-within:outline-none"
+      >
+        <span
+          class="icon-[streamline--search-visual-solid] bg-primary size-5"
+        ></span>
+        <input type="search" placeholder="Tên đợt giảm giá..." />
+      </label>
 
-            <label class="input w-1/2 bg-base-200">
-              <span class="label">Ngày kết thúc</span>
-              <input type="date" class="w-full min-w-0">
-            </label>
-          </div>
-        </div>
-        <div class="flex items-center justify-between w-full px-10 mt-8 gap-50">
-          <div class="flex-1 items-center">
-            <label class="select w-full bg-base-200">
-              <span class="label">Trạng thái</span>
-              <select>
-                <option disabled selected>Trạng thái</option>
-                <option>Hoạt động</option>
-                <option>Không hoạt động</option>
-              </select>
-            </label>
-          </div>
+      <label class="input custom-input w-fit">
+        <span class="label text-primary font-medium">Ngày bắt đầu</span>
+        <input type="datetime-local" />
+      </label>
 
-          <div class="flex-1 items-center">
-            <label class="select w-full bg-base-200">
-              <span class="label">Sắp xếp</span>
-              <select>
-                <option disabled selected>Sắp xếp</option>
-                <option>A-Z</option>
-                <option>Z-A</option>
-              </select>
-            </label>
-          </div>
+      <label class="input custom-input w-fit">
+        <span class="label text-primary font-medium">Ngày kết thúc</span>
+        <input type="datetime-local" />
+      </label>
+    </div>
+
+    <div class="mb-2 flex w-full items-center justify-end gap-2">
+      <div class="join">
+        <button class="btn btn-soft btn-primary join-item border-none">
+          <span class="icon-[line-md--filter-remove] size-5"></span>
+        </button>
+        <select class="select custom-input">
+          <option selected disabled>Trạng thái</option>
+          <option>Đang diễn ra</option>
+          <option>Ngừng/Hết hạn</option>
+        </select>
+      </div>
+
+      <div class="join">
+        <button class="btn btn-soft btn-primary join-item border-none">
+          <span class="icon-[line-md--filter-remove] size-5"></span>
+        </button>
+        <select class="select custom-input join-item">
+          <option selected disabled>Loại</option>
+          <option>Hoạt động</option>
+          <option>Ngừng/Hết hạn</option>
+        </select>
+      </div>
+
+      <div class="join">
+        <button class="btn btn-soft btn-primary join-item border-none">
+          <span class="icon-[line-md--filter-remove] size-5"></span>
+        </button>
+        <div class="bg-base-200 join-item flex items-center gap-2">
+          <input
+            type="text"
+            placeholder="%"
+            class="input input-ghost join-item custom-input w-15"
+          />
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value="40"
+            class="range range-primary range-xs mr-3 w-100"
+          />
         </div>
-        <div class="flex justify-end w-full px-10 mt-8">
-          <button class="btn btn-primary btn-soft">Thêm voucher</button>
-        </div>
-        <div class="flex grow items-start justify-center w-full px-10 overflow-x-auto mt-5">
-          <table class="table table-pin-rows">
-            <thead>
-            <tr>
-              <th>STT</th>
-              <th>Tên</th>
-              <th>Giá trị</th>
-              <th>Thời gian</th>
-              <th>Trạng thái</th>
-              <th>Thao tác</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td>1</td>
-              <td>Phieu1</td>
-              <td>100.000 đ</td>
-              <td>1/1/2025 - 1/1/2026</td>
-              <td>
-                <div class="badge badge-soft badge-success">Hoạt động</div>
-              </td>
-              <td>
-                <button class="btn btn-circle btn-soft">
-                  <font-awesome-icon icon="fa-solid fa-pencil"/>
+      </div>
+    </div>
+
+    <!-- button -->
+    <div class="mb-2 flex w-full items-center justify-end gap-2">
+      <button class="btn btn-primary btn-soft">
+        <span class="icon-[ph--microsoft-excel-logo] size-5"></span>
+        Nhập Excel
+      </button>
+      <button class="btn btn-primary btn-soft">
+        <span class="icon-[ph--microsoft-excel-logo] size-5"></span>
+        Xuất Excel
+      </button>
+      <button class="btn btn-primary btn-soft">
+        <span class="icon-[icon-park-outline--add-four] size-5"></span>
+        Thêm đợt giảm giá
+      </button>
+    </div>
+
+    <!-- table -->
+    <div class="relative flex-1">
+      <div class="absolute inset-0 overflow-auto">
+        <table class="table-pin-rows table text-center">
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Tên</th>
+            <th>Giá trị</th>
+            <th>Thời gian</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Phieu1</td>
+            <td>100.000 đ</td>
+            <td>1/1/2025 - 1/1/2026</td>
+            <td>
+              <div class="badge badge-soft badge-success">Đang diễn ra</div>
+            </td>
+            <td>
+              <div class="join">
+                <button
+                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                >
+                  <!-- Icon mặc định -->
+                  <span
+                    class="icon-[heroicons-outline--pencil-alt] size-4 group-hover:hidden"
+                  ></span>
+                  <!-- Icon khi hover -->
+                  <span
+                    class="icon-[heroicons-solid--pencil-alt] hidden size-4 group-hover:inline"
+                  ></span>
                 </button>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Phieu2</td>
-              <td>200.000 đ</td>
-              <td>1/1/2025 - 1/1/2026</td>
-              <td>
-                <div class="badge badge-soft badge-error">Không hoạt động</div>
-              </td>
-              <td>
-                <button class="btn btn-circle btn-soft">
-                  <font-awesome-icon icon="fa-solid fa-pencil"/>
+                <button
+                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                >
+                  <!-- Icon mặc định -->
+                  <span
+                    class="icon-[mdi--bin-outline] size-4 group-hover:hidden"
+                  ></span>
+                  <!-- Icon khi hover -->
+                  <span
+                    class="icon-[mdi--bin] hidden size-4 group-hover:inline"
+                  ></span>
                 </button>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Phieu2</td>
-              <td>200.000 đ</td>
-              <td>1/1/2025 - 1/1/2026</td>
-              <td>
-                <div class="badge badge-soft badge-error">Không hoạt động</div>
-              </td>
-              <td>
-                <button class="btn btn-circle btn-soft">
-                  <font-awesome-icon icon="fa-solid fa-pencil"/>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>Phieu1</td>
+            <td>100.000 đ</td>
+            <td>1/1/2025 - 1/1/2026</td>
+            <td>
+              <div class="badge badge-soft badge-success">Đang diễn ra</div>
+            </td>
+            <td>
+              <div class="join">
+                <button
+                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                >
+                  <!-- Icon mặc định -->
+                  <span
+                    class="icon-[heroicons-outline--pencil-alt] size-4 group-hover:hidden"
+                  ></span>
+                  <!-- Icon khi hover -->
+                  <span
+                    class="icon-[heroicons-solid--pencil-alt] hidden size-4 group-hover:inline"
+                  ></span>
                 </button>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Phieu2</td>
-              <td>200.000 đ</td>
-              <td>1/1/2025 - 1/1/2026</td>
-              <td>
-                <div class="badge badge-soft badge-error">Không hoạt động</div>
-              </td>
-              <td>
-                <button class="btn btn-circle btn-soft">
-                  <font-awesome-icon icon="fa-solid fa-pencil"/>
+                <button
+                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                >
+                  <!-- Icon mặc định -->
+                  <span
+                    class="icon-[mdi--bin-outline] size-4 group-hover:hidden"
+                  ></span>
+                  <!-- Icon khi hover -->
+                  <span
+                    class="icon-[mdi--bin] hidden size-4 group-hover:inline"
+                  ></span>
                 </button>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Phieu2</td>
-              <td>200.000 đ</td>
-              <td>1/1/2025 - 1/1/2026</td>
-              <td>
-                <div class="badge badge-soft badge-error">Không hoạt động</div>
-              </td>
-              <td>
-                <button class="btn btn-circle btn-soft">
-                  <font-awesome-icon icon="fa-solid fa-pencil"/>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>Phieu1</td>
+            <td>100.000 đ</td>
+            <td>1/1/2025 - 1/1/2026</td>
+            <td>
+              <div class="badge badge-soft badge-success">Đang diễn ra</div>
+            </td>
+            <td>
+              <div class="join">
+                <button
+                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                >
+                  <!-- Icon mặc định -->
+                  <span
+                    class="icon-[heroicons-outline--pencil-alt] size-4 group-hover:hidden"
+                  ></span>
+                  <!-- Icon khi hover -->
+                  <span
+                    class="icon-[heroicons-solid--pencil-alt] hidden size-4 group-hover:inline"
+                  ></span>
                 </button>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Phieu2</td>
-              <td>200.000 đ</td>
-              <td>1/1/2025 - 1/1/2026</td>
-              <td>
-                <div class="badge badge-soft badge-error">Không hoạt động</div>
-              </td>
-              <td>
-                <button class="btn btn-circle btn-soft">
-                  <font-awesome-icon icon="fa-solid fa-pencil"/>
+                <button
+                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                >
+                  <!-- Icon mặc định -->
+                  <span
+                    class="icon-[mdi--bin-outline] size-4 group-hover:hidden"
+                  ></span>
+                  <!-- Icon khi hover -->
+                  <span
+                    class="icon-[mdi--bin] hidden size-4 group-hover:inline"
+                  ></span>
                 </button>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="flex items-center justify-between w-full px-10 mb-5 mt-5">
-          <div class="flex items-center">
-            <label class="label">
-              <span>Xem</span>
-                <select class="badge badge-soft">
-                  <option>5</option>
-                  <option>10</option>
-                  <option>20</option>
-                </select>
-              <span>phiếu giảm giá</span>
-            </label>
-          </div>
-          <div class="join gap-2">
-            <button class="join-item btn btn-circle btn-sm btn-soft">
-              <font-awesome-icon icon="fa-solid fa-angle-left"/>
-            </button>
-            <button class="join-item btn btn-circle btn-sm btn-soft">1</button>
-            <button class="join-item btn btn-circle btn-sm btn-soft">2</button>
-            <button class="join-item btn btn-circle btn-sm btn-soft">3</button>
-            <button class="join-item btn btn-circle btn-sm btn-soft">4</button>
-            <button class="join-item btn btn-circle btn-sm btn-soft">
-              <font-awesome-icon icon="fa-solid fa-angle-right" />
-            </button>
-          </div>
-        </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>Phieu1</td>
+            <td>100.000 đ</td>
+            <td>1/1/2025 - 1/1/2026</td>
+            <td>
+              <div class="badge badge-soft badge-success">Đang diễn ra</div>
+            </td>
+            <td>
+              <div class="join">
+                <button
+                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                >
+                  <!-- Icon mặc định -->
+                  <span
+                    class="icon-[heroicons-outline--pencil-alt] size-4 group-hover:hidden"
+                  ></span>
+                  <!-- Icon khi hover -->
+                  <span
+                    class="icon-[heroicons-solid--pencil-alt] hidden size-4 group-hover:inline"
+                  ></span>
+                </button>
+                <button
+                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                >
+                  <!-- Icon mặc định -->
+                  <span
+                    class="icon-[mdi--bin-outline] size-4 group-hover:hidden"
+                  ></span>
+                  <!-- Icon khi hover -->
+                  <span
+                    class="icon-[mdi--bin] hidden size-4 group-hover:inline"
+                  ></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>Phieu1</td>
+            <td>100.000 đ</td>
+            <td>1/1/2025 - 1/1/2026</td>
+            <td>
+              <div class="badge badge-soft badge-success">Đang diễn ra</div>
+            </td>
+            <td>
+              <div class="join">
+                <button
+                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                >
+                  <!-- Icon mặc định -->
+                  <span
+                    class="icon-[heroicons-outline--pencil-alt] size-4 group-hover:hidden"
+                  ></span>
+                  <!-- Icon khi hover -->
+                  <span
+                    class="icon-[heroicons-solid--pencil-alt] hidden size-4 group-hover:inline"
+                  ></span>
+                </button>
+                <button
+                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                >
+                  <!-- Icon mặc định -->
+                  <span
+                    class="icon-[mdi--bin-outline] size-4 group-hover:hidden"
+                  ></span>
+                  <!-- Icon khi hover -->
+                  <span
+                    class="icon-[mdi--bin] hidden size-4 group-hover:inline"
+                  ></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>Phieu1</td>
+            <td>100.000 đ</td>
+            <td>1/1/2025 - 1/1/2026</td>
+            <td>
+              <div class="badge badge-soft badge-success">Đang diễn ra</div>
+            </td>
+            <td>
+              <div class="join">
+                <button
+                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                >
+                  <!-- Icon mặc định -->
+                  <span
+                    class="icon-[heroicons-outline--pencil-alt] size-4 group-hover:hidden"
+                  ></span>
+                  <!-- Icon khi hover -->
+                  <span
+                    class="icon-[heroicons-solid--pencil-alt] hidden size-4 group-hover:inline"
+                  ></span>
+                </button>
+                <button
+                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                >
+                  <!-- Icon mặc định -->
+                  <span
+                    class="icon-[mdi--bin-outline] size-4 group-hover:hidden"
+                  ></span>
+                  <!-- Icon khi hover -->
+                  <span
+                    class="icon-[mdi--bin] hidden size-4 group-hover:inline"
+                  ></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Phieu2</td>
+            <td>200.000 đ</td>
+            <td>1/1/2025 - 1/1/2026</td>
+            <td>
+              <div class="badge badge-soft badge-error">Ngừng/Hết hạn</div>
+            </td>
+            <td>
+              <div class="join">
+                <button
+                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                >
+                  <!-- Icon mặc định -->
+                  <span
+                    class="icon-[heroicons-outline--pencil-alt] size-4 group-hover:hidden"
+                  ></span>
+                  <!-- Icon khi hover -->
+                  <span
+                    class="icon-[heroicons-solid--pencil-alt] hidden size-4 group-hover:inline"
+                  ></span>
+                </button>
+                <button
+                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                >
+                  <!-- Icon mặc định -->
+                  <span
+                    class="icon-[mdi--bin-outline] size-4 group-hover:hidden"
+                  ></span>
+                  <!-- Icon khi hover -->
+                  <span
+                    class="icon-[mdi--bin] hidden size-4 group-hover:inline"
+                  ></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Phieu2</td>
+            <td>200.000 đ</td>
+            <td>1/1/2025 - 1/1/2026</td>
+            <td>
+              <div class="badge badge-soft badge-error">Ngừng/Hết hạn</div>
+            </td>
+            <td>
+              <div class="join">
+                <button
+                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                >
+                  <!-- Icon mặc định -->
+                  <span
+                    class="icon-[heroicons-outline--pencil-alt] size-4 group-hover:hidden"
+                  ></span>
+                  <!-- Icon khi hover -->
+                  <span
+                    class="icon-[heroicons-solid--pencil-alt] hidden size-4 group-hover:inline"
+                  ></span>
+                </button>
+                <button
+                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                >
+                  <!-- Icon mặc định -->
+                  <span
+                    class="icon-[mdi--bin-outline] size-4 group-hover:hidden"
+                  ></span>
+                  <!-- Icon khi hover -->
+                  <span
+                    class="icon-[mdi--bin] hidden size-4 group-hover:inline"
+                  ></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Phieu2</td>
+            <td>200.000 đ</td>
+            <td>1/1/2025 - 1/1/2026</td>
+            <td>
+              <div class="badge badge-soft badge-error">Ngừng/Hết hạn</div>
+            </td>
+            <td>
+              <div class="join">
+                <button
+                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                >
+                  <!-- Icon mặc định -->
+                  <span
+                    class="icon-[heroicons-outline--pencil-alt] size-4 group-hover:hidden"
+                  ></span>
+                  <!-- Icon khi hover -->
+                  <span
+                    class="icon-[heroicons-solid--pencil-alt] hidden size-4 group-hover:inline"
+                  ></span>
+                </button>
+                <button
+                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                >
+                  <!-- Icon mặc định -->
+                  <span
+                    class="icon-[mdi--bin-outline] size-4 group-hover:hidden"
+                  ></span>
+                  <!-- Icon khi hover -->
+                  <span
+                    class="icon-[mdi--bin] hidden size-4 group-hover:inline"
+                  ></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Phieu2</td>
+            <td>200.000 đ</td>
+            <td>1/1/2025 - 1/1/2026</td>
+            <td>
+              <div class="badge badge-soft badge-error">Ngừng/Hết hạn</div>
+            </td>
+            <td>
+              <div class="join">
+                <button
+                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                >
+                  <!-- Icon mặc định -->
+                  <span
+                    class="icon-[heroicons-outline--pencil-alt] size-4 group-hover:hidden"
+                  ></span>
+                  <!-- Icon khi hover -->
+                  <span
+                    class="icon-[heroicons-solid--pencil-alt] hidden size-4 group-hover:inline"
+                  ></span>
+                </button>
+                <button
+                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                >
+                  <!-- Icon mặc định -->
+                  <span
+                    class="icon-[mdi--bin-outline] size-4 group-hover:hidden"
+                  ></span>
+                  <!-- Icon khi hover -->
+                  <span
+                    class="icon-[mdi--bin] hidden size-4 group-hover:inline"
+                  ></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Phieu2</td>
+            <td>200.000 đ</td>
+            <td>1/1/2025 - 1/1/2026</td>
+            <td>
+              <div class="badge badge-soft badge-error">Ngừng/Hết hạn</div>
+            </td>
+            <td>
+              <div class="join">
+                <button
+                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                >
+                  <!-- Icon mặc định -->
+                  <span
+                    class="icon-[heroicons-outline--pencil-alt] size-4 group-hover:hidden"
+                  ></span>
+                  <!-- Icon khi hover -->
+                  <span
+                    class="icon-[heroicons-solid--pencil-alt] hidden size-4 group-hover:inline"
+                  ></span>
+                </button>
+                <button
+                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                >
+                  <!-- Icon mặc định -->
+                  <span
+                    class="icon-[mdi--bin-outline] size-4 group-hover:hidden"
+                  ></span>
+                  <!-- Icon khi hover -->
+                  <span
+                    class="icon-[mdi--bin] hidden size-4 group-hover:inline"
+                  ></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+    <div class="divider divider-primary"></div>
+    <!-- pagination -->
+    <div class="flex justify-between">
+      <div class="flex items-center">
+        <label class="label">
+          <span>Xem</span>
+          <span class="badge badge-soft badge-primary">
+            <select class="focus:outline-none">
+              <option>5</option>
+              <option>10</option>
+              <option>20</option>
+            </select>
+          </span>
+          <span>dòng 1 trang</span>
+        </label>
+      </div>
+
+      <div class="join gap-2">
+        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
+          <span class="icon-[ep--arrow-left-bold]"></span>
+        </button>
+        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
+          1
+        </button>
+        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
+          2
+        </button>
+        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
+          3
+        </button>
+        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
+          4
+        </button>
+        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
+          <span class="icon-[ep--arrow-right-bold]"></span>
+        </button>
       </div>
     </div>
   </div>
 </template>
-
-<style scoped>
-
-</style>
