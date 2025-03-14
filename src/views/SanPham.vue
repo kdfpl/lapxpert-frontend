@@ -2,24 +2,24 @@
 import { ref, computed } from "vue";
 import GlassTable from "../components/customTable.vue";
 
-const headers = [
-  "STT",
-  "Tên SP",
-  "Ảnh",
-  "Ngày Thêm",
-  "Số lượng",
-  "Trạng thái",
-  "Thao tác",
-];
-const data = Array(20).fill([
-  "demo",
-  "demo",
-  "demo",
-  "demo",
-  "demo",
-  "demo",
-  "demo",
-]);
+  const headers = [
+    "STT",
+    "Tên SP",
+    "Ảnh",
+    "Ngày Thêm",
+    "Số lượng",
+    "Trạng thái",
+    "Thao tác",
+  ];
+  const data = Array(20).fill([
+    "demo",
+    "demo",
+    "demo",
+    "demo",
+    "demo",
+    "demo",
+    "demo",
+  ]);
 
 const search = ref("");
 const searchLength = computed(() => search.value.length);

@@ -21,19 +21,47 @@ export default {
       chartData: {
         labels: ['Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7', 'Chủ Nhật'],
         datasets: [
-          {
+        {
             type: 'bar',
             label: 'Apple',
             backgroundColor: 'rgba(255, 99, 132, 0.5)',
             borderColor: '#ff6384',
-            data: [2600,1900, 1300, 1700, 2100, 1800, 2000, 2000],
+            data: [1262, 2912, 2165, 2335, 2943, 1765, 1734],
           },
           {
             type: 'bar',
             label: 'ASUS',
             backgroundColor: 'rgba(54, 162, 235, 0.5)',
             borderColor: '#36A2EB',
-            data: [1500, 1900, 1300, 1700, 2100, 1800, 2000, 4400],
+            data: [1500, 1900, 1300, 1700, 2100, 1800, 2000],
+          },
+          {
+            type: 'bar',
+            label: 'Dell',
+            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+            borderColor: '#4BC0C0',
+            data: [1400, 1600, 1800, 2200, 2500, 2000, 2300],
+          },
+          {
+            type: 'bar',
+            label: 'Lenovo',
+            backgroundColor: 'rgba(153, 102, 255, 0.5)',
+            borderColor: '#9966FF',
+            data: [1200, 1400, 1600, 1900, 2100, 1800, 2000],
+          },
+          {
+            type: 'bar',
+            label: 'MSI',
+            backgroundColor: 'rgba(255, 159, 64, 0.5)',
+            borderColor: '#FF9F40',
+            data: [1000, 1300, 1500, 1700, 2000, 1800, 1900],
+          },
+          {
+            type: 'bar',
+            label: 'HP',
+            backgroundColor: 'rgba(255, 206, 86, 0.5)',
+            borderColor: '#FFCE56',
+            data: [900, 1100, 1300, 1600, 1900, 1700, 1800],
           },
           {
             type: 'line',
