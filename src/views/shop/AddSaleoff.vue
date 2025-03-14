@@ -1,11 +1,11 @@
 <template>
-  <div class="flex h-full w-full flex-col">
+  <section class="flex h-full w-full flex-col">
     <!-- div-form -->
-    <div class="flex h-[650px] w-full items-center mb-4">
+    <section class="flex h-[650px] w-full items-center mb-4">
       <!-- form -->
       <div class="rounded-box bg-base-200 border-base-300 flex-1 border px-4 pb-4">
         <fieldset class="fieldset w-full">
-          <legend class="fieldset-legend">Thêm phiếu giảm giá</legend>
+          <legend class="fieldset-legend">Thêm đợt giảm giá</legend>
 
           <label class="fieldset-label">Mã</label>
           <input type="text" class="input w-full" placeholder="KM100..." />
@@ -156,12 +156,12 @@
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
     <span class="text-base-content text-2xl font-bold mb-2">Chi tiết sản phẩm</span>
 
     <!-- div-table-detail -->
-    <div
+    <section
         class="rounded-box bg-base-200 border-base-300 flex max-h-[650px] flex-1 flex-col border p-4"
       >
         <!-- table -->
@@ -264,6 +264,6 @@
             </button>
           </div>
         </div>
-      </div>
-  </div>
+      </section>
+  </section>
 </template>

@@ -20,6 +20,8 @@ import DataDisplay from "../views/DataDisplay.vue";
 import Admin from "../views/Admin.vue";
 import AddVoucher from "../views/shop/AddVoucher.vue";
 import VoucherMain from "../views/shop/VoucherMain.vue";
+import SaleoffMain from "../views/shop/SaleoffMain.vue";
+import AddSaleoff from "../views/shop/AddSaleoff.vue";
 
 const routes = [
     {
@@ -61,6 +63,18 @@ const routes = [
                 path: '/saleoff',
                 name: 'Saleoff',
                 component: Saleoff,
+                children: [
+                  {
+                    path: '',
+                    name: 'SaleoffDefault',
+                    component: SaleoffMain,
+                  },
+                  {
+                    path: '/saleoff/add',
+                    name: 'AddSaleoff',
+                    component: AddSaleoff,
+                  }
+                ],
             },
             {
                 path: '/voucher',
