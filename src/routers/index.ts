@@ -1,7 +1,7 @@
 import {createRouter, createWebHistory} from "vue-router";
 import Login from "../views/auth/Login.vue";
 import Register from "../views/auth/Register.vue";
-import Voucher from "../views/shop/Voucher.vue";
+import Voucher from "../views/voucher/Voucher.vue";
 import Invoice from "../views/shop/Invoice.vue";
 import User from "../views/user/User.vue";
 import Customer from "../views/user/Customer.vue";
@@ -14,14 +14,15 @@ import Disk from "../views/product/Disk.vue";
 import Display from "../views/product/Display.vue";
 import Color from "../views/product/Color.vue";
 import Profile from "../views/user/Profile.vue";
-import Saleoff from "../views/shop/Saleoff.vue";
+import Saleoff from "../views/sale/Saleoff.vue";
 import AddProduct from "../views/product/AddProduct.vue";
 import DataDisplay from "../views/DataDisplay.vue";
 import Admin from "../views/Admin.vue";
-import AddVoucher from "../views/shop/AddVoucher.vue";
-import VoucherMain from "../views/shop/VoucherMain.vue";
-import SaleoffMain from "../views/shop/SaleoffMain.vue";
-import AddSaleoff from "../views/shop/AddSaleoff.vue";
+import AddVoucher from "../views/voucher/AddVoucher.vue";
+import VoucherMain from "../views/voucher/VoucherMain.vue";
+import SaleoffMain from "../views/sale/SaleoffMain.vue";
+import AddSaleoff from "../views/sale/AddSaleoff.vue";
+
 
 const routes = [
     {
