@@ -5,7 +5,8 @@ import bannerImage from "../../assets/img/CPUBanner.jpg";
 import { ref, onMounted, computed } from "vue";
 import { getAllCpu, addCpu, updateCpu, deleteCpu } from "../../service/SPCTService.js";
 const headers = [
-  "STT",
+  "#",
+  "id",
   "Hãng CPU",
   "Tên CPU",
   "Thế hệ CPU",
@@ -33,6 +34,7 @@ const fetchCpu = async () => {
 const formattedData = computed(() =>
   Array.isArray(cpuList.value)
     ? cpuList.value.map((cpu, index) => ({
+      stt: index + 1,
       id: cpu.id,
       hangCpu: cpu.hangCpu,
       tenCpu: cpu.tenCpu,
@@ -46,18 +48,22 @@ const formattedData = computed(() =>
 const softDeleteCpu = async (cpu) => {
   if (!confirm('Bạn có chắc chắn muốn xóa CPU này?')) return;
 
-  const cpuToDelete = cpuList.value.find(item => item.id === cpu.id);
-  
+  const cpuToDelete = cpuList.value.find((item) => item.id === cpu.id);
+
   if (!cpuToDelete) return;
 
   try {
-    console.log(cpuToDelete.value.id);
-    await deleteCpu(cpuToDelete.value.id);
-    await fetchKhachHang(); 
+    console.log(cpuToDelete.id);
+    await deleteCpu(cpuToDelete.id);
+    await fetchCpu();
   } catch (error) {
-    console.log(cpuToDelete.value.id);
+    console.log(cpuToDelete.id);
     console.error('Lỗi khi xóa CPU:', error);
   }
+};
+
+const editCpu = (cpu) => {
+  router.push({ name: "CpuCRUD", params: { id: cpu.id } });
 };
 
 onMounted(async () => {
@@ -66,6 +72,18 @@ onMounted(async () => {
 </script>
 
 <template>
+  <div class="relative w-full mt-5">
+    <!-- Banner -->
+    <div class="w-full h-50 overflow-hidden rounded-lg mb-15">
+      <img class="w-full h-full object-cover" src="../../assets/img/RamBanner.jpg" alt="Banner" />
+    </div>
+
+    <!-- Thẻ thông tin đè lên -->
+    <div
+      class="absolute bottom-[-40px] bg-white/90 left-1/2 transform -translate-x-1/2 w-[90%] md:w-[80%] lg:w-[70%] shadow-lg rounded-xl p-5 flex justify-between space-x-4">
+      <h1 class="text-3xl font-bold">DANH SÁCH CPU</h1>
+    </div>
+  </div>
   <div class="p-6 mx-auto bg-white rounded-xl shadow-lg border border-gray-200">
     <div class="flex justify-between">
       <!-- Thanh tìm kiếm -->
@@ -85,17 +103,18 @@ onMounted(async () => {
       <div class="flex space-x-3">
         <router-link to="/CpuCRUD">
           <button
-            class="px-6 py-2 rounded-lg font-semibold text-white bg-gray-900 shadow-lg hover:scale-105 active:scale-95 transition">
+            class="px-6 h-10 py-2 rounded-lg font-semibold text-white bg-gray-900 shadow-lg hover:scale-105 active:scale-95 transition">
             + THÊM
           </button>
         </router-link>
         <button
-          class="px-6 py-2 rounded-lg font-semibold border text-black bg-white shadow-lg hover:scale-105 active:scale-95 transition">
+          class="px-6 h-10 py-2 rounded-lg font-semibold border text-black bg-white shadow-lg hover:scale-105 active:scale-95 transition">
           XUẤT
         </button>
       </div>
     </div>
   </div>
   <!-- Bảng hiển thị dữ liệu -->
-  <customTable :headers="headers" :data="formattedData" :deleteFunc="deleteCpu" link="/CpuCRUD" />
+  <customTable :headers="headers" :data="formattedData" :deleteFunc="softDeleteCpu" link="/CpuCRUD"
+    :editFunc="editCpu" />
 </template>

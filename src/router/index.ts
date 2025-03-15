@@ -15,6 +15,12 @@ import GiamGia from "../views/GiamGia.vue";
 import KhachHang from "../views/KhachHang.vue";
 import NhanVien from "../views/NhanVien.vue";
 import CpuCRUD from "../views/crud/CpuCRUD.vue";
+import MauSacCRUD from "../views/crud/MauSacCRUD.vue";
+import GpuCRUD from "../views/crud/GpuCRUD.vue";
+import ManHinhCRUD from "../views/crud/ManHinhCRUD.vue";
+import OCungCRUD from "../views/crud/OCungCRUD.vue";
+import PinCRUD from "../views/crud/PinCRUD.vue";
+import SanPhamCRUD from "../views/crud/SanPhamCRUD.vue";
 
 
 const routes = [
@@ -64,14 +70,52 @@ const routes = [
         component: Ram,
     },
     {
-        path: '/RamCRUD',
+        path: '/RamCRUD/:id?',
         name: 'RamCRUD',
         component: RamCRUD,
+        props: true,
+    },
+    {
+        path: '/SanPhamCRUD/:id?',
+        name: 'SanPhamCRUD',
+        component: SanPhamCRUD,
+        props: true,
     },
     {
         path: '/CpuCRUD/:id?',
         name: 'CpuCRUD',
         component: CpuCRUD,
+        props: true,
+    },
+    {
+        path: '/MauSacCRUD/:id?',
+        name: 'MauSacCRUD',
+        component: MauSacCRUD,
+        props: true,
+    },
+    {
+        path: '/ManHinhCRUD/:id?',
+        name: 'ManHinhCRUD',
+        component: ManHinhCRUD,
+        props: true,
+    },
+    {
+        path: '/GpuCRUD/:id?',
+        name: 'GpuCRUD',
+        component: GpuCRUD,
+        props: true,
+    },
+    {
+        path: '/OCungCRUD/:id?',
+        name: 'OCungCRUD',
+        component: OCungCRUD,
+        props: true,
+    },
+    {
+        path: '/PinCRUD/:id?',
+        name: 'PinCRUD',
+        component: PinCRUD,
+        props: true,
     },
     {
         path: '/cpu',

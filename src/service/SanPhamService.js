@@ -30,3 +30,22 @@ export const getAllThuongHieu = async () => {
   console.log(response);
   return response.data;
 };
+
+export const addSanPham = async (sanPhamData) => {
+  try {
+    const response = await axios.post(`${URL_API}/add`, sanPhamData);
+    console.log("Phản hồi từ server:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Lỗi khi thêm Sản Phẩm:", error);
+    throw error;
+  }
+};
+
+export const updateSanPham = async (id, sanPhamData) => {
+  await axios.put(`${URL_API}/update/${id}`, sanPhamData);
+};
+
+export const deleteSanPham = async (id) => {
+  await axios.delete(`${URL_API}/delete/${id}`);
+};
