@@ -12,7 +12,7 @@
             {{ num }}
           </option>
         </select>
-        <span class="text-sm text-black">entries per page</span>
+        <span class="text-sm text-black">số thành phần trong trang</span>
       </div>
     </div>
 
@@ -27,7 +27,9 @@
               :class="rowHeight"
             >
               {{ header }}
-              <span v-if="sortColumn === index">{{ sortDirection === 1 ? ' ▲' : ' ▼' }}</span>
+            </th>
+            <th class="px-4 py-2 text-left text-black font-semibold border-b border-[#C8C7C7]">
+              Hành động
             </th>
             <th
               class="px-4 py-2 text-left text-black font-semibold border-b border-[#C8C7C7]"

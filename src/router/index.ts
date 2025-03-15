@@ -25,6 +25,18 @@ import SanPhamCRUD from "../views/crud/SanPhamCRUD.vue";
 
 const routes = [
     {
+        path: '/KhachHangCRUD/:id?',
+        name: 'KhachHangCRUD',
+        component: KhachHangCRUD,
+        props: true, 
+    },
+    {
+        path: '/NhanVienCRUD/:id?',
+        name: 'NhanVienCRUD',
+        component: NhanVienCRUD,
+        props: true, 
+    },
+    {
         path: '/GiamGia',
         name: 'GiamGia',
         component: GiamGia,
@@ -142,11 +154,11 @@ const routes = [
         name: 'Login',
         component: Login,
     }
-]
+];
 
 const router = createRouter({
     history: createWebHistory(),
     routes,
-})
+});
 
 export default router;
