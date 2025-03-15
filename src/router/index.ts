@@ -3,6 +3,7 @@ import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import Profile from "../views/Profile.vue";
 import SanPham from "../views/SanPham.vue";
+import SPCT from "../views/SanPhamChiTiet.vue";
 import RamCRUD from "../views/crud/RamCRUD.vue";
 import Ram from "../views/list/Ram.vue";
 import ManHInh from "../views/list/ManHInh.vue";
@@ -21,6 +22,7 @@ import ManHinhCRUD from "../views/crud/ManHinhCRUD.vue";
 import OCungCRUD from "../views/crud/OCungCRUD.vue";
 import PinCRUD from "../views/crud/PinCRUD.vue";
 import SanPhamCRUD from "../views/crud/SanPhamCRUD.vue";
+import SpctCRUD from "../views/crud/SpctCRUD.vue";
 
 
 const routes = [
@@ -82,6 +84,12 @@ const routes = [
         props: true,
     },
     {
+        path: '/SpctCRUD/:id?',
+        name: 'SpctCRUD',
+        component: SpctCRUD,
+        props: true,
+    },
+    {
         path: '/CpuCRUD/:id?',
         name: 'CpuCRUD',
         component: CpuCRUD,
@@ -136,6 +144,11 @@ const routes = [
         path: '/san-pham',
         name: 'SanPham',
         component: SanPham,
+    },
+    {
+        path: '/san-pham-chi-tiet',
+        name: 'SanPhamChiTiet',
+        component: SPCT,
     },
     {
         path: '/login',

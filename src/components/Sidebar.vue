@@ -133,7 +133,8 @@ import {
   faHardDrive,
   faDisplay,
   faPalette,
-  faBatteryEmpty
+  faBatteryEmpty,
+  faClipboardList
 } from "@fortawesome/free-solid-svg-icons";
 
 const isCollapsed = ref(false);
@@ -165,6 +166,11 @@ const menuItems = ref([
         name: "Danh sách sản phẩm",
         icon: faLaptop,
         link: "/san-pham",
+      },
+      {
+        name: "Danh sách phiên bản",
+        icon: faClipboardList,
+        link: "/san-pham-chi-tiet",
       },
       {
         name: "Thuộc tính",
