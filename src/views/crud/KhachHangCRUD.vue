@@ -32,17 +32,45 @@ onMounted(async () => {
           sdt: response.data.sdt || "",
         };
 
-        diaChiList.value = response.data.diaChiList || [
-          { thanhPho: "", quanHuyen: "", phuongXa: "", soNhaDuong: "", macDinh: true }
+        const diaChiHopLe = response.data.diaChiList?.filter(dc => dc.tinhTrang) || [];
+
+        diaChiList.value = diaChiHopLe.length > 0 ? diaChiHopLe : [
+          {
+            thanhPho: "",
+            quanHuyen: "",
+            phuongXa: "",
+            soNhaDuong: "",
+            macDinh: true,
+            tinhTrang: true, 
+          },
         ];
       }
     } catch (error) {
       console.error("Lỗi khi tải dữ liệu khách hàng:", error);
     }
   } else {
-    diaChiList.value = [{ thanhPho: "", quanHuyen: "", phuongXa: "", soNhaDuong: "", macDinh: true }];
+    diaChiList.value = [
+      {
+        thanhPho: "",
+        quanHuyen: "",
+        phuongXa: "",
+        soNhaDuong: "",
+        macDinh: true,
+        tinhTrang: true, 
+      },
+    ];
   }
 });
+
+const isValidEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+const isValidPhone = (sdt) => {
+  const phoneRegex = /^[0-9]{10}$/; 
+  return phoneRegex.test(sdt);
+};
 
 const addDiaChi = () => {
   diaChiList.value.push({
@@ -55,15 +83,15 @@ const addDiaChi = () => {
   });
 };
 
-const diaChiHienThi = computed(() => {
-  return diaChiList.value.filter(dc => dc.tinhTrang);
-});
+const diaChiHienThi = computed(() =>
+  diaChiList.value.filter((dc) => dc.tinhTrang)
+);
 
-const removeDiaChi = (index) => {
-  // Kiểm tra có bao nhiêu địa chỉ còn hoạt động (tinhTrang = true)
+const removeDiaChi = (id) => {
+  const index = diaChiList.value.findIndex(dc => dc.id === id);
+  if (index === -1) return;
+
   const activeAddresses = diaChiList.value.filter(dc => dc.tinhTrang);
-
-  // Nếu chỉ còn 1 địa chỉ hợp lệ thì không cho phép xóa
   if (activeAddresses.length === 1) {
     alert("Phải có ít nhất một địa chỉ hợp lệ!");
     return;
@@ -72,34 +100,29 @@ const removeDiaChi = (index) => {
   diaChiList.value[index].tinhTrang = false;
 
   if (diaChiList.value[index].macDinh) {
-    const firstValidIndex = diaChiList.value.findIndex(dc => dc.tinhTrang);
-    if (firstValidIndex !== -1) {
-      diaChiList.value[firstValidIndex].macDinh = true;
-    }
+    const firstValid = diaChiList.value.find(dc => dc.tinhTrang);
+    if (firstValid) firstValid.macDinh = true;
   }
 };
 
 
-
 const setMacDinh = (index) => {
-  if (!diaChiList.value[index].tinhTrang) return; 
+  if (!diaChiList.value[index].tinhTrang) return;
 
   diaChiList.value.forEach((dc, i) => {
     dc.macDinh = i === index;
   });
 };
 
-
-
 const thongTinHopLe = computed(() => {
-
   return (
     khachHang.value.hoTen &&
-    khachHang.value.email &&
-    khachHang.value.sdt &&
+    isValidEmail(khachHang.value.email) &&
+    isValidPhone(khachHang.value.sdt) &&
     diaChiHienThi.value.length > 0 &&
-    diaChiHienThi.value.every(dc => dc.thanhPho && dc.quanHuyen && dc.phuongXa && dc.soNhaDuong)
-    
+    diaChiHienThi.value.every(
+      (dc) => dc.thanhPho && dc.quanHuyen && dc.phuongXa && dc.soNhaDuong
+    )
   );
 });
 
@@ -109,6 +132,16 @@ const validateAndProceed = async (nextTab) => {
   if (activeTab.value === "panel1") {
     if (!khachHang.value.hoTen || !khachHang.value.email || !khachHang.value.sdt) {
       errors.value.khachHang = "Vui lòng nhập đầy đủ thông tin!";
+      return;
+    }
+
+    if (!isValidEmail(khachHang.value.email)) {
+      errors.value.khachHang = "Email không đúng định dạng!";
+      return;
+    }
+
+    if (!isValidPhone(khachHang.value.sdt)) {
+      errors.value.khachHang = "Số điện thoại phải có 10 chữ số!";
       return;
     }
 
@@ -131,7 +164,7 @@ const validateAndProceed = async (nextTab) => {
   }
 
   if (activeTab.value === "panel2") {
-    if (diaChiList.value.length === 0) {
+    if (diaChiHienThi.value.length === 0) {
       errors.value.diaChi = "Vui lòng nhập ít nhất một địa chỉ!";
       return;
     }
@@ -139,6 +172,7 @@ const validateAndProceed = async (nextTab) => {
 
   activeTab.value = nextTab;
 };
+
 
 const submitForm = async () => {
   if (!thongTinHopLe.value) {
@@ -149,7 +183,7 @@ const submitForm = async () => {
   try {
     const customerData = {
       ...khachHang.value,
-      diaChiList: diaChiList.value // Chỉ gửi danh sách địa chỉ mới
+      diaChiList: diaChiList.value, // Chỉ gửi danh sách địa chỉ mới
     };
 
     if (customerId) {
@@ -167,8 +201,6 @@ const submitForm = async () => {
   }
 };
 </script>
-
-
 
 <template>
   <div class="w-[90%] mx-auto mt-10">
@@ -244,14 +276,14 @@ const submitForm = async () => {
               <input
                 type="radio"
                 :checked="dc.macDinh"
-                @change="setMacDinh(index)"
+                @change="setMacDinh(dc.id)"
                 class="mr-2"
               />
               Mặc định
             </label>
             <button
               v-if="diaChiList.length > 1"
-              @click="removeDiaChi(index)"
+              @click="removeDiaChi(dc.id)"
               class="text-red-500 hover:text-red-700 flex items-center"
             >
               <Trash2 class="w-4 h-4 mr-1" /> Xóa

@@ -48,9 +48,18 @@ onMounted(async () => {
   }
 });
 
-// Kiểm tra tính hợp lệ của thông tin
+const isValidEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+const isValidPhone = (sdt) => {
+  const phoneRegex = /^[0-9]{10}$/; 
+  return phoneRegex.test(sdt);
+};
+
 const thongTinHopLe = computed(() => {
-  return nhanVien.value.hoTen && nhanVien.value.email && nhanVien.value.sdt;
+  return nhanVien.value.hoTen && nhanVien.value.email && nhanVien.value.sdt && isValidEmail(nhanVien.value.email)&& isValidPhone(nhanVien.value.sdt);
 });
 
 const validateAndProceed = async (nextTab) => {
@@ -63,6 +72,16 @@ const validateAndProceed = async (nextTab) => {
     errors.value.nhanVien = "Vui lòng nhập đầy đủ thông tin nhân viên!";
     return;
   }
+
+  if (!isValidEmail(nhanVien.value.email)) {
+      errors.value.nhanVien = "Email không đúng định dạng!";
+      return;
+    }
+
+    if (!isValidPhone(nhanVien.value.sdt)) {
+      errors.value.nhanVien = "Số điện thoại phải có 10 chữ số!";
+      return;
+    }
 
   if (activeTab.value === "panel1") {
     const { email, sdt } = nhanVien.value;
