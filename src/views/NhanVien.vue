@@ -1,8 +1,33 @@
 <template>
-  <div class="p-6 mx-auto bg-white rounded-xl shadow-lg border border-gray-200">
+  <div
+    class="p-6 mx-auto bg-white rounded-xl mb-5 shadow-md border border-gray-200"
+  >
+    <div class="flex justify-between">
+      <h1 class="items-center text-center  font-bold text-4xl ">
+        DANH SÁCH NHÂN VIÊN
+      </h1>
+      <div class="flex space-x-3">
+        <button
+          class="px-6 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-gray-900 to-gray-700 shadow-xl backdrop-blur-md bg-opacity-80 border border-white/30 transition-all duration-200 ease-out hover:bg-opacity-90 hover:scale-105 active:scale-95 active:shadow-md"
+        >
+          <router-link to="/NhanVienCRUD">+ THÊM</router-link>
+        </button>
+
+        <button
+          class="px-6 py-2 rounded-lg font-semibold border text-black bg-white/20 backdrop-blur-lg shadow-lg transition-all duration-200 ease-out hover:bg-white/30 hover:border-white/60 hover:scale-105 active:scale-95 active:shadow-md"
+        >
+          XUẤT
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="p-6 mx-auto bg-white rounded-t-xl border border-gray-200"
+  >
     <div class="flex justify-between">
       <div
-        class="flex items-center align-top max-w-md shadow-md bg-white/60 rounded-md"
+        class="flex items-center align-top max-w-md shadow-lg bg-white/60 rounded-md"
       >
         <div class="w-60">
           <input
@@ -39,19 +64,7 @@
         </div>
       </div>
 
-      <div class="flex space-x-3">
-        <button
-          class="px-6 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-gray-900 to-gray-700 shadow-xl backdrop-blur-md bg-opacity-80 border border-white/30 transition-all duration-200 ease-out hover:bg-opacity-90 hover:scale-105 active:scale-95 active:shadow-md"
-        >
-          <router-link to="/NhanVienCRUD">+ THÊM</router-link>
-        </button>
 
-        <button
-          class="px-6 py-2 rounded-lg font-semibold border text-black bg-white/20 backdrop-blur-lg shadow-lg transition-all duration-200 ease-out hover:bg-white/30 hover:border-white/60 hover:scale-105 active:scale-95 active:shadow-md"
-        >
-          XUẤT
-        </button>
-      </div>
     </div>
   </div>
 
@@ -60,6 +73,7 @@
     :data="formattedData"
     :deleteFunc="deleteNhanVien"
     link="/NhanVienCRUD"
+    round="rounded-b-xl"
   />
 </template>
 
@@ -68,7 +82,7 @@ import { ref, computed, onMounted } from "vue";
 import CustomTable from "../components/CustomTable.vue";
 import NhanVienService from "../api/service/NhanVienService.js";
 
-const headers = ["STT","ID", "Họ Tên", "Email", "SĐT", "Chức Vụ"];
+const headers = ["STT", "ID", "Họ Tên", "Email", "SĐT", "Chức Vụ"];
 const NhanVienList = ref([]);
 
 // Xử lý dữ liệu
@@ -80,7 +94,7 @@ const formattedData = computed(() =>
         hoTen: nv.hoTen,
         email: nv.email,
         sdt: nv.sdt,
-        chucVu: nv.chucVu.tenChucVu , 
+        chucVu: nv.chucVu.tenChucVu,
       }))
     : []
 );

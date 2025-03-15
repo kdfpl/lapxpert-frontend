@@ -1,14 +1,13 @@
 <script setup>
-import { ref, computed, watchEffect, onMounted } from "vue";
-import { useRoute,useRouter } from "vue-router";
+import { ref, computed, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import customerService from "../../api/service/KhachHangService";
 import TabPanel from "../../components/TabPanel.vue";
-import { Check, Plus, Trash2, User, Mail, Lock, Phone } from "lucide-vue-next";
+import { Plus, Trash2, Check } from "lucide-vue-next";
 
 const route = useRoute();
 const router = useRouter();
 const customerId = route.params.id;
-console.log(customerId);
 
 const tabs = [
   { label: "1. Thông tin khách hàng", key: "panel1" },
@@ -19,11 +18,8 @@ const tabs = [
 const activeTab = ref("panel1");
 
 const khachHang = ref({ hoTen: "", email: "", sdt: "" });
-const diaChiList = ref([
-  { thanhPho: "", quanHuyen: "", phuongXa: "", soNhaDuong: "", macDinh: true },
-]);
+const diaChiList = ref([]);
 const errors = ref({});
-const duplicateError = ref("");
 
 onMounted(async () => {
   if (customerId) {
@@ -37,18 +33,14 @@ onMounted(async () => {
         };
 
         diaChiList.value = response.data.diaChiList || [
-          {
-            thanhPho: "",
-            quanHuyen: "",
-            phuongXa: "",
-            soNhaDuong: "",
-            macDinh: true,
-          },
+          { thanhPho: "", quanHuyen: "", phuongXa: "", soNhaDuong: "", macDinh: true }
         ];
       }
     } catch (error) {
       console.error("Lỗi khi tải dữ liệu khách hàng:", error);
     }
+  } else {
+    diaChiList.value = [{ thanhPho: "", quanHuyen: "", phuongXa: "", soNhaDuong: "", macDinh: true }];
   }
 });
 
@@ -59,78 +51,92 @@ const addDiaChi = () => {
     phuongXa: "",
     soNhaDuong: "",
     macDinh: false,
+    tinhTrang: true,
   });
 };
 
+const diaChiHienThi = computed(() => {
+  return diaChiList.value.filter(dc => dc.tinhTrang);
+});
+
 const removeDiaChi = (index) => {
-  if (diaChiList.value.length > 1) {
-    const isRemovingDefault = diaChiList.value[index].macDinh;
-    diaChiList.value.splice(index, 1);
-    if (isRemovingDefault && diaChiList.value.length > 0) {
-      diaChiList.value[0].macDinh = true;
+  // Kiểm tra có bao nhiêu địa chỉ còn hoạt động (tinhTrang = true)
+  const activeAddresses = diaChiList.value.filter(dc => dc.tinhTrang);
+
+  // Nếu chỉ còn 1 địa chỉ hợp lệ thì không cho phép xóa
+  if (activeAddresses.length === 1) {
+    alert("Phải có ít nhất một địa chỉ hợp lệ!");
+    return;
+  }
+
+  diaChiList.value[index].tinhTrang = false;
+
+  if (diaChiList.value[index].macDinh) {
+    const firstValidIndex = diaChiList.value.findIndex(dc => dc.tinhTrang);
+    if (firstValidIndex !== -1) {
+      diaChiList.value[firstValidIndex].macDinh = true;
     }
   }
 };
 
+
+
 const setMacDinh = (index) => {
+  if (!diaChiList.value[index].tinhTrang) return; 
+
   diaChiList.value.forEach((dc, i) => {
     dc.macDinh = i === index;
   });
 };
 
+
+
 const thongTinHopLe = computed(() => {
+
   return (
     khachHang.value.hoTen &&
     khachHang.value.email &&
     khachHang.value.sdt &&
-    diaChiList.value.length > 0 &&
-    diaChiList.value.every(
-      (dc) => dc.thanhPho && dc.quanHuyen && dc.phuongXa && dc.soNhaDuong
-    )
+    diaChiHienThi.value.length > 0 &&
+    diaChiHienThi.value.every(dc => dc.thanhPho && dc.quanHuyen && dc.phuongXa && dc.soNhaDuong)
+    
   );
 });
 
 const validateAndProceed = async (nextTab) => {
   errors.value = {};
 
-  if (
-    activeTab.value === "panel1" &&
-    (!khachHang.value.hoTen || !khachHang.value.email || !khachHang.value.sdt)
-  ) {
-    errors.value.khachHang = "Vui lòng nhập đầy đủ thông tin khách hàng!";
-    return;
-  }
-
   if (activeTab.value === "panel1") {
-    const { email, sdt } = khachHang.value;
+    if (!khachHang.value.hoTen || !khachHang.value.email || !khachHang.value.sdt) {
+      errors.value.khachHang = "Vui lòng nhập đầy đủ thông tin!";
+      return;
+    }
 
-    if (email || sdt) {
-      try {
-        const response = await customerService.checkDuplicate(
-          email,
-          sdt,
-          customerId ? customerId : 0
-        );
+    try {
+      const response = await customerService.checkDuplicate(
+        khachHang.value.email,
+        khachHang.value.sdt,
+        customerId ? customerId : 0
+      );
 
-        if (response?.data) {
-          errors.value.khachHang = "Email hoặc số điện thoại đã tồn tại!";
-          return;
-        }
-      } catch (error) {
-        console.error("Lỗi kiểm tra trùng lặp:", error);
-        errors.value.khachHang = "Lỗi khi kiểm tra trùng lặp!";
+      if (response?.data) {
+        errors.value.khachHang = "Email hoặc số điện thoại đã tồn tại!";
         return;
       }
+    } catch (error) {
+      console.error("Lỗi kiểm tra trùng lặp:", error);
+      errors.value.khachHang = "Lỗi khi kiểm tra trùng lặp!";
+      return;
     }
   }
 
-  // Kiểm tra địa chỉ trong panel2
-  if (activeTab.value === "panel2" && diaChiList.value.length === 0) {
-    errors.value.diaChi = "Vui lòng nhập ít nhất một địa chỉ!";
-    return;
+  if (activeTab.value === "panel2") {
+    if (diaChiList.value.length === 0) {
+      errors.value.diaChi = "Vui lòng nhập ít nhất một địa chỉ!";
+      return;
+    }
   }
 
-  // Nếu không có lỗi, cho phép chuyển tab
   activeTab.value = nextTab;
 };
 
@@ -139,23 +145,12 @@ const submitForm = async () => {
     alert("Vui lòng nhập đầy đủ thông tin khách hàng và ít nhất một địa chỉ!");
     return;
   }
-  if (
-    await customerService.checkDuplicate(
-      khachHang.value.email,
-      khachHang.value.sdt,
-      customerId ? customerId : 0
-    )
-  ) {
-    alert("Số điện thoại hoặc email đang bị trùng!");
-    return;
-  }
+
   try {
     const customerData = {
       ...khachHang.value,
-      diaChiList: diaChiList.value,
+      diaChiList: diaChiList.value // Chỉ gửi danh sách địa chỉ mới
     };
-
-    console.log("Dữ liệu gửi đi:", customerData);
 
     if (customerId) {
       await customerService.updateCustomer(customerId, customerData);
@@ -164,13 +159,16 @@ const submitForm = async () => {
       await customerService.addCustomer(customerData);
       alert("Thêm khách hàng thành công!");
     }
-    router.push("/KhachHang")
+
+    router.push("/KhachHang");
   } catch (error) {
     console.error("Lỗi khi gửi dữ liệu:", error);
     alert("Có lỗi xảy ra, vui lòng thử lại!");
   }
 };
 </script>
+
+
 
 <template>
   <div class="w-[90%] mx-auto mt-10">
@@ -215,7 +213,7 @@ const submitForm = async () => {
 
       <template #panel2>
         <div
-          v-for="(dc, index) in diaChiList"
+          v-for="(dc, index) in diaChiHienThi"
           :key="index"
           class="p-6 rounded-lg shadow-md bg-white mb-4"
         >
@@ -301,7 +299,7 @@ const submitForm = async () => {
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(dc, index) in diaChiList" :key="index">
+                <tr v-for="(dc, index) in diaChiHienThi" :key="index">
                   <td class="border p-2">{{ dc.thanhPho || '""' }}</td>
                   <td class="border p-2">{{ dc.quanHuyen || '""' }}</td>
                   <td class="border p-2">{{ dc.phuongXa || '""' }}</td>

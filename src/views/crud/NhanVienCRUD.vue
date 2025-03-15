@@ -86,6 +86,7 @@ const validateAndProceed = async (nextTab) => {
       }
     }
   }
+  activeTab.value = "panel2"
 }
 
 const submitForm = async () => {
@@ -98,7 +99,7 @@ const submitForm = async () => {
       hoTen: nhanVien.value.hoTen,
       email: nhanVien.value.email,
       sdt: nhanVien.value.sdt,
-      chucVu: { id: nhanVien.value.vaiTro?.id }, // Gửi chucVu dưới dạng đối tượng có id
+      chucVu: { id: nhanVien.value.vaiTro?.id },
     };
     if (staffId) {
       await staffService.updateStaff(staffId, staffData);
