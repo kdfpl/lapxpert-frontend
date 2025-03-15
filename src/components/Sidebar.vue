@@ -147,7 +147,7 @@ const toggleSubMenu = (key) => {
 };
 
 const menuItems = ref([
-  { name: "Bảng thống kê", icon: faHouse, link: "/StatisticsTable" },
+  { name: "Bảng thống kê", icon: faHouse, link: "/thongke" },
   {
     name: "Bán hàng",
     icon: faCashRegister,
