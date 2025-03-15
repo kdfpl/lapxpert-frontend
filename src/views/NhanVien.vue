@@ -64,15 +64,14 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted } from "vue";
 import CustomTable from "../components/CustomTable.vue";
 import NhanVienService from "../api/service/NhanVienService.js";
 
-const headers = ["STT", "ID", "Họ Tên", "Email", "SĐT", "Chức Vụ"];
+const headers = ["STT","ID", "Họ Tên", "Email", "SĐT", "Chức Vụ"];
 const NhanVienList = ref([]);
-const search = ref("");
 
-// Xử lý dữ liệu hiển thị
+// Xử lý dữ liệu
 const formattedData = computed(() =>
   Array.isArray(NhanVienList.value)
     ? NhanVienList.value.map((nv, index) => ({
@@ -81,44 +80,44 @@ const formattedData = computed(() =>
         hoTen: nv.hoTen,
         email: nv.email,
         sdt: nv.sdt,
-        chucVu: nv.chucVu.tenChucVu,
+        chucVu: nv.chucVu.tenChucVu , 
       }))
     : []
 );
 
-// Lấy danh sách nhân viên từ API
+// Hàm fetch dữ liệu từ API
 const fetchNhanVien = async () => {
   try {
     const data = await NhanVienService.getAllStaff();
-    NhanVienList.value = Array.isArray(data) ? data : [];
+    if (Array.isArray(data)) {
+      NhanVienList.value = data;
+    } else {
+      console.error("Dữ liệu trả về không hợp lệ:", data);
+    }
   } catch (error) {
-    console.error("Lỗi khi lấy danh sách nhân viên:", error);
+    console.error("Lỗi khi lấy danh sách nhân viên:", error.message);
   }
 };
 
-// Tìm kiếm nhân viên theo từ khóa
-const fetchNhanVienBySearch = async () => {
-  if (search.value.trim() === "") {
-    await fetchNhanVien();
-    return;
-  }
+const deleteNhanVien = async (nv) => {
+  if (!confirm("Bạn có chắc chắn muốn xóa nhân viên này?")) return;
+
+  const nvToDelete = NhanVienList.value.find((item) => item.id === nv.id);
+  if (!nvToDelete) return;
+
   try {
-    const response = await NhanVienService.searchStaff(search.value);
-    NhanVienList.value = response.data;
+    await NhanVienService.deleteStaff(nvToDelete.id);
+    NhanVienList.value = NhanVienList.value.filter((item) => item.id !== nv.id);
+    alert("Xóa nhân viên thành công!");
+    await fetchNhanVien();
   } catch (error) {
-    console.error("Lỗi tìm kiếm:", error);
+    console.error("Lỗi khi xóa nhân viên:", error);
+    alert("Có lỗi xảy ra khi xóa nhân viên!");
   }
 };
 
-// Gọi API khi nhập vào ô tìm kiếm
-watch(search, () => {
-  fetchNhanVienBySearch();
-});
-
-// Gọi API khi component mount
+// Gọi hàm fetch khi component được mounted
 onMounted(() => {
   fetchNhanVien();
 });
 </script>
-
-

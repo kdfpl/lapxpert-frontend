@@ -12,7 +12,7 @@
             {{ num }}
           </option>
         </select>
-        <span class="text-sm text-black">entries per page</span>
+        <span class="text-sm text-black">số thành phần trong trang</span>
       </div>
     </div>
 
@@ -21,38 +21,34 @@
         <thead>
           <tr>
             <th
-              v-for="(header, index) in headers"
+              v-for="(header, index) in visibleHeaders"
               :key="index"
               class="px-4 py-2 text-left text-black font-semibold border-b border-[#C8C7C7] cursor-pointer"
-              :class="rowHeight"
             >
               {{ header }}
             </th>
-            <th
-              class="px-4 py-2 text-left text-black font-semibold border-b border-[#C8C7C7]"
-            >
+            <th class="px-4 py-2 text-left text-black font-semibold border-b border-[#C8C7C7]">
               Hành động
             </th>
           </tr>
         </thead>
         <tbody>
           <tr
-            v-for="(row, rowIndex) in paginatedData"
+            v-for="(row, rowIndex) in filteredData"
             :key="rowIndex"
             class="border-t border-[#C8C7C7] cursor-pointer hover:bg-[#F7F7F7] hover:shadow-lg transition-all duration-300 ease-in-out"
           >
             <td
-              v-for="(cell, cellIndex) in row"
+              v-for="(cell, cellIndex) in Object.values(row)"
               :key="cellIndex"
               class="px-4 py-3 text-black border-b border-[#C8C7C7]"
-              :class="rowHeight"
             >
               <div class="flex items-center space-x-4">
                 <div v-html="cell" class="flex-1"></div>
               </div>
             </td>
             <td class="px-4 py-3 text-black border-b border-[#C8C7C7]">
-              <router-link :to="`${link}/${row.id}`">
+              <router-link :to="`${link}/${paginatedData[rowIndex].id}`">
                 <button
                   class="p-2 text-gray-700 rounded-lg hover:bg-yellow-400 hover:text-white transition duration-300"
                 >
@@ -60,7 +56,7 @@
                 </button>
               </router-link>
               <button
-                @click="handleDelete(row)"
+                @click="handleDelete(paginatedData[rowIndex])"
                 class="p-2 text-gray-700 rounded-lg hover:bg-red-500 hover:text-white transition duration-300"
               >
                 <Trash2 class="w-5 h-5" />
@@ -73,9 +69,9 @@
 
     <div class="mt-4 flex justify-between items-center">
       <p class="text-sm text-gray-600">
-        Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
-        {{ Math.min(currentPage * itemsPerPage, data.length) }} of
-        {{ data.length }} entries
+        Hiển thị {{ (currentPage - 1) * itemsPerPage + 1 }} đến
+        {{ Math.min(currentPage * itemsPerPage, data.length) }} trên
+        {{ data.length }} phần tử
       </p>
       <div class="flex space-x-2">
         <button
@@ -83,7 +79,7 @@
           :disabled="currentPage === 1"
           class="px-3 py-1 rounded-lg border bg-white shadow-md text-gray-700 hover:bg-gray-100 transition duration-300"
         >
-          Prev
+          Trước
         </button>
 
         <button
@@ -105,7 +101,7 @@
           :disabled="currentPage === totalPages"
           class="px-3 py-1 rounded-lg border bg-white shadow-md text-black hover:bg-gray-100 transition duration-300"
         >
-          Next
+          Tiếp
         </button>
       </div>
     </div>
@@ -143,6 +139,12 @@ const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage.value;
   return props.data.slice(start, start + itemsPerPage.value);
 });
+
+const filteredData = computed(() => {
+  return paginatedData.value.map(({ id, ...rest }) => rest);
+});
+
+const visibleHeaders = computed(() => props.headers.filter(header => header.toLowerCase() !== "id"));
 
 const setPage = (page) => {
   if (page >= 1 && page <= totalPages.value) {
