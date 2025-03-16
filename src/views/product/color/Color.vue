@@ -8,13 +8,13 @@
       <label
         class="input input-ghost bg-base-200 focus-within:bg-base-200 grow focus-within:outline-none"
       >
-        <span class="icon-[streamline--search-visual-solid] bg-primary size-5"></span>
+        <span
+          class="icon-[streamline--search-visual-solid] bg-primary size-5"
+        ></span>
         <input type="search" placeholder="Màu sắc..." />
       </label>
 
-      <label
-        class="select custom-input"
-      >
+      <label class="select custom-input">
         <span class="label text-primary font-medium">Màu sắc</span>
         <select>
           <option selected disabled>Chọn</option>
@@ -23,9 +23,7 @@
           <option>Vàng</option>
         </select>
       </label>
-      <label
-        class="select custom-input"
-      >
+      <label class="select custom-input">
         <span class="label text-primary font-medium">Trạng thái</span>
         <select>
           <option selected disabled>Chọn</option>
@@ -33,10 +31,6 @@
           <option>Không hoạt động</option>
         </select>
       </label>
-    </div>
-
-    <!-- button -->
-    <div class="mb-2 flex w-full items-center justify-end gap-2">
       <button class="btn btn-primary btn-soft">
         <span class="icon-[ph--microsoft-excel-logo] size-5"></span>
         Nhập Excel
@@ -45,10 +39,30 @@
         <span class="icon-[ph--microsoft-excel-logo] size-5"></span>
         Xuất Excel
       </button>
-      <button class="btn btn-primary btn-soft">
-        <span class="icon-[icon-park-outline--add-four] size-5"></span>
-        Thêm màu sắc
-      </button>
+    </div>
+
+    <div class="mb-2 flex w-full items-center gap-2">
+      <fieldset class="fieldset rounded-box bg-base-200 w-full p-4">
+        <legend class="fieldset-legend">Thêm màu</legend>
+
+        <div class="flex gap-4">
+          <fieldset class="fieldset flex-1">
+            <label class="fieldset-label">Tên</label>
+            <input
+              type="text"
+              class="input w-full"
+              placeholder="Core i9-13900K"
+            />
+          </fieldset>
+          <fieldset class="fieldset flex-1">
+            <label class="fieldset-label">Mã</label>
+            <input type="text" class="input w-full" placeholder="SKU" />
+          </fieldset>
+        </div>
+      </fieldset>
+    </div>
+    <div class="mb-2 flex w-full items-center justify-end gap-2">
+      <button @click="" class="btn btn-primary btn-soft">Thêm màu sắc</button>
     </div>
 
     <!-- table -->

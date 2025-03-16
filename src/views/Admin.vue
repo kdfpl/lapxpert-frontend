@@ -169,7 +169,7 @@
 
               <ul>
                 <li>
-                  <RouterLink to="/user">
+                  <RouterLink to="/employee">
                     <span class="icon-[solar--user-id-linear] size-5"></span>
                     Nhân viên
                   </RouterLink>
@@ -236,10 +236,10 @@
         >
           <input type="checkbox" class="theme-controller" value="dracula" />
           <span
-            class="icon-[line-md--sun-rising-loop] swap-off size-6 fill-current"
+            class="icon-[line-md--sunny-outline-to-moon-alt-loop-transition] swap-off size-6 fill-current"
           ></span>
           <span
-            class="icon-[line-md--moon-alt-loop] swap-on fill-curren size-6"
+            class="icon-[line-md--moon-alt-to-sunny-outline-loop-transition] swap-on fill-curren size-6"
           ></span>
         </label>
       </div>
