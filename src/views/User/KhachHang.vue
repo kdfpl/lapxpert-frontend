@@ -8,7 +8,7 @@
           <Icon icon="icon-park-outline:add-four" class="size-5" />
           Thêm khách hàng
         </RouterLink>
-        <button class="btn btn-primary btn-soft">
+        <button @click="exportToExcel" class="btn btn-primary btn-soft">
           <Icon icon="ph:microsoft-excel-logo" class="size-5" />
           Xuất Excel
         </button>
@@ -94,6 +94,24 @@
 import { ref, computed, watch, onMounted } from 'vue';
 import KhachHangService from '@/api/service/KhachHangService';
 import { Icon } from '@iconify/vue';
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
+
+const exportToExcel = async () => {
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet("Khách Hàng");
+
+  worksheet.addRow(["STT", "Mã KH", "Họ tên", "Email", "SĐT"]);
+
+  khachHangList.value.forEach((kh, index) => {
+    worksheet.addRow([index + 1, kh.maKhachHang, kh.hoTen, kh.email, kh.sdt]);
+  });
+
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+  saveAs(blob, "DanhSachKhachHang.xlsx");
+};
+
 
 const currentPage = ref(1);
 const itemsPerPage = ref(5);
@@ -121,6 +139,7 @@ const fetchKhachHang = async () => {
     console.error("Lỗi khi lấy danh sách khách hàng:", error.message);
   }
 };
+
 
 const filteredData = computed(() => {
   return khachHangList.value.filter(kh =>

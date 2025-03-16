@@ -8,7 +8,7 @@
           <Icon icon="icon-park-outline:add-four" class="size-5" />
           Thêm nhân viên
         </RouterLink>
-        <button class="btn btn-primary btn-soft">
+        <button @click="exportToExcel" class="btn btn-primary btn-soft">
           <Icon icon="ph:microsoft-excel-logo" class="size-5" />
           Xuất Excel
         </button>
@@ -34,7 +34,7 @@
           <thead>
             <tr>
               <th>STT</th>
-              <th>ID</th>
+              <th>Mã nhân viên</th>
               <th>Họ Tên</th>
               <th>Email</th>
               <th>SĐT</th>
@@ -45,7 +45,7 @@
           <tbody>
             <tr v-for="(nv, index) in paginatedData" :key="nv.id">
               <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
-              <td>{{ nv.id }}</td>
+              <td>{{ nv.maNhanVien }}</td>
               <td>{{ nv.hoTen }}</td>
               <td>{{ nv.email }}</td>
               <td>{{ nv.sdt }}</td>
@@ -96,6 +96,23 @@
 import { ref, computed, watch, onMounted } from 'vue';
 import NhanVienService from '@/api/service/NhanVienService';
 import { Icon } from '@iconify/vue';
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
+
+const exportToExcel = async () => {
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet("Nhân viên");
+
+  worksheet.addRow(["STT", "Mã NV", "Họ tên", "Email", "SĐT","Chức vụ"]);
+
+  nhanVienList.value.forEach((nv, index) => {
+    worksheet.addRow([index + 1, nv.maNhanVien, nv.hoTen, nv.email, nv.sdt,nv.chucVu.tenChucVu]);
+  });
+
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+  saveAs(blob, "DanhSachNhanVien.xlsx");
+};
 
 const currentPage = ref(1);
 const itemsPerPage = ref(5);
