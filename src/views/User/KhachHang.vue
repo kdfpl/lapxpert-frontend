@@ -12,6 +12,10 @@
           <Icon icon="ph:microsoft-excel-logo" class="size-5" />
           Xuất Excel
         </button>
+        <button class="btn btn-primary btn-soft">
+          <Icon icon="ph:microsoft-excel-logo" class="size-5" />
+          Nhập Excel
+        </button>
       </div>
     </section>
 
@@ -61,7 +65,7 @@
     </section>
 
     <!-- Pagination -->
-    <section class="flex justify-between mt-4">
+    <section class="flex justify-between border-t pt-2 mt-4">
       <div class="flex items-center">
         <span>Xem</span>
         <select v-model="itemsPerPage" class="ml-2 px-2 py-1 border rounded">
