@@ -5,7 +5,7 @@ const API_URL = "/khach-hang";
 const customerService = {
   async getAllCustomers() {
     try {
-      const { data } = await api.get(`${API_URL}/list`);
+      const { data } = await api.get(`${API_URL}/fetch`);
       return data;
     } catch (error) {
       console.error("Lỗi khi lấy danh sách khách hàng:", error.response?.data || error.message);
@@ -15,7 +15,7 @@ const customerService = {
 
   async getCustomerById(id) {
     try {
-      return await api.get(`${API_URL}/getOne/${id}`);
+      return await api.get(`${API_URL}/get-one/${id}`);
 
     } catch (error) {
       console.error(`Lỗi khi lấy khách hàng ID ${id}:`, error.response?.data || error.message);

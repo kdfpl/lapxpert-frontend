@@ -1,9 +1,10 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import customerService from "../../api/service/KhachHangService";
 import TabPanel from "../../components/TabPanel.vue";
 import { Plus, Trash2, Check } from "lucide-vue-next";
+import axios from "axios";
 
 const route = useRoute();
 const router = useRouter();
@@ -89,6 +90,52 @@ const addDiaChi = () => {
 
 const diaChiHienThi = computed(() =>
   diaChiList.value.filter((dc) => dc.tinhTrang)
+);
+
+const cityData = ref([]);
+const citis = ref([]);
+const districts = ref([]);
+const wards = ref([]);
+
+onMounted(async () => {
+  try {
+    const response = await axios.get(
+      "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
+    );
+    cityData.value = response.data;
+    citis.value = cityData.value.map((city) => city.Name);
+  } catch (error) {
+    console.error("Lỗi tải dữ liệu địa phương:", error);
+  }
+});
+
+watch(
+  () => diaChiList.value.map((dc) => dc.thanhPho),
+  (newCities) => {
+    districts.value = [];
+    newCities.forEach((newCity, index) => {
+      const city = cityData.value.find((c) => c.Name === newCity);
+      districts.value = city ? city.Districts.map((d) => d.Name) : [];
+    });
+  },
+  { deep: true }
+);
+
+watch(
+  () => diaChiList.value.map((dc) => dc.quanHuyen),
+  (newDistricts) => {
+    wards.value = [];
+    newDistricts.forEach((newDistrict, index) => {
+      const city = cityData.value.find(
+        (c) => c.Name === diaChiList.value[index].thanhPho
+      );
+      if (city) {
+        const district = city.Districts.find((d) => d.Name === newDistrict);
+        wards.value = district ? district.Wards.map((w) => w.Name) : [];
+      }
+    });
+  },
+  { deep: true }
 );
 
 const removeDiaChi = (id) => {
@@ -212,7 +259,6 @@ const submitForm = async () => {
   <div class="w-[90%] mx-auto mt-10">
     <TabPanel :tabs="tabs" v-model:activeTab="activeTab">
       <template #panel1>
-      
         <form class="space-y-4 p-6 bg-base-100">
           <div
             v-for="(value, key) in khachHang"
@@ -229,12 +275,12 @@ const submitForm = async () => {
                   ? Phone
                   : Lock
               "
-              class="w-5 h-5  mr-2"
+              class="w-5 h-5 mr-2"
             />
             <input
               v-model="khachHang[key]"
               :placeholder="key"
-              class="w-full  border-0 focus:outline-none"
+              class="w-full border-0 focus:outline-none"
             />
           </div>
           <p v-if="errors.khachHang" class="text-red-500">
@@ -242,40 +288,55 @@ const submitForm = async () => {
           </p>
           <p v-if="duplicateError" class="text-red-500">{{ duplicateError }}</p>
         </form>
-        <button
-          @click="validateAndProceed('panel2')"
-          class="mt-4 px-6 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-gray-900 to-gray-700 shadow-xl backdrop-blur-md bg-opacity-80 border border-white/30 transition-all duration-200 ease-out hover:bg-opacity-90 hover:scale-105 active:scale-95 active:shadow-md"
-        >
+        <button @click="validateAndProceed('panel2')" class="btn btn-primary">
           Tiếp tục
         </button>
       </template>
 
-      <template #panel2 >
+      <template #panel2>
         <div
           v-for="(dc, index) in diaChiHienThi"
           :key="index"
-          class="p-6 rounded-lg border shadow-md bg-base mb-4"
+          class="p-6 rounded-lg border-base-300 shadow-md bg-white mb-4"
         >
           <div class="grid grid-cols-2 gap-4">
-            <input
-              v-model="dc.thanhPho"
-              placeholder="Thành phố"
-              class="border p-2 rounded-lg focus:ring-2 focus:ring-base-300"
-            />
-            <input
+            <select v-model="dc.thanhPho" class="select select-bordered">
+              <option value="">Chọn thành phố</option>
+              <option v-for="city in citis" :key="city" :value="city">
+                {{ city }}
+              </option>
+            </select>
+
+            <select
               v-model="dc.quanHuyen"
-              placeholder="Quận/Huyện"
-              class="border p-2 rounded-lg focus:ring-2 focus:ring-base-300"
-            />
-            <input
+              :disabled="!dc.thanhPho"
+              class="select select-bordered"
+            >
+              <option value="">Chọn quận huyện</option>
+              <option
+                v-for="district in districts"
+                :key="district"
+                :value="district"
+              >
+                {{ district }}
+              </option>
+            </select>
+
+            <select
               v-model="dc.phuongXa"
-              placeholder="Phường/Xã"
-              class="border p-2 rounded-lg focus:ring-2 focus:ring-base-300"
-            />
+              :disabled="!dc.quanHuyen"
+              class="select select-bordered"
+            >
+              <option value="">Chọn phường xã</option>
+              <option v-for="ward in wards" :key="ward" :value="ward">
+                {{ ward }}
+              </option>
+            </select>
+
             <input
               v-model="dc.soNhaDuong"
               placeholder="Số nhà, Đường"
-              class="border p-2 rounded-lg focus:ring-2 focus:ring-base-300"
+              class="input input-bordered focus:ring-primary"
             />
           </div>
           <div class="flex justify-between mt-4">
@@ -283,14 +344,14 @@ const submitForm = async () => {
               <input
                 type="radio"
                 :checked="dc.macDinh"
-                @change="setMacDinh(dc.id)"
+                @change="setMacDinh(index)"
                 class="mr-2"
               />
               Mặc định
             </label>
             <button
               v-if="diaChiList.length > 1"
-              @click="removeDiaChi(dc.id)"
+              @click="removeDiaChi(index)"
               class="text-red-500 hover:text-red-700 flex items-center"
             >
               <Trash2 class="w-4 h-4 mr-1" /> Xóa
@@ -299,16 +360,10 @@ const submitForm = async () => {
         </div>
         <p v-if="errors.diaChi" class="text-red-500">{{ errors.diaChi }}</p>
         <div class="flex gap-1">
-          <button
-            @click="addDiaChi"
-            class="mt-4 px-6 py-2 rounded-lg font-semibold text-black border shadow-xl backdrop-blur-md bg-opacity-80 transition-all duration-200 ease-out hover:bg-opacity-90 hover:scale-105 active:scale-95 active:shadow-md"
-          >
+          <button @click="addDiaChi" class="btn btn-outline btn-primary">
             + Thêm địa chỉ
           </button>
-          <button
-            @click="validateAndProceed('panel3')"
-            class="mt-4 px-6 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-gray-900 to-gray-700 shadow-xl backdrop-blur-md bg-opacity-80 border border-white/30 transition-all duration-200 ease-out hover:bg-opacity-90 hover:scale-105 active:scale-95 active:shadow-md"
-          >
+          <button @click="validateAndProceed('panel3')" class="btn btn-primary">
             Tiếp tục
           </button>
         </div>
@@ -318,15 +373,11 @@ const submitForm = async () => {
         <div class="grid grid-cols-2 gap-6">
           <div class="p-6 bg-base border rounded-lg shadow-md">
             <h2 class="text-lg font-semibold">Thông tin khách hàng</h2>
-            <p
-              v-for="(value, key) in khachHang"
-              :key="key"
-              class=""
-            >
+            <p v-for="(value, key) in khachHang" :key="key" class="">
               {{ key }}: {{ value || '""' }}
             </p>
           </div>
-          <div class="p-6  rounded-lg shadow-md">
+          <div class="p-6 rounded-lg shadow-md">
             <h2 class="text-lg font-semibold">Địa chỉ khách hàng</h2>
             <table class="w-full border-collapse border">
               <thead>
@@ -348,12 +399,7 @@ const submitForm = async () => {
             </table>
           </div>
         </div>
-        <button
-          @click="submitForm"
-          class="mt-4 px-6 py-2 btn-soft rounded-lg font-semibold bg-gradient-to-r from-base-300 to-base-100 shadow-xl backdrop-blur-md bg-opacity-80 border border-white/30 transition-all duration-200 ease-out hover:bg-opacity-90 hover:scale-105 active:scale-95 active:shadow-md"
-        >
-          Xác nhận
-        </button>
+        <button @click="submitForm" class="btn btn-primary">Xác nhận</button>
       </template>
     </TabPanel>
   </div>

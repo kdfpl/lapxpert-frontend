@@ -4,7 +4,7 @@ const URL_API = "/san-pham";
 
 export const getAllSP = async () => {
   try {
-    const response = await axios.get(`${URL_API}/list`);
+    const response = await axios.get(`${URL_API}/fetch`);
     console.log(response);
     return response.data;
   } catch (error) {

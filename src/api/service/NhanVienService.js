@@ -5,7 +5,7 @@ const API_URL ="/nhan-vien"
 const staffService = {
   async getAllStaff() {
     try {
-      const response = await api.get(`${API_URL}/list`);
+      const response = await api.get(`${API_URL}/fetch`);
       return response.data;
     } catch (error) {
       console.error("Lỗi khi lấy danh sách nhân viên:", error);
@@ -15,7 +15,7 @@ const staffService = {
 
   async getStaffById(id) {
     try {
-      const response = await api.get(`${API_URL}/getOne/${id}`);
+      const response = await api.get(`${API_URL}/get-one/${id}`);
       return response.data;
     } catch (error) {
       console.error(`Lỗi khi lấy nhân viên ID ${id}:`, error);

@@ -170,11 +170,11 @@ const submitForm = async () => {
               class="w-full border-0 focus:outline-none"
             />
           </div>
-          <div class="flex items-center border rounded-lg p-2 w-full">
+          <div class="flex items-center border rounded-lg p-1 w-full">
             <Lock class="w-5 h-5  mr-2" />
             <select
               v-model="nhanVien.vaiTro"
-              class="w-full border-0 outline-0 focus:outline-none"
+              class="w-full select border-0"
             >
               <option
                 v-for="chucVu in chucVuList"
@@ -191,7 +191,7 @@ const submitForm = async () => {
         </form>
         <button
           @click="validateAndProceed('panel2')"
-          class="mt-4 px-6 py-2 rounded-lg bg-gray-900 text-white"
+          class="mt-4 px-6 py-2 btn btn-primary border-base-300"
         >
           Tiếp tục
         </button>
@@ -209,7 +209,7 @@ const submitForm = async () => {
         </div>
         <button
           @click="submitForm"
-          class="mt-4 px-6 py-2 rounded-lg bg-gray-900 text-white"
+          class="mt-4 px-6 py-2 btn btn-base border-primary hover:btn-primary "
         >
           Xác nhận
         </button>
