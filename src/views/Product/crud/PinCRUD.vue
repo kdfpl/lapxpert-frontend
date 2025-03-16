@@ -1,8 +1,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { getAllPin, addPin, updatePin } from "../../api/service/SPCTService.js";
-import RichTextEditor from "../../components/RichTextEditor.vue";
+import { getAllPin, addPin, updatePin } from "@/api/service/SPCTService.js";
+import RichTextEditor from "@/components/RichTextEditor.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -35,7 +35,7 @@ const handleSubmit = async () => {
       await addPin(pinData.value);
       alert("Thêm PIN thành công!");
     }
-    router.push("/pin"); // Điều hướng về danh sách
+    router.push("/admin/pin"); // Điều hướng về danh sách
   } catch (error) {
     console.error("Lỗi khi thêm/sửa PIN:", error);
     alert("Có lỗi xảy ra, vui lòng thử lại!");
@@ -47,7 +47,7 @@ const handleSubmit = async () => {
   <div class="relative w-full mt-5">
     <!-- Banner -->
     <div class="w-full h-50 overflow-hidden rounded-lg">
-      <img class="w-full h-full object-cover" src="../../assets/img/RamBanner.jpg" alt="Banner" />
+      <img class="w-full h-full object-cover" src="@/assets/img/RamBanner.jpg" alt="Banner" />
     </div>
 
     <!-- Thẻ thông tin đè lên -->
@@ -56,7 +56,7 @@ const handleSubmit = async () => {
       <h1 class="text-3xl font-bold">THÊM/SỬA PIN</h1>
       <button
         class="px-6 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-gray-900 to-gray-700 shadow-xl backdrop-blur-md bg-opacity-80 border border-white/30 transition-all duration-200 ease-out hover:bg-opacity-90 hover:scale-105 active:scale-95 active:shadow-md">
-        <router-link to="/pin">Danh Sách</router-link>
+        <router-link to="/admin/pin">Danh Sách</router-link>
       </button>
     </div>
   </div>

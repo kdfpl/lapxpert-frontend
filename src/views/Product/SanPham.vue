@@ -69,7 +69,7 @@ const softDeleteSanPham = async (sanPham) => {
 };
 
 const editSanPham = (sanPham) => {
-  router.push({ name: "SanPhamCRUD", params: { id: sanPham.id } });
+  router.push({ name: "/admin/san-pham-crud", params: { id: sanPham.id } });
 };
 
 onMounted(async () => {
@@ -107,7 +107,7 @@ onMounted(async () => {
 
       <!-- Nút Thêm và Xuất -->
       <div class="flex space-x-3">
-        <router-link to="/SanPhamCRUD">
+        <router-link to="/admin/san-pham-crud">
           <button
             class="px-6 h-10 py-2 rounded-lg font-semibold text-white bg-gray-900 shadow-lg hover:scale-105 active:scale-95 transition">
             + THÊM
@@ -121,6 +121,6 @@ onMounted(async () => {
     </div>
   </div>
   <!-- Bảng hiển thị dữ liệu -->
-  <customTable :headers="headers" :data="formattedData" :deleteFunc="softDeleteSanPham" link="/SanPhamCRUD"
+  <customTable :headers="headers" :data="formattedData" :deleteFunc="softDeleteSanPham" link="/admin/san-pham-crud"
     :editFunc="editSanPham" />
 </template>

@@ -1,70 +1,73 @@
 <script setup>
-import ElementListLayout from "../../layout/ElementListLayout.vue";
-import customTable from "../../components/customTable.vue";
-import bannerImage from "../../assets/img/pinBanner.jpg";
+import ElementListLayout from "@/layout/ElementListLayout.vue";
+import customTable from "@/components/customTable.vue";
+import bannerImage from "@/assets/img/CPUBanner.jpg";
 import { ref, onMounted, computed } from "vue";
-import { getAllPin, deletePin } from "../../api/service/SPCTService.js";
+import { getAllCpu, addCpu, updateCpu, deleteCpu } from "@/api/service/SPCTService.js";
 const headers = [
   "#",
-  "Id",
-  "Mã pin",
-  "Thời lượng pin",
-  "Dung lượng pin",
-  "Công xuất sạc",
+  "id",
+  "Hãng CPU",
+  "Tên CPU",
+  "Thế hệ CPU",
+  "Số nhân",
+  "Số luồng",
+  "Xung nhịp",
 ];
-
 const isEditing = ref(false);
-const selectedPin = ref({});
-const pinList = ref([]);
+const selectedCpu = ref({});
+const cpuList = ref([]);
 
-const fetchPin = async () => {
+const fetchCpu = async () => {
   try {
-    const data = await getAllPin();
+    const data = await getAllCpu();
     if (Array.isArray(data)) {
-      pinList.value = data;
+      cpuList.value = data;
     } else {
       console.error("Dữ liệu trả về không hợp lệ:", data);
     }
   } catch (error) {
-    console.error("Lỗi khi lấy danh sách PIN:", error.message);
+    console.error("Lỗi khi lấy danh sách CPU:", error.message);
   }
 };
 
 const formattedData = computed(() =>
-  Array.isArray(pinList.value)
-    ? pinList.value.map((pin, index) => ({
+  Array.isArray(cpuList.value)
+    ? cpuList.value.map((cpu, index) => ({
       stt: index + 1,
-      id: pin.id,
-      maPin: pin.maPin,
-      thoiLuongPin: pin.thoiLuongPin,
-      dungLuongPin: pin.dungLuongPin,
-      congSuatSac: pin.congSuatSac,
+      id: cpu.id,
+      hangCpu: cpu.hangCpu,
+      tenCpu: cpu.tenCpu,
+      theHeCpu: cpu.theHeCpu,
+      soNhan: cpu.soNhan,
+      soLuong: cpu.soLuong,
+      xungNhip: cpu.xungNhip,
     }))
     : []
 );
-const softDeletePin = async (pin) => {
-  if (!confirm('Bạn có chắc chắn muốn xóa PIN này?')) return;
+const softDeleteCpu = async (cpu) => {
+  if (!confirm('Bạn có chắc chắn muốn xóa CPU này?')) return;
 
-  const pinToDelete = pinList.value.find((item) => item.id === pin.id);
+  const cpuToDelete = cpuList.value.find((item) => item.id === cpu.id);
 
-  if (!pinToDelete) return;
+  if (!cpuToDelete) return;
 
   try {
-    console.log(pinToDelete.id);
-    await deletePin(pinToDelete.id);
-    await fetchPin();
+    console.log(cpuToDelete.id);
+    await deleteCpu(cpuToDelete.id);
+    await fetchCpu();
   } catch (error) {
-    console.log(pinToDelete.id);
-    console.error('Lỗi khi xóa PIN:', error);
+    console.log(cpuToDelete.id);
+    console.error('Lỗi khi xóa CPU:', error);
   }
 };
 
-const editPin = (pin) => {
-  router.push({ name: "PinCRUD", params: { id: pin.id } });
+const editCpu = (cpu) => {
+  router.push({ name: "/admin/cpu-crud", params: { id: cpu.id } });
 };
 
 onMounted(async () => {
-  await fetchPin();
+  await fetchCpu();
 });
 </script>
 
@@ -72,13 +75,13 @@ onMounted(async () => {
   <div class="relative w-full mt-5">
     <!-- Banner -->
     <div class="w-full h-50 overflow-hidden rounded-lg mb-15">
-      <img class="w-full h-full object-cover" src="../../assets/img/RamBanner.jpg" alt="Banner" />
+      <img class="w-full h-full object-cover" src="@/assets/img/RamBanner.jpg" alt="Banner" />
     </div>
 
     <!-- Thẻ thông tin đè lên -->
     <div
       class="absolute bottom-[-40px] bg-white/90 left-1/2 transform -translate-x-1/2 w-[90%] md:w-[80%] lg:w-[70%] shadow-lg rounded-xl p-5 flex justify-between space-x-4">
-      <h1 class="text-3xl font-bold">DANH SÁCH PIN</h1>
+      <h1 class="text-3xl font-bold">DANH SÁCH CPU</h1>
     </div>
   </div>
   <div class="p-6 mx-auto bg-white rounded-xl shadow-lg border border-gray-200">
@@ -98,7 +101,7 @@ onMounted(async () => {
 
       <!-- Nút Thêm và Xuất -->
       <div class="flex space-x-3">
-        <router-link to="/PinCRUD">
+        <router-link to="/admin/cpu-crud">
           <button
             class="px-6 h-10 py-2 rounded-lg font-semibold text-white bg-gray-900 shadow-lg hover:scale-105 active:scale-95 transition">
             + THÊM
@@ -112,6 +115,6 @@ onMounted(async () => {
     </div>
   </div>
   <!-- Bảng hiển thị dữ liệu -->
-  <customTable :headers="headers" :data="formattedData" :deleteFunc="softDeletePin" link="/PinCRUD"
-    :editFunc="editPin" />
+  <customTable :headers="headers" :data="formattedData" :deleteFunc="softDeleteCpu" link="/admin/cpu-crud"
+    :editFunc="editCpu" />
 </template>

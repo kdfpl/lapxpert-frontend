@@ -1,9 +1,9 @@
 <script setup>
-import ElementListLayout from "../../layout/ElementListLayout.vue";
-import customTable from "../../components/customTable.vue";
-import bannerImage from '../../assets/img/colorBanner.jpg';
+import ElementListLayout from "@/layout/ElementListLayout.vue";
+import customTable from "@/components/customTable.vue";
+import bannerImage from '@/assets/img/colorBanner.jpg';
 import { ref, onMounted, computed } from "vue";
-import { getAllMauSac, deleteMauSac } from "../../api/service/SPCTService.js";
+import { getAllMauSac, deleteMauSac } from "@/api/service/SPCTService.js";
 // import { SquarePen } from 'lucide-vue-next'; --lấy màu
 const headers = ["#", "Id", "Mã màu", "Tên màu"];
 
@@ -56,7 +56,7 @@ const softDeleteMauSac = async (color) => {
 };
 
 const editCpu = (cpu) => {
-  router.push({ name: "CpuCRUD", params: { id: cpu.id } });
+  router.push({ name: "/admin/mau-sac-crud", params: { id: cpu.id } });
 };
 
 onMounted(async () => {
@@ -68,7 +68,7 @@ onMounted(async () => {
   <div class="relative w-full mt-5">
     <!-- Banner -->
     <div class="w-full h-50 overflow-hidden rounded-lg mb-15">
-      <img class="w-full h-full object-cover" src="../../assets/img/RamBanner.jpg" alt="Banner" />
+      <img class="w-full h-full object-cover" src="@/assets/img/RamBanner.jpg" alt="Banner" />
     </div>
 
     <!-- Thẻ thông tin đè lên -->
@@ -94,7 +94,7 @@ onMounted(async () => {
 
       <!-- Nút Thêm và Xuất -->
       <div class="flex space-x-3">
-        <router-link to="/MauSacCRUD">
+        <router-link to="/admin/mau-sac-crud">
           <button
             class="px-6 h-10 py-2 rounded-lg font-semibold text-white bg-gray-900 shadow-lg hover:scale-105 active:scale-95 transition">
             + THÊM

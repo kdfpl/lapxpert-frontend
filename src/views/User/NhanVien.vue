@@ -1,15 +1,16 @@
 <template>
-  <div class="p-6 mx-auto bg-white rounded-xl shadow-lg mb-5 border border-gray-200">
-
-    <div class="flex justify-between ">
+  <div
+    class="p-6 mx-auto bg-white rounded-xl mb-5 shadow-md border border-gray-200"
+  >
+    <div class="flex justify-between">
       <h1 class="items-center text-center  font-bold text-4xl ">
-        DANH SÁCH KHÁCH HÀNG
+        DANH SÁCH NHÂN VIÊN
       </h1>
       <div class="flex space-x-3">
         <button
           class="px-6 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-gray-900 to-gray-700 shadow-xl backdrop-blur-md bg-opacity-80 border border-white/30 transition-all duration-200 ease-out hover:bg-opacity-90 hover:scale-105 active:scale-95 active:shadow-md"
         >
-          <router-link to="/KhachHangCRUD">+ THÊM</router-link>
+          <router-link to="/admin/nhan-vien-crud">+ THÊM</router-link>
         </button>
 
         <button
@@ -67,70 +68,70 @@
     </div>
   </div>
 
-  <!-- Bảng hiển thị dữ liệu -->
   <CustomTable
     :headers="headers"
     :data="formattedData"
-    :deleteFunc="deleteKhachHang"
-    link="/KhachHangCRUD"
+    :deleteFunc="deleteNhanVien"
+    link="/admin/nhan-vien-crud"
+    round="rounded-b-xl"
   />
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import KhachHangService from '../api/service/KhachHangService';
-import CustomTable from '../components/CustomTable.vue';
+import { ref, computed, onMounted } from "vue";
+import CustomTable from "@/components/CustomTable.vue";
+import NhanVienService from "@/api/service/NhanVienService.js";
 
-// State
-const khachHangList = ref([]);
-const search = ref('');
-const headers = ["STT","Id" ,"Mã KH", "Họ tên", "Email", "SĐT"];
-
-// Fetch dữ liệu
-const fetchKhachHang = async () => {
-  try {
-    const data = await KhachHangService.getAllCustomers();
-    if (Array.isArray(data)) {
-      khachHangList.value = data;
-    } else {
-      console.error("Dữ liệu trả về không hợp lệ:", data);
-    }
-  } catch (error) {
-    console.error("Lỗi khi lấy danh sách khách hàng:", error.message);
-  }
-};
+const headers = ["STT", "ID", "Họ Tên", "Email", "SĐT", "Chức Vụ"];
+const NhanVienList = ref([]);
 
 // Xử lý dữ liệu
-const formattedData = computed(() => 
-  Array.isArray(khachHangList.value) 
-    ? khachHangList.value.map((kh, index) => ({
+const formattedData = computed(() =>
+  Array.isArray(NhanVienList.value)
+    ? NhanVienList.value.map((nv, index) => ({
         stt: index + 1,
-        id: kh.id,
-        maKhachHang: kh.maKhachHang,
-        hoTen: kh.hoTen,
-        email: kh.email,
-        sdt: kh.sdt
+        id: nv.id,
+        hoTen: nv.hoTen,
+        email: nv.email,
+        sdt: nv.sdt,
+        chucVu: nv.chucVu.tenChucVu,
       }))
     : []
 );
 
-// Xóa khách hàng
-const deleteKhachHang = async (kh) => {
-  if (!confirm('Bạn có chắc chắn muốn xóa khách hàng này?')) return;
-
-  const khToDelete = khachHangList.value.find(item => item.maKhachHang === kh.maKhachHang);
-  if (!khToDelete) return;
-
+// Hàm fetch dữ liệu từ API
+const fetchNhanVien = async () => {
   try {
-    await KhachHangService.deleteCustomer(khToDelete.id);
-    await fetchKhachHang(); 
+    const data = await NhanVienService.getAllStaff();
+    if (Array.isArray(data)) {
+      NhanVienList.value = data;
+    } else {
+      console.error("Dữ liệu trả về không hợp lệ:", data);
+    }
   } catch (error) {
-    console.error('Lỗi khi xóa khách hàng:', error);
+    console.error("Lỗi khi lấy danh sách nhân viên:", error.message);
   }
 };
 
+const deleteNhanVien = async (nv) => {
+  if (!confirm("Bạn có chắc chắn muốn xóa nhân viên này?")) return;
 
+  const nvToDelete = NhanVienList.value.find((item) => item.id === nv.id);
+  if (!nvToDelete) return;
 
-// Khởi động component
-onMounted(fetchKhachHang);
+  try {
+    await NhanVienService.deleteStaff(nvToDelete.id);
+    NhanVienList.value = NhanVienList.value.filter((item) => item.id !== nv.id);
+    alert("Xóa nhân viên thành công!");
+    await fetchNhanVien();
+  } catch (error) {
+    console.error("Lỗi khi xóa nhân viên:", error);
+    alert("Có lỗi xảy ra khi xóa nhân viên!");
+  }
+};
+
+// Gọi hàm fetch khi component được mounted
+onMounted(() => {
+  fetchNhanVien();
+});
 </script>

@@ -3,8 +3,8 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import {
     getAllSP, getAllLoaiSanPham, getAllHeDieuHanh, getAllThuongHieu, addSanPham, updateSanPham
-} from "../../api/service/SanPhamService.js";
-import RichTextEditor from "../../components/RichTextEditor.vue";
+} from "@/api/service/SanPhamService.js";
+import RichTextEditor from "@/components/RichTextEditor.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -53,7 +53,7 @@ const handleSubmit = async () => {
             await addSanPham(sanPhamData.value);
             alert("Thêm Sản Phẩm thành công!");
         }
-        router.push("/san-pham"); // Điều hướng về danh sách
+        router.push("/admin/san-pham"); // Điều hướng về danh sách
     } catch (error) {
         console.error("Lỗi khi thêm/sửa Sản Phẩm:", error);
         alert("Có lỗi xảy ra, vui lòng thử lại!");
@@ -66,7 +66,7 @@ onMounted(fetchDropdownData);
     <div class="relative w-full mt-5">
         <!-- Banner -->
         <div class="w-full h-50 overflow-hidden rounded-lg">
-            <img class="w-full h-full object-cover" src="../../assets/img/RamBanner.jpg" alt="Banner" />
+            <img class="w-full h-full object-cover" src="@/assets/img/RamBanner.jpg" alt="Banner" />
         </div>
 
         <!-- Thẻ thông tin đè lên -->
@@ -75,7 +75,7 @@ onMounted(fetchDropdownData);
             <h1 class="text-3xl font-bold">THÊM/SỬA SẢN PHẨM</h1>
             <button
                 class="px-6 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-gray-900 to-gray-700 shadow-xl backdrop-blur-md bg-opacity-80 border border-white/30 transition-all duration-200 ease-out hover:bg-opacity-90 hover:scale-105 active:scale-95 active:shadow-md">
-                <router-link to="/san-pham">Danh Sách</router-link>
+                <router-link to="/admin/san-pham">Danh Sách</router-link>
             </button>
         </div>
     </div>

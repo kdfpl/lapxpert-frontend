@@ -160,7 +160,7 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import HoaDonService from '../api/service/HoaDonService.js';
+import HoaDonService from '@/api/service/HoaDonService.js';
 
 export default {
     setup() {

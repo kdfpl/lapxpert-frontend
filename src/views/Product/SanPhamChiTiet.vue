@@ -1,9 +1,9 @@
 <script setup>
-import ElementListLayout from "../layout/ElementListLayout.vue";
-import customTable from "../components/customTable.vue";
-import bannerImage from "../assets/img/RamBanner.jpg";
+import ElementListLayout from "@/layout/ElementListLayout.vue";
+import customTable from "@/components/customTable.vue";
+import bannerImage from "@/assets/img/RamBanner.jpg";
 import { ref, onMounted, computed } from "vue";
-import { getAllSpct, deleteSPCT } from "../api/service/SPCTService.js";
+import { getAllSpct, deleteSPCT } from "@/api/service/SPCTService.js";
 
 const headers = [
     "#",
@@ -85,7 +85,7 @@ onMounted(async () => {
     <div class="relative w-full mt-5">
         <!-- Banner -->
         <div class="w-full h-50 overflow-hidden rounded-lg mb-15">
-            <img class="w-full h-full object-cover" src="../assets/img/RamBanner.jpg" alt="Banner" />
+            <img class="w-full h-full object-cover" src="@/assets/img/RamBanner.jpg" alt="Banner" />
         </div>
 
         <!-- Thẻ thông tin đè lên -->
@@ -100,7 +100,7 @@ onMounted(async () => {
             <div class="flex items-center max-w-md shadow-md bg-white/60 rounded-md">
                 <input v-model="search" type="search"
                     class="w-60 px-5 py-2 border-0 bg-white text-gray-900 focus:outline-none"
-                    placeholder="Tìm kiếm..." />
+                    placeholder="Tìm kiếm@." />
                 <button class="flex items-center justify-center w-12 h-12 text-white rounded-r-lg transition"
                     :class="search ? 'bg-black' : 'bg-gray-500 cursor-not-allowed'" :disabled="!search">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -112,7 +112,7 @@ onMounted(async () => {
 
             <!-- Nút Thêm và Xuất -->
             <div class="flex space-x-3">
-                <router-link to="/SpctCRUD">
+                <router-link to="/admin/spct-crud">
                     <button
                         class="px-6 h-10 py-2 rounded-lg font-semibold text-white bg-gray-900 shadow-lg hover:scale-105 active:scale-95 transition">
                         + THÊM
@@ -126,6 +126,6 @@ onMounted(async () => {
         </div>
     </div>
     <!-- Bảng hiển thị dữ liệu -->
-    <customTable :headers="headers" :data="formattedData" :deleteFunc="softDeleteSPCT" link="/SpctCRUD"
+    <customTable :headers="headers" :data="formattedData" :deleteFunc="softDeleteSPCT" link="/admin/spct-crud"
         :editFunc="editSpct" />
 </template>

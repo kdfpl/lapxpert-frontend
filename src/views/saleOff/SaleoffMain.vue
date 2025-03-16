@@ -76,7 +76,7 @@
           <span class="icon-[ph--microsoft-excel-logo] size-5"></span>
           Xuất Excel
         </button>
-        <RouterLink to="/saleoff/add" class="btn btn-primary btn-soft">
+        <RouterLink to="/admin/saleoff/add" class="btn btn-primary btn-soft">
           <span class="icon-[icon-park-outline--add-four] size-5"></span>
           Thêm đợt giảm giá
         </RouterLink>
@@ -188,8 +188,8 @@
   </template>
   <script setup>
   import { onMounted } from "vue"
-  import { useDotGiamGiaStore } from "../../stores/dotgiamgiastore"
-  import { deleteDotGiamGia } from "../../api/service/dotgiamgia"
+  import { useDotGiamGiaStore } from "@/stores/dotgiamgiastore"
+  import { deleteDotGiamGia } from "@/api/service/dotgiamgia"
   
   
   const store = useDotGiamGiaStore()

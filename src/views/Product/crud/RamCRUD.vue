@@ -1,9 +1,9 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { getAllRam, addRam, updateRam } from "../../api/service/SPCTService.js";
-import { getAllLoaiRam } from "../../api/service/LoaiRamService.js";
-import RichTextEditor from "../../components/RichTextEditor.vue";
+import { getAllRam, addRam, updateRam } from "@/api/service/SPCTService.js";
+import { getAllLoaiRam } from "@/api/service/LoaiRamService.js";
+import RichTextEditor from "@/components/RichTextEditor.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -41,7 +41,7 @@ const handleSubmit = async () => {
       await addRam(ramData.value);
       alert("Thêm Ram thành công!");
     }
-    router.push("/ram"); // Điều hướng về danh sách
+    router.push("/admin/ram"); // Điều hướng về danh sách
   } catch (error) {
     console.error("Lỗi khi thêm/sửa Ram:", error);
     alert("Có lỗi xảy ra, vui lòng thử lại!");
@@ -54,7 +54,7 @@ onMounted(fetchLoaiRam);
   <div class="relative w-full mt-5">
     <!-- Banner -->
     <div class="w-full h-50 overflow-hidden rounded-lg">
-      <img class="w-full h-full object-cover" src="../../assets/img/RamBanner.jpg" alt="Banner" />
+      <img class="w-full h-full object-cover" src="@/assets/img/RamBanner.jpg" alt="Banner" />
     </div>
 
     <!-- Thẻ thông tin đè lên -->
@@ -63,7 +63,7 @@ onMounted(fetchLoaiRam);
       <h1 class="text-3xl font-bold">THÊM/SỬA RAM</h1>
       <button
         class="px-6 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-gray-900 to-gray-700 shadow-xl backdrop-blur-md bg-opacity-80 border border-white/30 transition-all duration-200 ease-out hover:bg-opacity-90 hover:scale-105 active:scale-95 active:shadow-md">
-        <router-link to="/Ram">Danh Sách</router-link>
+        <router-link to="/admin/ram">Danh Sách</router-link>
       </button>
     </div>
   </div>

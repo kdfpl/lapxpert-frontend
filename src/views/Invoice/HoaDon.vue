@@ -25,10 +25,10 @@
 <script setup>
 
 import { ref, onMounted } from "vue";
-import HoaDonService from "../api/service/HoaDonService.js";
-import ElementListLayout from "../layout/ElementListLayout.vue";
-import CustomTable from "../components/CustomTable.vue"; // Import CustomTable
-import bannerImage from "../assets/img/GPUBanner.jpg";
+import HoaDonService from "@/api/service/HoaDonService.js";
+import ElementListLayout from "@/layout/ElementListLayout.vue";
+import CustomTable from "@/components/CustomTable.vue"; // Import CustomTable
+import bannerImage from "@/assets/img/GPUBanner.jpg";
 
 // Các biến header và hoaDons vẫn như trước
 const headers = ref([

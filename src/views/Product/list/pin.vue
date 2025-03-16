@@ -1,69 +1,70 @@
 <script setup>
-import ElementListLayout from "../../layout/ElementListLayout.vue";
-import customTable from "../../components/customTable.vue";
-import bannerImage from "../../assets/img/RamBanner.jpg";
+import ElementListLayout from "@/layout/ElementListLayout.vue";
+import customTable from "@/components/customTable.vue";
+import bannerImage from "@/assets/img/pinBanner.jpg";
 import { ref, onMounted, computed } from "vue";
-import { getAllRam, addRam, updateRam, deleteRam } from "../../api/service/SPCTService.js";
+import { getAllPin, deletePin } from "@/api/service/SPCTService.js";
 const headers = [
   "#",
   "Id",
-  "Loại ram",
-  "Dung lượng",
-  "Số khe",
-  "Hỗ trợ tối đa",
+  "Mã pin",
+  "Thời lượng pin",
+  "Dung lượng pin",
+  "Công xuất sạc",
 ];
-const ramList = ref([]);
-const isEditing = ref(false);
-const selectedRam = ref({});
 
-const fetchRam = async () => {
+const isEditing = ref(false);
+const selectedPin = ref({});
+const pinList = ref([]);
+
+const fetchPin = async () => {
   try {
-    const data = await getAllRam();
+    const data = await getAllPin();
     if (Array.isArray(data)) {
-      ramList.value = data;
+      pinList.value = data;
     } else {
       console.error("Dữ liệu trả về không hợp lệ:", data);
     }
   } catch (error) {
-    console.error("Lỗi khi lấy danh sách Ram:", error.message);
+    console.error("Lỗi khi lấy danh sách PIN:", error.message);
   }
 };
 
 const formattedData = computed(() =>
-  Array.isArray(ramList.value)
-    ? ramList.value.map((ram, index) => ({
-      stt: index+1,
-      id: ram.id,
-      loaiRam: ram.idLoaiRam.maLoai,
-      dungLuong: ram.dungLuongRam,
-      soKhe: ram.soKheRam,
-      hoTroToiDa: ram.hoTroToiDa,
+  Array.isArray(pinList.value)
+    ? pinList.value.map((pin, index) => ({
+      stt: index + 1,
+      id: pin.id,
+      maPin: pin.maPin,
+      thoiLuongPin: pin.thoiLuongPin,
+      dungLuongPin: pin.dungLuongPin,
+      congSuatSac: pin.congSuatSac,
     }))
     : []
 );
-const softDeleteRam = async (ram) => {
-  if (!confirm('Bạn có chắc chắn muốn xóa Ram này?')) return;
+const softDeletePin = async (pin) => {
+  if (!confirm('Bạn có chắc chắn muốn xóa PIN này?')) return;
 
-  const ramToDelete = ramList.value.find((item) => item.id === ram.id);
+  const pinToDelete = pinList.value.find((item) => item.id === pin.id);
 
-  if (!ramToDelete) return;
+  if (!pinToDelete) return;
 
   try {
-    console.log(ramToDelete.id);
-    await deleteRam(ramToDelete.id);
-    await fetchRam();
+    console.log(pinToDelete.id);
+    await deletePin(pinToDelete.id);
+    await fetchPin();
   } catch (error) {
-    console.log(ramToDelete.id);
-    console.error('Lỗi khi xóa Ram:', error);
+    console.log(pinToDelete.id);
+    console.error('Lỗi khi xóa PIN:', error);
   }
 };
 
-const editRam = (ram) => {
-  router.push({ name: "RamCRUD", params: { id: ram.id } });
+const editPin = (pin) => {
+  router.push({ name: "PinCRUD", params: { id: pin.id } });
 };
 
 onMounted(async () => {
-  await fetchRam();
+  await fetchPin();
 });
 </script>
 
@@ -71,13 +72,13 @@ onMounted(async () => {
   <div class="relative w-full mt-5">
     <!-- Banner -->
     <div class="w-full h-50 overflow-hidden rounded-lg mb-15">
-      <img class="w-full h-full object-cover" src="../../assets/img/RamBanner.jpg" alt="Banner" />
+      <img class="w-full h-full object-cover" src="@/assets/img/RamBanner.jpg" alt="Banner" />
     </div>
 
     <!-- Thẻ thông tin đè lên -->
     <div
       class="absolute bottom-[-40px] bg-white/90 left-1/2 transform -translate-x-1/2 w-[90%] md:w-[80%] lg:w-[70%] shadow-lg rounded-xl p-5 flex justify-between space-x-4">
-      <h1 class="text-3xl font-bold">DANH SÁCH RAM</h1>
+      <h1 class="text-3xl font-bold">DANH SÁCH PIN</h1>
     </div>
   </div>
   <div class="p-6 mx-auto bg-white rounded-xl shadow-lg border border-gray-200">
@@ -97,7 +98,7 @@ onMounted(async () => {
 
       <!-- Nút Thêm và Xuất -->
       <div class="flex space-x-3">
-        <router-link to="/RamCRUD">
+        <router-link to="/admin/pin-crud">
           <button
             class="px-6 h-10 py-2 rounded-lg font-semibold text-white bg-gray-900 shadow-lg hover:scale-105 active:scale-95 transition">
             + THÊM
@@ -111,6 +112,6 @@ onMounted(async () => {
     </div>
   </div>
   <!-- Bảng hiển thị dữ liệu -->
-  <customTable :headers="headers" :data="formattedData" :deleteFunc="softDeleteRam" link="/RamCRUD"
-    :editFunc="editRam" />
+  <customTable :headers="headers" :data="formattedData" :deleteFunc="softDeletePin" link="/admin/crud"
+    :editFunc="editPin" />
 </template>

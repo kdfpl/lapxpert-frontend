@@ -1,16 +1,15 @@
 <template>
-  <div
-    class="p-6 mx-auto bg-white rounded-xl mb-5 shadow-md border border-gray-200"
-  >
-    <div class="flex justify-between">
+  <div class="p-6 mx-auto bg-white rounded-xl shadow-lg mb-5 border border-gray-200">
+
+    <div class="flex justify-between ">
       <h1 class="items-center text-center  font-bold text-4xl ">
-        DANH SÁCH NHÂN VIÊN
+        DANH SÁCH KHÁCH HÀNG
       </h1>
       <div class="flex space-x-3">
         <button
           class="px-6 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-gray-900 to-gray-700 shadow-xl backdrop-blur-md bg-opacity-80 border border-white/30 transition-all duration-200 ease-out hover:bg-opacity-90 hover:scale-105 active:scale-95 active:shadow-md"
         >
-          <router-link to="/NhanVienCRUD">+ THÊM</router-link>
+          <router-link to="/admin/khach-hang-crud">+ THÊM</router-link>
         </button>
 
         <button
@@ -68,70 +67,70 @@
     </div>
   </div>
 
+  <!-- Bảng hiển thị dữ liệu -->
   <CustomTable
     :headers="headers"
     :data="formattedData"
-    :deleteFunc="deleteNhanVien"
-    link="/NhanVienCRUD"
-    round="rounded-b-xl"
+    :deleteFunc="deleteKhachHang"
+    link="/admin/khach-hang-crud"
   />
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import CustomTable from "../components/CustomTable.vue";
-import NhanVienService from "../api/service/NhanVienService.js";
+import { ref, computed, onMounted } from 'vue';
+import KhachHangService from '@/api/service/KhachHangService';
+import CustomTable from '@/components/CustomTable.vue';
 
-const headers = ["STT", "ID", "Họ Tên", "Email", "SĐT", "Chức Vụ"];
-const NhanVienList = ref([]);
+// State
+const khachHangList = ref([]);
+const search = ref('');
+const headers = ["STT","Id" ,"Mã KH", "Họ tên", "Email", "SĐT"];
 
-// Xử lý dữ liệu
-const formattedData = computed(() =>
-  Array.isArray(NhanVienList.value)
-    ? NhanVienList.value.map((nv, index) => ({
-        stt: index + 1,
-        id: nv.id,
-        hoTen: nv.hoTen,
-        email: nv.email,
-        sdt: nv.sdt,
-        chucVu: nv.chucVu.tenChucVu,
-      }))
-    : []
-);
-
-// Hàm fetch dữ liệu từ API
-const fetchNhanVien = async () => {
+// Fetch dữ liệu
+const fetchKhachHang = async () => {
   try {
-    const data = await NhanVienService.getAllStaff();
+    const data = await KhachHangService.getAllCustomers();
     if (Array.isArray(data)) {
-      NhanVienList.value = data;
+      khachHangList.value = data;
     } else {
       console.error("Dữ liệu trả về không hợp lệ:", data);
     }
   } catch (error) {
-    console.error("Lỗi khi lấy danh sách nhân viên:", error.message);
+    console.error("Lỗi khi lấy danh sách khách hàng:", error.message);
   }
 };
 
-const deleteNhanVien = async (nv) => {
-  if (!confirm("Bạn có chắc chắn muốn xóa nhân viên này?")) return;
+// Xử lý dữ liệu
+const formattedData = computed(() => 
+  Array.isArray(khachHangList.value) 
+    ? khachHangList.value.map((kh, index) => ({
+        stt: index + 1,
+        id: kh.id,
+        maKhachHang: kh.maKhachHang,
+        hoTen: kh.hoTen,
+        email: kh.email,
+        sdt: kh.sdt
+      }))
+    : []
+);
 
-  const nvToDelete = NhanVienList.value.find((item) => item.id === nv.id);
-  if (!nvToDelete) return;
+// Xóa khách hàng
+const deleteKhachHang = async (kh) => {
+  if (!confirm('Bạn có chắc chắn muốn xóa khách hàng này?')) return;
+
+  const khToDelete = khachHangList.value.find(item => item.maKhachHang === kh.maKhachHang);
+  if (!khToDelete) return;
 
   try {
-    await NhanVienService.deleteStaff(nvToDelete.id);
-    NhanVienList.value = NhanVienList.value.filter((item) => item.id !== nv.id);
-    alert("Xóa nhân viên thành công!");
-    await fetchNhanVien();
+    await KhachHangService.deleteCustomer(khToDelete.id);
+    await fetchKhachHang(); 
   } catch (error) {
-    console.error("Lỗi khi xóa nhân viên:", error);
-    alert("Có lỗi xảy ra khi xóa nhân viên!");
+    console.error('Lỗi khi xóa khách hàng:', error);
   }
 };
 
-// Gọi hàm fetch khi component được mounted
-onMounted(() => {
-  fetchNhanVien();
-});
+
+
+// Khởi động component
+onMounted(fetchKhachHang);
 </script>

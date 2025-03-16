@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from "vue";
 import { Icon } from "@iconify/vue";
 import axios from "axios";
-import GlassTable from "../components/customTable.vue";
+import GlassTable from "@/components/customTable.vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -84,13 +84,13 @@ onMounted(() => {
 
 const editVoucher = (voucher) => {
   if (voucher && voucher.id) {
-    router.push(`/crud-giam-gia/${voucher.id}`);
+    router.push(`/admin/crud-giam-gia/${voucher.id}`);
   } else {
     alert("Không thể xác định voucher để chỉnh sửa!");
   }
 };
 const addVoucher = (voucher) => {
-    router.push(`/crud-giam-gia`);
+    router.push(`/admin/crud-giam-gia`);
 };
 
 const deleteVoucher = async (voucher) => {

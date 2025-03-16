@@ -1,72 +1,76 @@
 <script setup>
-import ElementListLayout from "../../layout/ElementListLayout.vue";
-import customTable from "../../components/customTable.vue";
-import bannerImage from "../../assets/img/ManhinhBanner.jpg";
+import ElementListLayout from "@/layout/ElementListLayout.vue";
+import customTable from "@/components/customTable.vue";
+import bannerImage from "@/assets/img/OCBanner.jpg";
 import { ref, onMounted, computed } from "vue";
-import { getAllManHinh, deleteManHinh } from "../../api/service/SPCTService.js";
+import { getAllOCung, deleteOCung } from "@/api/service/SPCTService.js";
 const headers = [
   "#",
   "Id",
-  "Mã màn hình",
-  "Kích thước",
-  "Tần số quét",
-  "Tấm nền",
-  "Độ phân giải",
+  "Mã ổ cứng",
+  "Loại ổ cứng",
+  "Dung lượng",
+  "Chuẩn kết nối",
+  "Tốc độ đọc",
+  "Tốc độ ghi",
+  "Hỗ trợ nâng cấp",
 ];
 
 const isEditing = ref(false);
-const selectedManHinh = ref({});
-const manHinhList = ref([]);
+const selectedOCung = ref({});
+const oCungList = ref([]);
 
-const fetchManHinh = async () => {
+const fetchOCung = async () => {
   try {
-    const data = await getAllManHinh();
+    const data = await getAllOCung();
     if (Array.isArray(data)) {
-      manHinhList.value = data;
+      oCungList.value = data;
     } else {
       console.error("Dữ liệu trả về không hợp lệ:", data);
     }
   } catch (error) {
-    console.error("Lỗi khi lấy danh sách Screen:", error.message);
+    console.error("Lỗi khi lấy danh sách Drive:", error.message);
   }
 };
 
 const formattedData = computed(() =>
-  Array.isArray(manHinhList.value)
-    ? manHinhList.value.map((manHinh, index) => ({
+  Array.isArray(oCungList.value)
+    ? oCungList.value.map((oCung, index) => ({
       stt: index + 1,
-      id: manHinh.id,
-      maManHinh: manHinh.maManHinh,
-      kichThuoc: manHinh.kichThuoc,
-      tanSoQuet: manHinh.tanSoQuet,
-      loaiTamNen: manHinh.loaiTamNen,
-      doPhanGiai: manHinh.doPhanGiai,
+      id: oCung.id,
+      maOCung: oCung.maOCung,
+      loaiOCung: oCung.loaiOCung,
+      dungLuong: oCung.dungLuong,
+      chuanKetNoi: oCung.chuanKetNoi,
+      tocDoDoc: oCung.tocDoDoc,
+      tocDoGhi: oCung.tocDoGhi,
+      hoTroNangCap: oCung.hoTroNangCap ? "Có" : "Không",
     }))
     : []
 );
-const softDeleteManHinh = async (manHinh) => {
-  if (!confirm('Bạn có chắc chắn muốn xóa Screen này?')) return;
+const softDeleteOCung = async (oCung) => {
+  if (!confirm('Bạn có chắc chắn muốn xóa Drive này?')) return;
 
-  const manHinhToDelete = manHinhList.value.find((item) => item.id === manHinh.id);
+  const oCungToDelete = oCungList.value.find((item) => item.id === oCung.id);
 
-  if (!manHinhToDelete) return;
+  if (!oCungToDelete) return;
 
   try {
-    console.log(manHinhToDelete.id);
-    await deleteManHinh(manHinhToDelete.id);
-    await fetchManHinh();
+    console.log(oCungToDelete.id);
+    await deleteOCung(oCungToDelete.id);
+    await fetchOCung();
   } catch (error) {
-    console.log(manHinhToDelete.id);
-    console.error('Lỗi khi xóa Screen:', error);
+    console.log(oCungToDelete.id);
+    console.error('Lỗi khi xóa Drive:', error);
   }
 };
 
-const editManHinh = (manHinh) => {
-  router.push({ name: "ManHinhCRUD", params: { id: manHinh.id } });
+const editOCung = (oCung) => {
+  router.push({ name: "OCungCRUD", params: { id: oCung.id } });
 };
 
 onMounted(async () => {
-  await fetchManHinh();
+  await fetchOCung();
 });
 </script>
 
@@ -74,13 +78,13 @@ onMounted(async () => {
   <div class="relative w-full mt-5">
     <!-- Banner -->
     <div class="w-full h-50 overflow-hidden rounded-lg mb-15">
-      <img class="w-full h-full object-cover" src="../../assets/img/RamBanner.jpg" alt="Banner" />
+      <img class="w-full h-full object-cover" src="@/assets/img/RamBanner.jpg" alt="Banner" />
     </div>
 
     <!-- Thẻ thông tin đè lên -->
     <div
       class="absolute bottom-[-40px] bg-white/90 left-1/2 transform -translate-x-1/2 w-[90%] md:w-[80%] lg:w-[70%] shadow-lg rounded-xl p-5 flex justify-between space-x-4">
-      <h1 class="text-3xl font-bold">DANH SÁCH MÀN HÌNH</h1>
+      <h1 class="text-3xl font-bold">DANH SÁCH Ổ CỨNG</h1>
     </div>
   </div>
   <div class="p-6 mx-auto bg-white rounded-xl shadow-lg border border-gray-200">
@@ -100,7 +104,7 @@ onMounted(async () => {
 
       <!-- Nút Thêm và Xuất -->
       <div class="flex space-x-3">
-        <router-link to="/ManHinhCRUD">
+        <router-link to="/admin/o-cung-crud">
           <button
             class="px-6 h-10 py-2 rounded-lg font-semibold text-white bg-gray-900 shadow-lg hover:scale-105 active:scale-95 transition">
             + THÊM
@@ -114,6 +118,6 @@ onMounted(async () => {
     </div>
   </div>
   <!-- Bảng hiển thị dữ liệu -->
-  <customTable :headers="headers" :data="formattedData" :deleteFunc="softDeleteManHinh" link="/ManHinhCRUD"
-    :editFunc="editManHinh" />
+  <customTable :headers="headers" :data="formattedData" :deleteFunc="softDeleteOCung" link="/admin/o-cung-crud"
+    :editFunc="editOCung" />
 </template>

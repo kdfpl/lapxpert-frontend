@@ -1,73 +1,72 @@
 <script setup>
-import ElementListLayout from "../../layout/ElementListLayout.vue";
-import customTable from "../../components/customTable.vue";
-import bannerImage from "../../assets/img/CPUBanner.jpg";
+import ElementListLayout from "@/layout/ElementListLayout.vue";
+import customTable from "@/components/customTable.vue";
+import bannerImage from "@/assets/img/ManhinhBanner.jpg";
 import { ref, onMounted, computed } from "vue";
-import { getAllCpu, addCpu, updateCpu, deleteCpu } from "../../api/service/SPCTService.js";
+import { getAllManHinh, deleteManHinh } from "@/api/service/SPCTService.js";
 const headers = [
   "#",
-  "id",
-  "Hãng CPU",
-  "Tên CPU",
-  "Thế hệ CPU",
-  "Số nhân",
-  "Số luồng",
-  "Xung nhịp",
+  "Id",
+  "Mã màn hình",
+  "Kích thước",
+  "Tần số quét",
+  "Tấm nền",
+  "Độ phân giải",
 ];
-const isEditing = ref(false);
-const selectedCpu = ref({});
-const cpuList = ref([]);
 
-const fetchCpu = async () => {
+const isEditing = ref(false);
+const selectedManHinh = ref({});
+const manHinhList = ref([]);
+
+const fetchManHinh = async () => {
   try {
-    const data = await getAllCpu();
+    const data = await getAllManHinh();
     if (Array.isArray(data)) {
-      cpuList.value = data;
+      manHinhList.value = data;
     } else {
       console.error("Dữ liệu trả về không hợp lệ:", data);
     }
   } catch (error) {
-    console.error("Lỗi khi lấy danh sách CPU:", error.message);
+    console.error("Lỗi khi lấy danh sách Screen:", error.message);
   }
 };
 
 const formattedData = computed(() =>
-  Array.isArray(cpuList.value)
-    ? cpuList.value.map((cpu, index) => ({
+  Array.isArray(manHinhList.value)
+    ? manHinhList.value.map((manHinh, index) => ({
       stt: index + 1,
-      id: cpu.id,
-      hangCpu: cpu.hangCpu,
-      tenCpu: cpu.tenCpu,
-      theHeCpu: cpu.theHeCpu,
-      soNhan: cpu.soNhan,
-      soLuong: cpu.soLuong,
-      xungNhip: cpu.xungNhip,
+      id: manHinh.id,
+      maManHinh: manHinh.maManHinh,
+      kichThuoc: manHinh.kichThuoc,
+      tanSoQuet: manHinh.tanSoQuet,
+      loaiTamNen: manHinh.loaiTamNen,
+      doPhanGiai: manHinh.doPhanGiai,
     }))
     : []
 );
-const softDeleteCpu = async (cpu) => {
-  if (!confirm('Bạn có chắc chắn muốn xóa CPU này?')) return;
+const softDeleteManHinh = async (manHinh) => {
+  if (!confirm('Bạn có chắc chắn muốn xóa Screen này?')) return;
 
-  const cpuToDelete = cpuList.value.find((item) => item.id === cpu.id);
+  const manHinhToDelete = manHinhList.value.find((item) => item.id === manHinh.id);
 
-  if (!cpuToDelete) return;
+  if (!manHinhToDelete) return;
 
   try {
-    console.log(cpuToDelete.id);
-    await deleteCpu(cpuToDelete.id);
-    await fetchCpu();
+    console.log(manHinhToDelete.id);
+    await deleteManHinh(manHinhToDelete.id);
+    await fetchManHinh();
   } catch (error) {
-    console.log(cpuToDelete.id);
-    console.error('Lỗi khi xóa CPU:', error);
+    console.log(manHinhToDelete.id);
+    console.error('Lỗi khi xóa Screen:', error);
   }
 };
 
-const editCpu = (cpu) => {
-  router.push({ name: "CpuCRUD", params: { id: cpu.id } });
+const editManHinh = (manHinh) => {
+  router.push({ name: "ManHinhCRUD", params: { id: manHinh.id } });
 };
 
 onMounted(async () => {
-  await fetchCpu();
+  await fetchManHinh();
 });
 </script>
 
@@ -75,13 +74,13 @@ onMounted(async () => {
   <div class="relative w-full mt-5">
     <!-- Banner -->
     <div class="w-full h-50 overflow-hidden rounded-lg mb-15">
-      <img class="w-full h-full object-cover" src="../../assets/img/RamBanner.jpg" alt="Banner" />
+      <img class="w-full h-full object-cover" src="@/assets/img/RamBanner.jpg" alt="Banner" />
     </div>
 
     <!-- Thẻ thông tin đè lên -->
     <div
       class="absolute bottom-[-40px] bg-white/90 left-1/2 transform -translate-x-1/2 w-[90%] md:w-[80%] lg:w-[70%] shadow-lg rounded-xl p-5 flex justify-between space-x-4">
-      <h1 class="text-3xl font-bold">DANH SÁCH CPU</h1>
+      <h1 class="text-3xl font-bold">DANH SÁCH MÀN HÌNH</h1>
     </div>
   </div>
   <div class="p-6 mx-auto bg-white rounded-xl shadow-lg border border-gray-200">
@@ -101,7 +100,7 @@ onMounted(async () => {
 
       <!-- Nút Thêm và Xuất -->
       <div class="flex space-x-3">
-        <router-link to="/CpuCRUD">
+        <router-link to="/admin/man-hinh-crud">
           <button
             class="px-6 h-10 py-2 rounded-lg font-semibold text-white bg-gray-900 shadow-lg hover:scale-105 active:scale-95 transition">
             + THÊM
@@ -115,6 +114,6 @@ onMounted(async () => {
     </div>
   </div>
   <!-- Bảng hiển thị dữ liệu -->
-  <customTable :headers="headers" :data="formattedData" :deleteFunc="softDeleteCpu" link="/CpuCRUD"
-    :editFunc="editCpu" />
+  <customTable :headers="headers" :data="formattedData" :deleteFunc="softDeleteManHinh" link="/admin/man-hinh-crud"
+    :editFunc="editManHinh" />
 </template>

@@ -6,7 +6,7 @@ import LaptopPT from "./ThongKe/LaptopPT.vue";
 import TTKH from "./ThongKe/TTKH.vue";
 import axios from "axios";
 import { ref, computed, onMounted } from "vue";
-import GlassTable from "../components/customTable.vue";
+import GlassTable from "@/components/customTable.vue";
 
 // Danh sách tiêu đề bảng
 const headers = [

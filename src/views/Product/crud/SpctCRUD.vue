@@ -5,9 +5,9 @@ import {
     getAllSpct, getAllRam, getAllCpu, getAllGpu, getAllSeri,
     getAllManHinh, getAllOCung, getAllPin, getAllMauSac,
     addSPCT, updateSPCT
-} from "../../api/service/SPCTService.js";
-import { getAllSP } from "../../api/service/SanPhamService.js";
-import RichTextEditor from "../../components/RichTextEditor.vue";
+} from "@/api/service/SPCTService.js";
+import { getAllSP } from "@/api/service/SanPhamService.js";
+import RichTextEditor from "@/components/RichTextEditor.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -70,7 +70,7 @@ const handleSubmit = async () => {
             await addSPCT(spctData.value);
             alert("Thêm Sản Phẩm Chi Tiết thành công!");
         }
-        router.push("/san-pham-chi-tiet"); // Điều hướng về danh sách
+        router.push("/admin/san-pham-chi-tiet"); // Điều hướng về danh sách
     } catch (error) {
         console.error("Lỗi khi thêm/sửa Sản Phẩm Chi Tiết:", error);
         alert("Có lỗi xảy ra, vui lòng thử lại!");
@@ -83,7 +83,7 @@ onMounted(fetchDropdownData);
     <div class="relative w-full mt-5">
         <!-- Banner -->
         <div class="w-full h-50 overflow-hidden rounded-lg">
-            <img class="w-full h-full object-cover" src="../../assets/img/RamBanner.jpg" alt="Banner" />
+            <img class="w-full h-full object-cover" src="@/assets/img/RamBanner.jpg" alt="Banner" />
         </div>
 
         <!-- Thẻ thông tin đè lên -->
@@ -92,7 +92,7 @@ onMounted(fetchDropdownData);
             <h1 class="text-3xl font-bold">THÊM/SỬA PHIÊN BẢN SẢN PHẨM</h1>
             <button
                 class="px-6 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-gray-900 to-gray-700 shadow-xl backdrop-blur-md bg-opacity-80 border border-white/30 transition-all duration-200 ease-out hover:bg-opacity-90 hover:scale-105 active:scale-95 active:shadow-md">
-                <router-link to="/san-pham-chi-tiet">Danh Sách</router-link>
+                <router-link to="/admin/san-pham-chi-tiet">Danh Sách</router-link>
             </button>
         </div>
     </div>

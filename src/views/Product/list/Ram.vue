@@ -1,76 +1,69 @@
 <script setup>
-import ElementListLayout from "../../layout/ElementListLayout.vue";
-import customTable from "../../components/customTable.vue";
-import bannerImage from "../../assets/img/OCBanner.jpg";
+import ElementListLayout from "@/layout/ElementListLayout.vue";
+import customTable from "@/components/customTable.vue";
+import bannerImage from "@/assets/img/RamBanner.jpg";
 import { ref, onMounted, computed } from "vue";
-import { getAllOCung, deleteOCung } from "../../api/service/SPCTService.js";
+import { getAllRam, addRam, updateRam, deleteRam } from "@/api/service/SPCTService.js";
 const headers = [
   "#",
   "Id",
-  "Mã ổ cứng",
-  "Loại ổ cứng",
+  "Loại ram",
   "Dung lượng",
-  "Chuẩn kết nối",
-  "Tốc độ đọc",
-  "Tốc độ ghi",
-  "Hỗ trợ nâng cấp",
+  "Số khe",
+  "Hỗ trợ tối đa",
 ];
-
+const ramList = ref([]);
 const isEditing = ref(false);
-const selectedOCung = ref({});
-const oCungList = ref([]);
+const selectedRam = ref({});
 
-const fetchOCung = async () => {
+const fetchRam = async () => {
   try {
-    const data = await getAllOCung();
+    const data = await getAllRam();
     if (Array.isArray(data)) {
-      oCungList.value = data;
+      ramList.value = data;
     } else {
       console.error("Dữ liệu trả về không hợp lệ:", data);
     }
   } catch (error) {
-    console.error("Lỗi khi lấy danh sách Drive:", error.message);
+    console.error("Lỗi khi lấy danh sách Ram:", error.message);
   }
 };
 
 const formattedData = computed(() =>
-  Array.isArray(oCungList.value)
-    ? oCungList.value.map((oCung, index) => ({
-      stt: index + 1,
-      id: oCung.id,
-      maOCung: oCung.maOCung,
-      loaiOCung: oCung.loaiOCung,
-      dungLuong: oCung.dungLuong,
-      chuanKetNoi: oCung.chuanKetNoi,
-      tocDoDoc: oCung.tocDoDoc,
-      tocDoGhi: oCung.tocDoGhi,
-      hoTroNangCap: oCung.hoTroNangCap ? "Có" : "Không",
+  Array.isArray(ramList.value)
+    ? ramList.value.map((ram, index) => ({
+      stt: index+1,
+      id: ram.id,
+      loaiRam: ram.idLoaiRam.maLoai,
+      dungLuong: ram.dungLuongRam,
+      soKhe: ram.soKheRam,
+      hoTroToiDa: ram.hoTroToiDa,
     }))
     : []
 );
-const softDeleteOCung = async (oCung) => {
-  if (!confirm('Bạn có chắc chắn muốn xóa Drive này?')) return;
+const softDeleteRam = async (ram) => {
+  if (!confirm('Bạn có chắc chắn muốn xóa Ram này?')) return;
 
-  const oCungToDelete = oCungList.value.find((item) => item.id === oCung.id);
+  const ramToDelete = ramList.value.find((item) => item.id === ram.id);
 
-  if (!oCungToDelete) return;
+  if (!ramToDelete) return;
 
   try {
-    console.log(oCungToDelete.id);
-    await deleteOCung(oCungToDelete.id);
-    await fetchOCung();
+    console.log(ramToDelete.id);
+    await deleteRam(ramToDelete.id);
+    await fetchRam();
   } catch (error) {
-    console.log(oCungToDelete.id);
-    console.error('Lỗi khi xóa Drive:', error);
+    console.log(ramToDelete.id);
+    console.error('Lỗi khi xóa Ram:', error);
   }
 };
 
-const editOCung = (oCung) => {
-  router.push({ name: "OCungCRUD", params: { id: oCung.id } });
+const editRam = (ram) => {
+  router.push({ name: "RamCRUD", params: { id: ram.id } });
 };
 
 onMounted(async () => {
-  await fetchOCung();
+  await fetchRam();
 });
 </script>
 
@@ -78,13 +71,13 @@ onMounted(async () => {
   <div class="relative w-full mt-5">
     <!-- Banner -->
     <div class="w-full h-50 overflow-hidden rounded-lg mb-15">
-      <img class="w-full h-full object-cover" src="../../assets/img/RamBanner.jpg" alt="Banner" />
+      <img class="w-full h-full object-cover" src="@/assets/img/RamBanner.jpg" alt="Banner" />
     </div>
 
     <!-- Thẻ thông tin đè lên -->
     <div
       class="absolute bottom-[-40px] bg-white/90 left-1/2 transform -translate-x-1/2 w-[90%] md:w-[80%] lg:w-[70%] shadow-lg rounded-xl p-5 flex justify-between space-x-4">
-      <h1 class="text-3xl font-bold">DANH SÁCH Ổ CỨNG</h1>
+      <h1 class="text-3xl font-bold">DANH SÁCH RAM</h1>
     </div>
   </div>
   <div class="p-6 mx-auto bg-white rounded-xl shadow-lg border border-gray-200">
@@ -104,7 +97,7 @@ onMounted(async () => {
 
       <!-- Nút Thêm và Xuất -->
       <div class="flex space-x-3">
-        <router-link to="/OCungCRUD">
+        <router-link to="/admin/ram-crud">
           <button
             class="px-6 h-10 py-2 rounded-lg font-semibold text-white bg-gray-900 shadow-lg hover:scale-105 active:scale-95 transition">
             + THÊM
@@ -118,6 +111,6 @@ onMounted(async () => {
     </div>
   </div>
   <!-- Bảng hiển thị dữ liệu -->
-  <customTable :headers="headers" :data="formattedData" :deleteFunc="softDeleteOCung" link="/OCungCRUD"
-    :editFunc="editOCung" />
+  <customTable :headers="headers" :data="formattedData" :deleteFunc="softDeleteRam" link="/admin/ram-crud"
+    :editFunc="editRam" />
 </template>

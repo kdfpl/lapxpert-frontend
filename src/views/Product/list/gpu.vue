@@ -1,9 +1,9 @@
 <script setup>
 import { ref, onMounted ,computed} from "vue";
-import ElementListLayout from "../../layout/ElementListLayout.vue";
-import customTable from "../../components/customTable.vue";
-import bannerImage from "../../assets/img/GPUBanner.jpg";
-import { getAllGpu, deleteGpu } from "../../api/service/SPCTService.js";
+import ElementListLayout from "@/layout/ElementListLayout.vue";
+import customTable from "@/components/customTable.vue";
+import bannerImage from "@/assets/img/GPUBanner.jpg";
+import { getAllGpu, deleteGpu } from "@/api/service/SPCTService.js";
 const headers = [
   "#",
   "Id",
@@ -74,7 +74,7 @@ onMounted(async () => {
   <div class="relative w-full mt-5">
     <!-- Banner -->
     <div class="w-full h-50 overflow-hidden rounded-lg mb-15">
-      <img class="w-full h-full object-cover" src="../../assets/img/RamBanner.jpg" alt="Banner" />
+      <img class="w-full h-full object-cover" src="@/assets/img/RamBanner.jpg" alt="Banner" />
     </div>
 
     <!-- Thẻ thông tin đè lên -->
@@ -100,7 +100,7 @@ onMounted(async () => {
 
       <!-- Nút Thêm và Xuất -->
       <div class="flex space-x-3">
-        <router-link to="/GpuCRUD">
+        <router-link to="/admin/gpu-crud">
           <button
             class="px-6 h-10 py-2 rounded-lg font-semibold text-white bg-gray-900 shadow-lg hover:scale-105 active:scale-95 transition">
             + THÊM
@@ -114,6 +114,6 @@ onMounted(async () => {
     </div>
   </div>
   <!-- Bảng hiển thị dữ liệu -->
-  <customTable :headers="headers" :data="formattedData" :deleteFunc="softDeleteGpu" link="/GpuCRUD"
+  <customTable :headers="headers" :data="formattedData" :deleteFunc="softDeleteGpu" link="/admin/gpu-crud"
     :editFunc="editGpu" />
 </template>
