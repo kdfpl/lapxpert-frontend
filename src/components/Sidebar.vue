@@ -214,7 +214,7 @@ const menuItems = ref([
       },
     ],
   },
-  { name: "Giảm giá", icon: faTicket, link: "/saleoff" },
+  { name: "Giảm giá", icon: faTicket, link: "/GiamGia" },
   {
     name: "Người dùng",
     icon: faUsers,
