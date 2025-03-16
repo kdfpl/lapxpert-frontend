@@ -1,7 +1,7 @@
 <template>
   <section class="flex h-full w-full flex-col">
     <!-- Header -->
-    <section class="mb-5 flex w-full items-center justify-between">
+    <section class="mb-5 text-primary flex w-full items-center justify-between">
       <h1 class="text-4xl font-bold">DANH SÁCH KHÁCH HÀNG</h1>
       <div class="flex gap-2">
         <RouterLink to="/admin/khach-hang-crud" class="btn btn-primary btn-soft">
@@ -22,7 +22,7 @@
     <!-- Search & Filter -->
     <section class="mb-5 flex w-full items-center justify-end gap-2">
       <label class="input input-ghost bg-base-200 focus-within:bg-base-200 grow focus-within:outline-none">
-        <Icon icon="streamline:search-visual-solid" class=" size-5" />
+        <Icon icon="streamline:search-visual-solid" class=" size-5 text-primary" />
         <input v-model="search" type="search" placeholder="Tìm kiếm khách hàng..." />
       </label>
     </section>
@@ -30,8 +30,8 @@
     <!-- Table -->
     <section class="relative flex-1">
       <div class="absolute inset-0 overflow-auto">
-        <table class="table-pin-rows table text-center w-full">
-          <thead class="">
+        <table class="table-pin-rows text-primary table text-center w-full">
+          <thead class="text-primary">
             <tr>
               <th>STT</th>
               <th>Mã KH</th>
@@ -51,10 +51,10 @@
               <td>
                 <div class="join">
                   <RouterLink :to="`/admin/khach-hang-crud/${kh.id}`" class="join-item btn btn-soft btn-sm">
-                    <Icon icon="heroicons-outline:pencil-alt" class="size-4" />
+                    <Icon icon="heroicons-outline:pencil-alt" class="size-4 text-primary" />
                   </RouterLink>
                   <button @click="deleteKhachHang(kh)" class="join-item btn btn-soft btn-sm">
-                    <Icon icon="mdi:bin-outline" class="size-4" />
+                    <Icon icon="mdi:bin-outline" class="size-4 text-primary" />
                   </button>
                 </div>
               </td>

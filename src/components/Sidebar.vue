@@ -5,36 +5,36 @@
   >
     <!-- Logo + Toggle Button -->
     <div class="flex justify-between items-center gap-4 p-4 border-b border-base-300">
-      <img v-if="!isCollapsed" src="../assets/img/logo.png" alt="Logo" class="h-7 transition-all duration-300" />
-      <button @click="toggleSidebar" class="btn btn-ghost btn-sm">
+      <div v-if="!isCollapsed" class="logo h-7 w-50"></div>
+      <button @click="toggleSidebar" class="btn btn-ghost text-primary btn-sm">
         <FontAwesomeIcon :icon="faList" class="text-2xl" />
       </button>
     </div>
 
     <!-- Menu -->
-    <ul class="menu p-2 flex-1 mt-2">
+    <ul class="menu text-primary p-2 flex-1 mt-2">
       <li v-for="(menu, index) in menuItems" :key="index">
         <details v-if="menu.subItems">
           <summary class="flex items-center">
-            <FontAwesomeIcon :icon="menu.icon" class="text-xl" />
-            <span v-if="!isCollapsed" class="ml-3">{{ menu.name }}</span>
+            <FontAwesomeIcon :icon="menu.icon" class="text-xl text-primary" />
+            <span v-if="!isCollapsed" class="ml-3 text-primary">{{ menu.name }}</span>
           </summary>
           <ul>
             <li v-for="(subMenu, subIndex) in menu.subItems" :key="subIndex">
               <RouterLink v-if="!subMenu.subItems" :to="subMenu.link" class="hover:bg-base-200 rounded">
-                <FontAwesomeIcon :icon="subMenu.icon" class="text-lg" />
-                <span v-if="!isCollapsed" class="ml-3">{{ subMenu.name }}</span>
+                <FontAwesomeIcon :icon="subMenu.icon" class="text-lg text-primary" />
+                <span v-if="!isCollapsed" class="ml-3 text-primary">{{ subMenu.name }}</span>
               </RouterLink>
               <details v-else>
-                <summary class="flex items-center">
-                  <FontAwesomeIcon :icon="subMenu.icon" class="text-lg" />
-                  <span v-if="!isCollapsed" class="ml-3">{{ subMenu.name }}</span>
+                <summary class="flex items-center ">
+                  <FontAwesomeIcon :icon="subMenu.icon" class="text-lg text-primary" />
+                  <span v-if="!isCollapsed" class="ml-3 text-primary">{{ subMenu.name }}</span>
                 </summary>
                 <ul>
                   <li v-for="(subSubMenu, subSubIndex) in subMenu.subItems" :key="subSubIndex">
                     <RouterLink :to="subSubMenu.link" class="hover:bg-base-200 rounded">
-                      <FontAwesomeIcon :icon="subSubMenu.icon" />
-                      <span v-if="!isCollapsed" class="ml-3">{{ subSubMenu.name }}</span>
+                      <FontAwesomeIcon :icon="subSubMenu.icon" class="text-primary"/>
+                      <span v-if="!isCollapsed" class="ml-3 text-primary">{{ subSubMenu.name }}</span>
                     </RouterLink>
                   </li>
                 </ul>
@@ -43,8 +43,8 @@
           </ul>
         </details>
         <RouterLink v-else :to="menu.link" class="hover:bg-base-200 rounded">
-          <FontAwesomeIcon :icon="menu.icon" class="text-xl" />
-          <span v-if="!isCollapsed" class="ml-3">{{ menu.name }}</span>
+          <FontAwesomeIcon :icon="menu.icon" class="text-xl text-primary" />
+          <span v-if="!isCollapsed" class="ml-3 text-primary">{{ menu.name }}</span>
         </RouterLink>
       </li>
     </ul>
