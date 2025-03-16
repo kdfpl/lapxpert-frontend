@@ -1,5 +1,5 @@
 <template>
-  <div class="p-6 w-full rounded-xl shadow-xl border border-gray-200">
+  <div class="p-6 w-full shadow-xl border border-gray-200" :class="round">
     <div class="flex justify-between items-center mb-7">
       <div class="flex items-center space-x-2">
         <label for="entries" class="text-sm text-black">Show</label>
@@ -17,12 +17,13 @@
     </div>
 
     <div class="overflow-auto rounded-lg shadow-md">
-      <table class="w-full border-collapse">
+      <table class="w-full  border-collapse">
         <thead>
-          <tr>
+          <tr class="bg-gray-100" :class="rowHeight">
             <th
               v-for="(header, index) in headers"
               :key="index"
+
               class="px-4 py-2 text-left text-black font-semibold border-b border-[#C8C7C7] cursor-pointer"
               :class="rowHeight"
             >
@@ -43,6 +44,7 @@
             v-for="(row, rowIndex) in paginatedData"
             :key="rowIndex"
             class="border-t border-[#C8C7C7] cursor-pointer hover:bg-[#F7F7F7] hover:shadow-lg transition-all duration-300 ease-in-out"
+            :class="rowHeight"
           >
             <td
               v-for="(cell, cellIndex) in row"
@@ -126,6 +128,7 @@ const props = defineProps({
   deleteFunc: { type: Function },
   link: { type: String },
   rowHeight: { type: String, default: "h-24" },
+  round: { type: String, default: "rounded-xl" },
 });
 
 const emit = defineEmits(["row-click", "add-row"]);
