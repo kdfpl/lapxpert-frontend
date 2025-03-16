@@ -1,11 +1,11 @@
 <script setup>
-import ElementListLayout from "../layout/ElementListLayout.vue";
-import customTable from "../components/customTable.vue";
-import bannerImage from "../assets/img/RamBanner.jpg";
+import ElementListLayout from "../../layout/ElementListLayout.vue";
+import customTable from "../../components/customTable.vue";
+import bannerImage from "../../assets/img/RamBanner.jpg";
 import { ref, onMounted, computed } from "vue";
 import {
   getAllSP, getAllLoaiSanPham, getAllHeDieuHanh, getAllThuongHieu, deleteSanPham
-} from "../api/service/SanPhamService.js";
+} from "../../api/service/SanPhamService.js";
 
 const headers = [
   "#",

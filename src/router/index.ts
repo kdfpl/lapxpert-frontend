@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import Profile from "../views/Profile.vue";
-import SanPham from "../views/SanPham.vue";
+import SanPham from "../views/Product/SanPham.vue";
 import ThongKe from "../views/ThongKe.vue";
 import SPCT from "../views/SanPhamChiTiet.vue";
 import RamCRUD from "../views/crud/RamCRUD.vue";
@@ -30,6 +30,8 @@ import HoaDon from "../views/HoaDon.vue";
 import ChiTietHoaDon from "../views/ChiTietHoaDon.vue";
 import HoaDonCRUD from "../views/crud/HoaDonCRUD.vue";
 import GiamGiaCRUD from "../views/crud/PhieuGiamGiaCRUD.vue";
+import SaleoffMain from "../views/saleOff/SaleoffMain.vue";
+import AddSaleoff from "../views/saleOff/AddSaleoff.vue";
 
 const routes = [
   {
@@ -37,6 +39,15 @@ const routes = [
     name: "KhachHangCRUD",
     component: KhachHangCRUD,
     props: true,
+  },{
+    path: '/SaleoffDefault',
+    name: 'SaleoffDefault',
+    component: SaleoffMain,
+  },
+  {
+    path: '/saleoff/add',
+    name: 'AddSaleoff',
+    component: AddSaleoff,
   },
   { path: "/thongke", name: "thongke", component: ThongKe },
   {
@@ -80,7 +91,7 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: Home,
+    component: ThongKe,
   },
   {
     path: "/KhachHang",
