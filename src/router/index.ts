@@ -23,7 +23,11 @@ import OCungCRUD from "../views/crud/OCungCRUD.vue";
 import PinCRUD from "../views/crud/PinCRUD.vue";
 import SanPhamCRUD from "../views/crud/SanPhamCRUD.vue";
 import SpctCRUD from "../views/crud/SpctCRUD.vue";
-
+import KhachHangCRUD from "../views/crud/KhachHangCRUD.vue";
+import NhanVienCRUD from "../views/crud/NhanVienCRUD.vue";
+import HoaDon from "../views/HoaDon.vue";
+import ChiTietHoaDon from "../views/ChiTietHoaDon.vue";
+import HoaDonCRUD from "../views/crud/HoaDonCRUD.vue";
 
 const routes = [
     {
@@ -31,6 +35,21 @@ const routes = [
         name: 'KhachHangCRUD',
         component: KhachHangCRUD,
         props: true, 
+    },
+    {
+        path: '/invoice',
+        name: 'HoaDon',
+        component: HoaDon
+    },
+    {
+        path: '/chi-tiet-hoa-don/:id',
+        name: 'ChiTietHoaDon',
+        component: ChiTietHoaDon,
+    },
+    {
+        path: '/hoa-don-crud',
+        name: 'HoaDonCRUD',
+        component: HoaDonCRUD
     },
     {
         path: '/NhanVienCRUD/:id?',

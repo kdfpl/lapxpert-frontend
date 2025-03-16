@@ -1,7 +1,7 @@
 <template>
-  <div class="p-6 mx-auto bg-white rounded-xl shadow-lg border border-gray-200">
+  <div class="p-6 mx-auto bg-white rounded-xl shadow-lg mb-5 border border-gray-200">
 
-    <div class="flex justify-between">
+    <div class="flex justify-between ">
       <h1 class="items-center text-center  font-bold text-4xl ">
         DANH SÁCH KHÁCH HÀNG
       </h1>

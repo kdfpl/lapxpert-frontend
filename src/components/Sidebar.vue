@@ -139,7 +139,7 @@ import {
   faMemory,
   faHardDrive,
   faDisplay,
-  faBatteryEmpty,
+  
   faPalette,
   faBatteryEmpty,
   faClipboardList
