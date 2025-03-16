@@ -3,32 +3,31 @@ import ElementListLayout from "../layout/ElementListLayout.vue";
 import customTable from "../components/customTable.vue";
 import bannerImage from "../assets/img/RamBanner.jpg";
 import { ref, onMounted, computed } from "vue";
-import { getAllSpct, deleteSPCT } from "../service/SPCTService.js";
+import {
+  getAllSP, getAllLoaiSanPham, getAllHeDieuHanh, getAllThuongHieu, deleteSanPham
+} from "../service/SanPhamService.js";
 
 const headers = [
   "#",
   "Id",
   "Tên SP",
-  "Hệ điều hành", /*Hệ điều hành*/
-  "Thương hiệu", /*Thương hiệu*/
-  "Seri",
-  "Ảnh",
-  /* */
-  "Màu sắc",
-  /**/
-  "Giá bán", /*SPCT*/
+  "Loại",
+  "Hệ điều hành",
+  "Thương hiệu",
+  "Bảo hành (Tháng)",
   "Trạng thái",
+  "Hình ảnh",
 ];
 
-const spctList = ref([]);
+const sanPhamList = ref([]);
 const isEditing = ref(false);
-const selectedSpct = ref({});
+const selectedSanPham = ref({});
 
-const fetchSpct = async () => {
+const fetchSanPham = async () => {
   try {
-    const data = await getAllSpct();
+    const data = await getAllSP();
     if (Array.isArray(data)) {
-      spctList.value = data;
+      sanPhamList.value = data;
     } else {
       console.error("Dữ liệu trả về không hợp lệ:", data);
     }
@@ -38,44 +37,43 @@ const fetchSpct = async () => {
 };
 
 const formattedData = computed(() =>
-  Array.isArray(spctList.value)
-    ? spctList.value.map((spct, index) => ({
+  Array.isArray(sanPhamList.value)
+    ? sanPhamList.value.map((sanPham, index) => ({
       stt: index + 1,
-      id: spct.id,
-      tenSP: spct.sanPham.tenSp,
-      heDieuHanh: spct.sanPham.heDieuHanh.tenHeDieuHanh,
-      thuongHieu: spct.sanPham.thuongHieu.tenThuongHieu,
-      seri: spct.seri.maSeri,
-      anh: spct.sanPham.hinhAnh,
-      mauSac: spct.mau.tenMau,
-      giaBan: spct.giaBan,
-      trangThai: spct.sanPham.trangThai ? "Đang bán" : "Ngừng bán",
+      id: sanPham.id,
+      tenSp: sanPham.tenSp,
+      loai: sanPham.loai.tenLoai,
+      heDieuHanh: sanPham.heDieuHanh.tenHeDieuHanh,
+      thuongHieu: sanPham.thuongHieu.tenThuongHieu,
+      baoHanhThang: sanPham.baoHanhThang,
+      trangThai: sanPham.trangThai ? "Đang bán" : "Ngừng bán",
+      hinhAnh: sanPham.hinhAnh,
     }))
     : []
 );
-const softDeleteSPCT = async (spct) => {
+const softDeleteSanPham = async (sanPham) => {
   if (!confirm('Bạn có chắc chắn muốn xóa Sản phẩm này?')) return;
 
-  const spctToDelete = spctList.value.find((item) => item.id === spct.id);
+  const sanPhamToDelete = sanPhamList.value.find((item) => item.id === sanPham.id);
 
-  if (!spctToDelete) return;
+  if (!sanPhamToDelete) return;
 
   try {
-    console.log(spctToDelete.id);
-    await deleteSPCT(spctToDelete.id);
-    await fetchSpct();
+    console.log(sanPhamToDelete.id);
+    await deleteSanPham(sanPhamToDelete.id);
+    await fetchSanPham();
   } catch (error) {
-    console.log(spctToDelete.id);
+    console.log(sanPhamToDelete.id);
     console.error('Lỗi khi xóa Sản Phẩm:', error);
   }
 };
 
-const editSpct = (spct) => {
-  router.push({ name: "SanPhamCRUD", params: { id: spct.id } });
+const editSanPham = (sanPham) => {
+  router.push({ name: "SanPhamCRUD", params: { id: sanPham.id } });
 };
 
 onMounted(async () => {
-  await fetchSpct();
+  await fetchSanPham();
 });
 </script>
 
@@ -123,6 +121,6 @@ onMounted(async () => {
     </div>
   </div>
   <!-- Bảng hiển thị dữ liệu -->
-  <customTable :headers="headers" :data="formattedData" :deleteFunc="softDeleteSPCT" link="/SanPhamCRUD"
-    :editFunc="editSpct" />
+  <customTable :headers="headers" :data="formattedData" :deleteFunc="softDeleteSanPham" link="/SanPhamCRUD"
+    :editFunc="editSanPham" />
 </template>

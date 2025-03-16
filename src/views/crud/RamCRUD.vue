@@ -78,8 +78,8 @@ onMounted(fetchLoaiRam);
       <input v-model="ramData.maRam" placeholder="Mã RAM" class="border p-2 w-full mb-2" required />
       <input v-model.number="ramData.dungLuongRam" type="number" placeholder="Dung Lượng RAM" value=""
         class="border p-2 w-full mb-2" required />
-      <input v-model.number="ramData.soKheRam" type="number" placeholder="Số khe RAM" value="" class="border p-2 w-full mb-2"
-        required />
+      <input v-model.number="ramData.soKheRam" type="number" placeholder="Số khe RAM" value=""
+        class="border p-2 w-full mb-2" required />
       <input v-model.number="ramData.hoTroToiDa" type="number" placeholder="Hỗ trợ tối đa" value=""
         class="border p-2 w-full mb-2" required />
       <button @click="handleSubmit" class="px-4 py-2 bg-blue-600 text-white rounded-lg w-full">
