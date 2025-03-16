@@ -29,6 +29,7 @@ import NhanVienCRUD from "../views/crud/NhanVienCRUD.vue";
 import HoaDon from "../views/HoaDon.vue";
 import ChiTietHoaDon from "../views/ChiTietHoaDon.vue";
 import HoaDonCRUD from "../views/crud/HoaDonCRUD.vue";
+import GiamGiaCRUD from "../views/crud/PhieuGiamGiaCRUD.vue";
 
 const routes = [
   {
@@ -42,6 +43,18 @@ const routes = [
     path: "/invoice",
     name: "HoaDon",
     component: HoaDon,
+  },
+  {
+    path: "/crud-giam-gia/:id",
+    name: "GiamGiaCRUD",
+    component: GiamGiaCRUD,
+    props: true,
+  },
+  {
+    path: "/crud-giam-gia",
+    name: "GiamGiaCRUD_Add",
+    component: GiamGiaCRUD,
+    props: false,
   },
   {
     path: "/chi-tiet-hoa-don/:id",
