@@ -3,7 +3,7 @@ import ElementListLayout from "../layout/ElementListLayout.vue";
 import customTable from "../components/customTable.vue";
 import bannerImage from "../assets/img/RamBanner.jpg";
 import { ref, onMounted, computed } from "vue";
-import { getAllSpct, deleteSPCT } from "../service/SPCTService.js";
+import { getAllSpct, deleteSPCT } from "../api/service/SPCTService.js";
 
 const headers = [
     "#",

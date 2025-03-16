@@ -1,8 +1,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { getAllRam, addRam, updateRam } from "../../service/SPCTService.js";
-import { getAllLoaiRam } from "../../service/LoaiRamService.js";
+import { getAllRam, addRam, updateRam } from "../../api/service/SPCTService.js";
+import { getAllLoaiRam } from "../../api/service/LoaiRamService.js";
 import RichTextEditor from "../../components/RichTextEditor.vue";
 
 const route = useRoute();

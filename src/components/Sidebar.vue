@@ -149,12 +149,7 @@ import {
   faMemory,
   faHardDrive,
   faDisplay,
-<<<<<<< HEAD
   
-=======
-
-  faBatteryEmpty,
->>>>>>> 6043f3c94921c236a22861f2e4e3b88f94972776
   faPalette,
   faBatteryEmpty,
   faClipboardList
@@ -174,7 +169,7 @@ const toggleSubMenu = (key) => {
 
 const menuItems = ref([
 
-  { name: "Bảng thống kê", icon: faHouse, link: "/monitor" },
+  { name: "Bảng thống kê", icon: faHouse, link: "/thongke" },
 
   {
     name: "Bán hàng",

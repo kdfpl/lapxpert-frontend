@@ -3,7 +3,7 @@ import ElementListLayout from "../../layout/ElementListLayout.vue";
 import customTable from "../../components/customTable.vue";
 import bannerImage from "../../assets/img/ManhinhBanner.jpg";
 import { ref, onMounted, computed } from "vue";
-import { getAllManHinh, deleteManHinh } from "../../service/SPCTService.js";
+import { getAllManHinh, deleteManHinh } from "../../api/service/SPCTService.js";
 const headers = [
   "#",
   "Id",

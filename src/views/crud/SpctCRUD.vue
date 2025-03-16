@@ -5,8 +5,8 @@ import {
     getAllSpct, getAllRam, getAllCpu, getAllGpu, getAllSeri,
     getAllManHinh, getAllOCung, getAllPin, getAllMauSac,
     addSPCT, updateSPCT
-} from "../../service/SPCTService.js";
-import { getAllSP } from "../../service/SanPhamService.js";
+} from "../../api/service/SPCTService.js";
+import { getAllSP } from "../../api/service/SanPhamService.js";
 import RichTextEditor from "../../components/RichTextEditor.vue";
 
 const route = useRoute();

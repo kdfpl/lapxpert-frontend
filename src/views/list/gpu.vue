@@ -3,7 +3,7 @@ import { ref, onMounted ,computed} from "vue";
 import ElementListLayout from "../../layout/ElementListLayout.vue";
 import customTable from "../../components/customTable.vue";
 import bannerImage from "../../assets/img/GPUBanner.jpg";
-import { getAllGpu, deleteGpu } from "../../service/SPCTService.js";
+import { getAllGpu, deleteGpu } from "../../api/service/SPCTService.js";
 const headers = [
   "#",
   "Id",

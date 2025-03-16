@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { getAllCpu, addCpu, updateCpu } from "../../service/SPCTService.js";
+import { getAllCpu, addCpu, updateCpu } from "../../api/service/SPCTService.js";
 import RichTextEditor from "../../components/RichTextEditor.vue";
 
 const route = useRoute();

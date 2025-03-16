@@ -5,7 +5,7 @@ import bannerImage from "../assets/img/RamBanner.jpg";
 import { ref, onMounted, computed } from "vue";
 import {
   getAllSP, getAllLoaiSanPham, getAllHeDieuHanh, getAllThuongHieu, deleteSanPham
-} from "../service/SanPhamService.js";
+} from "../api/service/SanPhamService.js";
 
 const headers = [
   "#",

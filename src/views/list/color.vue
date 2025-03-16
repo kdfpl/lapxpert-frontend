@@ -3,7 +3,7 @@ import ElementListLayout from "../../layout/ElementListLayout.vue";
 import customTable from "../../components/customTable.vue";
 import bannerImage from '../../assets/img/colorBanner.jpg';
 import { ref, onMounted, computed } from "vue";
-import { getAllMauSac, deleteMauSac } from "../../service/SPCTService.js";
+import { getAllMauSac, deleteMauSac } from "../../api/service/SPCTService.js";
 // import { SquarePen } from 'lucide-vue-next'; --lấy màu
 const headers = ["#", "Id", "Mã màu", "Tên màu"];
 

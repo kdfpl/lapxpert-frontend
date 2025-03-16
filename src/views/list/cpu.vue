@@ -3,7 +3,7 @@ import ElementListLayout from "../../layout/ElementListLayout.vue";
 import customTable from "../../components/customTable.vue";
 import bannerImage from "../../assets/img/CPUBanner.jpg";
 import { ref, onMounted, computed } from "vue";
-import { getAllCpu, addCpu, updateCpu, deleteCpu } from "../../service/SPCTService.js";
+import { getAllCpu, addCpu, updateCpu, deleteCpu } from "../../api/service/SPCTService.js";
 const headers = [
   "#",
   "id",

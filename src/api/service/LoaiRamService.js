@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from "../axiosAPI";
 
-const URL_API = "http://localhost:8080/san-pham/loai-ram";
+const URL_API = "/san-pham/loai-ram";
 
 export const getAllLoaiRam = async () => {
     try {

@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from "../axiosAPI";
 
-const URL_API = "http://localhost:8080/san-pham/san-pham-chi-tiet";
+const URL_API = "/san-pham/san-pham-chi-tiet";
 
 export const getAllSpct = async () => {
   try {

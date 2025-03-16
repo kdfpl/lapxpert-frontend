@@ -3,7 +3,7 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import {
     getAllSP, getAllLoaiSanPham, getAllHeDieuHanh, getAllThuongHieu, addSanPham, updateSanPham
-} from "../../service/SanPhamService.js";
+} from "../../api/service/SanPhamService.js";
 import RichTextEditor from "../../components/RichTextEditor.vue";
 
 const route = useRoute();

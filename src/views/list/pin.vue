@@ -3,7 +3,7 @@ import ElementListLayout from "../../layout/ElementListLayout.vue";
 import customTable from "../../components/customTable.vue";
 import bannerImage from "../../assets/img/pinBanner.jpg";
 import { ref, onMounted, computed } from "vue";
-import { getAllPin, deletePin } from "../../service/SPCTService.js";
+import { getAllPin, deletePin } from "../../api/service/SPCTService.js";
 const headers = [
   "#",
   "Id",
