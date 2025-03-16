@@ -1,18 +1,28 @@
 <script setup>
-import { ref } from "vue";
+
+import { ref, watch } from "vue";
 
 const props = defineProps({
   tabs: Array, // Danh sách tab (label + key)
+  activeTab: String, // Đồng bộ với component cha
 });
 
-const activeTab = ref(props.tabs[0]?.key || "");
+const emit = defineEmits(["update:activeTab"]);
 
+const activeTab = ref(props.activeTab || props.tabs[0]?.key || "");
+
+// Cập nhật activeTab khi component cha thay đổi
+watch(() => props.activeTab, (newVal) => {
+  activeTab.value = newVal;
+});
+
+// Hàm cập nhật tab
 const setActiveTab = (key) => {
   activeTab.value = key;
+  emit("update:activeTab", key); // Phát sự kiện để đồng bộ với component cha
 };
 
 defineExpose({ setActiveTab });
-
 </script>
 
 <template>
@@ -46,7 +56,9 @@ defineExpose({ setActiveTab });
     </div>
 
     <!-- Content Panel -->
-    <div class="p-6 mt-6   rounded-lg shadow-md bg-white">
+
+    <div class="p-6 mt-6 rounded-lg shadow-md bg-white">
+
       <slot :name="activeTab"></slot>
     </div>
   </div>
