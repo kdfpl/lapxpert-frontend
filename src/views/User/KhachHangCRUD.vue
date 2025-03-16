@@ -32,18 +32,22 @@ onMounted(async () => {
           sdt: response.data.sdt || "",
         };
 
-        const diaChiHopLe = response.data.diaChiList?.filter(dc => dc.tinhTrang) || [];
+        const diaChiHopLe =
+          response.data.diaChiList?.filter((dc) => dc.tinhTrang) || [];
 
-        diaChiList.value = diaChiHopLe.length > 0 ? diaChiHopLe : [
-          {
-            thanhPho: "",
-            quanHuyen: "",
-            phuongXa: "",
-            soNhaDuong: "",
-            macDinh: true,
-            tinhTrang: true, 
-          },
-        ];
+        diaChiList.value =
+          diaChiHopLe.length > 0
+            ? diaChiHopLe
+            : [
+                {
+                  thanhPho: "",
+                  quanHuyen: "",
+                  phuongXa: "",
+                  soNhaDuong: "",
+                  macDinh: true,
+                  tinhTrang: true,
+                },
+              ];
       }
     } catch (error) {
       console.error("Lỗi khi tải dữ liệu khách hàng:", error);
@@ -56,7 +60,7 @@ onMounted(async () => {
         phuongXa: "",
         soNhaDuong: "",
         macDinh: true,
-        tinhTrang: true, 
+        tinhTrang: true,
       },
     ];
   }
@@ -68,7 +72,7 @@ const isValidEmail = (email) => {
 };
 
 const isValidPhone = (sdt) => {
-  const phoneRegex = /^[0-9]{10}$/; 
+  const phoneRegex = /^[0-9]{10}$/;
   return phoneRegex.test(sdt);
 };
 
@@ -88,10 +92,10 @@ const diaChiHienThi = computed(() =>
 );
 
 const removeDiaChi = (id) => {
-  const index = diaChiList.value.findIndex(dc => dc.id === id);
+  const index = diaChiList.value.findIndex((dc) => dc.id === id);
   if (index === -1) return;
 
-  const activeAddresses = diaChiList.value.filter(dc => dc.tinhTrang);
+  const activeAddresses = diaChiList.value.filter((dc) => dc.tinhTrang);
   if (activeAddresses.length === 1) {
     alert("Phải có ít nhất một địa chỉ hợp lệ!");
     return;
@@ -100,11 +104,10 @@ const removeDiaChi = (id) => {
   diaChiList.value[index].tinhTrang = false;
 
   if (diaChiList.value[index].macDinh) {
-    const firstValid = diaChiList.value.find(dc => dc.tinhTrang);
+    const firstValid = diaChiList.value.find((dc) => dc.tinhTrang);
     if (firstValid) firstValid.macDinh = true;
   }
 };
-
 
 const setMacDinh = (index) => {
   if (!diaChiList.value[index].tinhTrang) return;
@@ -130,7 +133,11 @@ const validateAndProceed = async (nextTab) => {
   errors.value = {};
 
   if (activeTab.value === "panel1") {
-    if (!khachHang.value.hoTen || !khachHang.value.email || !khachHang.value.sdt) {
+    if (
+      !khachHang.value.hoTen ||
+      !khachHang.value.email ||
+      !khachHang.value.sdt
+    ) {
       errors.value.khachHang = "Vui lòng nhập đầy đủ thông tin!";
       return;
     }
@@ -173,7 +180,6 @@ const validateAndProceed = async (nextTab) => {
   activeTab.value = nextTab;
 };
 
-
 const submitForm = async () => {
   if (!thongTinHopLe.value) {
     alert("Vui lòng nhập đầy đủ thông tin khách hàng và ít nhất một địa chỉ!");
@@ -206,11 +212,12 @@ const submitForm = async () => {
   <div class="w-[90%] mx-auto mt-10">
     <TabPanel :tabs="tabs" v-model:activeTab="activeTab">
       <template #panel1>
-        <form class="space-y-4 p-6 bg-white rounded-lg shadow-md">
+      
+        <form class="space-y-4 p-6 bg-base-100">
           <div
             v-for="(value, key) in khachHang"
             :key="key"
-            class="flex items-center border rounded-lg p-2 w-full focus-within:ring-2 focus:ring-black"
+            class="flex items-center border rounded-lg p-2 w-full focus-within:ring-2 focus:ring-base-300"
           >
             <component
               :is="
@@ -222,12 +229,12 @@ const submitForm = async () => {
                   ? Phone
                   : Lock
               "
-              class="w-5 h-5 text-gray-500 mr-2"
+              class="w-5 h-5  mr-2"
             />
             <input
               v-model="khachHang[key]"
               :placeholder="key"
-              class="w-full border-0 focus:outline-none"
+              class="w-full  border-0 focus:outline-none"
             />
           </div>
           <p v-if="errors.khachHang" class="text-red-500">
@@ -243,32 +250,32 @@ const submitForm = async () => {
         </button>
       </template>
 
-      <template #panel2>
+      <template #panel2 >
         <div
           v-for="(dc, index) in diaChiHienThi"
           :key="index"
-          class="p-6 rounded-lg shadow-md bg-white mb-4"
+          class="p-6 rounded-lg border shadow-md bg-base mb-4"
         >
           <div class="grid grid-cols-2 gap-4">
             <input
               v-model="dc.thanhPho"
               placeholder="Thành phố"
-              class="border p-2 rounded-lg focus:ring-2 focus:ring-black"
+              class="border p-2 rounded-lg focus:ring-2 focus:ring-base-300"
             />
             <input
               v-model="dc.quanHuyen"
               placeholder="Quận/Huyện"
-              class="border p-2 rounded-lg focus:ring-2 focus:ring-black"
+              class="border p-2 rounded-lg focus:ring-2 focus:ring-base-300"
             />
             <input
               v-model="dc.phuongXa"
               placeholder="Phường/Xã"
-              class="border p-2 rounded-lg focus:ring-2 focus:ring-black"
+              class="border p-2 rounded-lg focus:ring-2 focus:ring-base-300"
             />
             <input
               v-model="dc.soNhaDuong"
               placeholder="Số nhà, Đường"
-              class="border p-2 rounded-lg focus:ring-2 focus:ring-black"
+              class="border p-2 rounded-lg focus:ring-2 focus:ring-base-300"
             />
           </div>
           <div class="flex justify-between mt-4">
@@ -309,21 +316,21 @@ const submitForm = async () => {
 
       <template #panel3>
         <div class="grid grid-cols-2 gap-6">
-          <div class="p-6 bg-white rounded-lg shadow-md">
+          <div class="p-6 bg-base border rounded-lg shadow-md">
             <h2 class="text-lg font-semibold">Thông tin khách hàng</h2>
             <p
               v-for="(value, key) in khachHang"
               :key="key"
-              class="text-gray-600"
+              class=""
             >
               {{ key }}: {{ value || '""' }}
             </p>
           </div>
-          <div class="p-6 bg-white rounded-lg shadow-md">
+          <div class="p-6  rounded-lg shadow-md">
             <h2 class="text-lg font-semibold">Địa chỉ khách hàng</h2>
             <table class="w-full border-collapse border">
               <thead>
-                <tr class="bg-gray-100">
+                <tr class="bg-base-200">
                   <th class="border p-2">Thành phố</th>
                   <th class="border p-2">Quận/Huyện</th>
                   <th class="border p-2">Phường/Xã</th>
@@ -343,7 +350,7 @@ const submitForm = async () => {
         </div>
         <button
           @click="submitForm"
-          class="mt-4 px-6 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-gray-900 to-gray-700 shadow-xl backdrop-blur-md bg-opacity-80 border border-white/30 transition-all duration-200 ease-out hover:bg-opacity-90 hover:scale-105 active:scale-95 active:shadow-md"
+          class="mt-4 px-6 py-2 btn-soft rounded-lg font-semibold bg-gradient-to-r from-base-300 to-base-100 shadow-xl backdrop-blur-md bg-opacity-80 border border-white/30 transition-all duration-200 ease-out hover:bg-opacity-90 hover:scale-105 active:scale-95 active:shadow-md"
         >
           Xác nhận
         </button>

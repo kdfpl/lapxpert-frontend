@@ -145,17 +145,17 @@ const submitForm = async () => {
       v-model:activeTab="activeTab"
     >
       <template #panel1>
-        <form class="space-y-4 p-6 bg-white rounded-lg shadow-md">
-          <div class="flex items-center border rounded-lg p-2 w-full">
-            <User class="w-5 h-5 text-gray-500 mr-2" />
+        <form class="space-y-4 p-6 bg-base  rounded-lg shadow-md">
+          <div class="flex  items-center border rounded-lg p-2 w-full">
+            <User class="w-5 h-5  mr-2" />
             <input
               v-model="nhanVien.hoTen"
               placeholder="Họ tên"
-              class="w-full border-0 focus:outline-none"
+              class="w-full border-0 focus:outline-none "
             />
           </div>
           <div class="flex items-center border rounded-lg p-2 w-full">
-            <Mail class="w-5 h-5 text-gray-500 mr-2" />
+            <Mail class="w-5 h-5  mr-2" />
             <input
               v-model="nhanVien.email"
               placeholder="Email"
@@ -163,7 +163,7 @@ const submitForm = async () => {
             />
           </div>
           <div class="flex items-center border rounded-lg p-2 w-full">
-            <Phone class="w-5 h-5 text-gray-500 mr-2" />
+            <Phone class="w-5 h-5  mr-2" />
             <input
               v-model="nhanVien.sdt"
               placeholder="Số điện thoại"
@@ -171,7 +171,7 @@ const submitForm = async () => {
             />
           </div>
           <div class="flex items-center border rounded-lg p-2 w-full">
-            <Lock class="w-5 h-5 text-gray-500 mr-2" />
+            <Lock class="w-5 h-5  mr-2" />
             <select
               v-model="nhanVien.vaiTro"
               class="w-full border-0 outline-0 focus:outline-none"
@@ -199,7 +199,7 @@ const submitForm = async () => {
 
       <template #panel2>
         <div class="grid grid-cols-2 gap-6">
-          <div class="p-6 bg-white rounded-lg shadow-md">
+          <div class="p-6 bg-base border rounded-lg shadow-md">
             <h2 class="text-lg font-semibold">Thông tin nhân viên</h2>
             <p>Họ tên: {{ nhanVien.hoTen }}</p>
             <p>Email: {{ nhanVien.email }}</p>

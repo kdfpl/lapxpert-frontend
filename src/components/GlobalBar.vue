@@ -1,12 +1,17 @@
 <template>
   <div class="navbar bg-base-100 backdrop-blur-lg border-b border-gray-300 shadow-md">
-    <div class="ml-auto flex gap-1">
+    <div class="ml-auto flex gap-1 items-center">
+      <!-- Chọn Theme -->
+      <select v-model="selectedTheme" @change="changeTheme" class="select select-bordered select-sm">
+        <option v-for="theme in themes" :key="theme" :value="theme">{{ theme }}</option>
+      </select>
+      
       <!-- Nút thông báo -->
       <button class="btn btn-ghost btn-circle relative">
         <FontAwesomeIcon :icon="faBell" class="text-xl" />
         <span class="badge badge-error badge-sm absolute top-0 right-0">3</span>
       </button>
-
+      
       <!-- Avatar + Dropdown -->
       <div class="dropdown dropdown-end">
         <button @click="toggleUserMenu" class="btn btn-ghost flex items-center gap-2">
@@ -19,9 +24,7 @@
           <li><RouterLink to="/profile">Hồ sơ</RouterLink></li>
           <li><RouterLink to="/settings">Cài đặt</RouterLink></li>
           <li>
-            <button @click="logout" class="text-red-600 hover:bg-red-100">
-              Đăng xuất
-            </button>
+            <button @click="logout" class="text-red-600 hover:bg-red-100">Đăng xuất</button>
           </li>
         </ul>
       </div>
@@ -30,12 +33,11 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faBell, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 const isUserMenuOpen = ref(false);
-
 const toggleUserMenu = () => {
   isUserMenuOpen.value = !isUserMenuOpen.value;
 };
@@ -43,4 +45,17 @@ const toggleUserMenu = () => {
 const logout = () => {
   alert("Đăng xuất thành công!");
 };
+
+// Danh sách theme của DaisyUI
+const themes = ["light", "dark", "cupcake", "bumblebee", "emerald", "corporate", "synthwave", "retro", "cyberpunk", "valentine"];
+const selectedTheme = ref(localStorage.getItem("theme") || "light");
+
+const changeTheme = () => {
+  document.documentElement.setAttribute("data-theme", selectedTheme.value);
+  localStorage.setItem("theme", selectedTheme.value);
+};
+
+onMounted(() => {
+  document.documentElement.setAttribute("data-theme", selectedTheme.value);
+});
 </script>

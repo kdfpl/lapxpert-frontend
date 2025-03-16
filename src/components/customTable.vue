@@ -1,12 +1,12 @@
 <template>
-  <div class="p-6 w-full shadow-xl border border-gray-200" :class="round">
+  <div class="p-6 w-full " :class="round">
     <div class="flex justify-between items-center mb-7">
       <div class="flex items-center space-x-2">
         <label for="entries" class="text-sm text-black">Show</label>
         <select
           id="entries"
           v-model="itemsPerPage"
-          class="border px-3 py-1 rounded-lg bg-white shadow-sm text-black"
+          class="border px-3 py-1 bg-base shadow-sm text-black"
         >
           <option v-for="num in [5, 10, 15, 20]" :key="num" :value="num">
             {{ num }}
@@ -17,17 +17,17 @@
     </div>
 
     <div class="overflow-auto rounded-lg shadow-md">
-      <table class="w-full  border-collapse">
+      <table class="w-full table-pin-rows table text-center">
         <thead>
-          <tr class="bg-gray-100" :class="rowHeight">
+          <tr class="" :class="rowHeight">
             <th
               v-for="(header, index) in visibleHeaders"
               :key="index"
-              class="px-4 py-2 text-left text-black  font-semibold border-b border-[#C8C7C7] cursor-pointer"
+              class=""
             >
               {{ header }}
             </th>
-            <th class="px-4 py-2 text-left text-black font-semibold border-b border-[#C8C7C7]">
+            <th class="">
               Hành động
             </th>
           </tr>
@@ -36,13 +36,13 @@
           <tr
             v-for="(row, rowIndex) in filteredData"
             :key="rowIndex"
-            class="border-t border-[#C8C7C7] cursor-pointer hover:bg-[#F7F7F7] hover:shadow-lg transition-all duration-300 ease-in-out"
+            class="cursor-pointer hover:bg-[#F7F7F7] hover:shadow-lg transition-all duration-300 ease-in-out"
             :class="rowHeight"
           >
             <td
               v-for="(cell, cellIndex) in Object.values(row)"
               :key="cellIndex"
-              class="px-4 py-3 text-black border-b border-[#C8C7C7]"
+              class=""
             >
               <div class="flex items-center space-x-4">
                 <div v-html="cell" class="flex-1"></div>
@@ -87,7 +87,7 @@
           v-for="page in totalPages"
           :key="page"
           @click="setPage(page)"
-          class="px-3 py-1 rounded-lg border shadow-md transition duration-300"
+          class="join-item btn btn-circle btn-sm btn-soft btn-primary"
           :class="
             currentPage === page
               ? 'bg-gray-400 text-white'
@@ -142,12 +142,6 @@ const paginatedData = computed(() => {
   return props.data.slice(start, start + itemsPerPage.value);
 });
 
-const filteredData = computed(() => {
-  return paginatedData.value.map(({ id, ...rest }) => rest);
-});
-
-const visibleHeaders = computed(() => props.headers.filter(header => header.toLowerCase() !== "id"));
-
 const setPage = (page) => {
   if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page;
@@ -159,4 +153,13 @@ const handleDelete = (row) => {
     props.deleteFunc(row);
   }
 };
+
+const filteredData = computed(() => {
+  return paginatedData.value.map(({ id, ...rest }) => rest);
+});
+
+
+const visibleHeaders = computed(() => props.headers.filter(header => header.toLowerCase() !== "id"));
+
+
 </script>

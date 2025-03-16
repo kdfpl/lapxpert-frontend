@@ -3,7 +3,7 @@
     <!-- Sidebar bên trái -->
     <Sidebar />
     <!-- Phần Main bên phải với Scroll Panel -->
-    <div class="flex flex-col flex-grow bg-[#ffffff] h-screen overflow-hidden">
+    <div class="flex flex-col flex-grow bg-base h-screen overflow-hidden">
       <!-- Global Bar (Cố định trên cùng) -->
       <GlobalBar class="flex-shrink-0" />
       <!-- Nội dung chính có thanh cuộn -->
