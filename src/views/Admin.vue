@@ -64,7 +64,7 @@
             <details open>
               <summary>
                 <span class="icon-[ph--laptop-light] size-5"></span>
-                <span class="text-sm font-medium"> Sản phẩm </span>
+                <span class="text-sm font-medium"> Quản lý sản phẩm </span>
               </summary>
               <ul>
                 <li>

@@ -189,7 +189,7 @@
 <script setup>
 import { onMounted } from "vue"
 import { useDotGiamGiaStore } from "../../stores/dotgiamgiastore"
-import { deleteDotGiamGia } from "../../apis/dotgiamgia"
+import { deleteDotGiamGia } from "../../apis/services/dotgiamgia"
 
 
 const store = useDotGiamGiaStore()

@@ -306,7 +306,7 @@
 </template>
 <script setup>
 import { ref } from "vue";
-import { submitSaleoff } from "../../apis/dotgiamgia";
+import { submitSaleoff } from "../../apis/services/dotgiamgia";
 
 const formData = ref({
   maDot: "",
