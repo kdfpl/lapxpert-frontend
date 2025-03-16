@@ -1,4 +1,5 @@
 <script setup>
+
 import { ref, watch } from "vue";
 
 const props = defineProps({
@@ -55,7 +56,9 @@ defineExpose({ setActiveTab });
     </div>
 
     <!-- Content Panel -->
+
     <div class="p-6 mt-6 rounded-lg shadow-md bg-white">
+
       <slot :name="activeTab"></slot>
     </div>
   </div>

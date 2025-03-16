@@ -2,8 +2,10 @@
   <!-- Sidebar -->
   <div
     :class="[
+
       'transition-all duration-300 border-r border-gray-300 shadow-lg flex flex-col backdrop-blur-lg overflow-hidden',
       isCollapsed ? 'w-14 bg-white' : 'w-72 bg-white',
+
     ]"
   >
     <!-- Logo + Toggle Button -->
@@ -16,7 +18,9 @@
       />
       <button
         @click="toggleSidebar"
+
         class="rounded hover:bg-gray-300 transition"
+
       >
         <FontAwesomeIcon :icon="faList" class="text-2xl" />
       </button>
@@ -33,7 +37,9 @@
             class="flex items-center justify-between p-3 w-full hover:bg-gray-300 rounded transition"
           >
             <div class="flex items-center transition duration-300">
+
               <FontAwesomeIcon :icon="menu.icon" class="text-2xl" />
+
               <span v-if="!isCollapsed" class="ml-3">{{ menu.name }}</span>
             </div>
             <FontAwesomeIcon
@@ -79,12 +85,14 @@
                     <span class="ml-3">{{ subMenu.name }}</span>
                   </div>
                   <FontAwesomeIcon
+
                     :icon="
                       showSubItems[subMenu.name]
                         ? faChevronDown
                         : faChevronRight
                     "
                     class="transition-transform duration-200"
+
                     :class="{ 'rotate-90': showSubItems[subMenu.name] }"
                   />
                 </button>
@@ -94,10 +102,12 @@
                   v-if="subMenu.subItems && showSubItems[subMenu.name]"
                   class="pl-6"
                 >
+
                   <li
                     v-for="(subSubMenu, subSubIndex) in subMenu.subItems"
                     :key="subSubIndex"
                   >
+
                     <RouterLink
                       :to="subSubMenu.link"
                       class="flex items-center p-2 hover:bg-gray-200/50 rounded transition"
@@ -139,10 +149,16 @@ import {
   faMemory,
   faHardDrive,
   faDisplay,
+<<<<<<< HEAD
   
+=======
+
+  faBatteryEmpty,
+>>>>>>> 6043f3c94921c236a22861f2e4e3b88f94972776
   faPalette,
   faBatteryEmpty,
   faClipboardList
+
 } from "@fortawesome/free-solid-svg-icons";
 
 const isCollapsed = ref(false);
@@ -157,7 +173,9 @@ const toggleSubMenu = (key) => {
 };
 
 const menuItems = ref([
+
   { name: "Bảng thống kê", icon: faHouse, link: "/monitor" },
+
   {
     name: "Bán hàng",
     icon: faCashRegister,
@@ -176,11 +194,13 @@ const menuItems = ref([
         link: "/san-pham",
       },
       {
+
         name: "Danh sách phiên bản",
         icon: faClipboardList,
         link: "/san-pham-chi-tiet",
       },
       {
+
         name: "Thuộc tính",
         icon: faMicrochip,
         link: "#",
@@ -190,9 +210,11 @@ const menuItems = ref([
           { name: "GPU", icon: faMicrochip, link: "/gpu" },
           { name: "Ổ cứng", icon: faHardDrive, link: "/oCung" },
           { name: "Màn hình", icon: faDisplay, link: "/manHInh" },
+
           { name: "Pin", icon: faBatteryEmpty, link: "/pin" },
           { name: "Màu sắc", icon: faPalette, link: "/color" },
           { name: "pin", icon: faBatteryEmpty, link: "/pin" },
+
         ],
       },
     ],
@@ -202,6 +224,7 @@ const menuItems = ref([
     name: "Người dùng",
     icon: faUsers,
     subItems: [
+
       { name: "Nhân viên", icon: faUser, link: "/NhanVien" },
       { name: "Khách hàng", icon: faUserGroup, link: "/KhachHang" },
     ],

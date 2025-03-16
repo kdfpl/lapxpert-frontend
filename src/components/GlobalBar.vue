@@ -19,7 +19,9 @@
               alt="User Avatar"
               class="w-8 h-8 rounded-full"
             />
+
             <span class="hidden md:block">Admin</span>
+
             <FontAwesomeIcon :icon="faChevronDown" class="text-sm" />
           </button>
   
