@@ -1,20 +1,6 @@
 <template>
   <div class="p-6 w-full shadow-xl border border-gray-200" :class="round">
-    <div class="flex justify-between items-center mb-7">
-      <div class="flex items-center space-x-2">
-        <label for="entries" class="text-sm text-black">Show</label>
-        <select
-          id="entries"
-          v-model="itemsPerPage"
-          class="border px-3 py-1 rounded-lg bg-white shadow-sm text-black"
-        >
-          <option v-for="num in [5, 10, 15, 20]" :key="num" :value="num">
-            {{ num }}
-          </option>
-        </select>
-        <span class="text-sm text-black">số thành phần trong trang</span>
-      </div>
-    </div>
+ 
 
     <div class="overflow-auto rounded-lg shadow-md">
       <table class="w-full  border-collapse">

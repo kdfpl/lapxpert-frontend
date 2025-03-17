@@ -103,9 +103,10 @@ export default {
         </div>
       </div>
 
-      <div class="flex-none mt-2 bg-white shadow-xl border-white p-5 flex flex basis-1/4 mr-2">
+      <div class="flex-none mt-2 bg-white shadow-xl border-white p-5 flex flex basis-1/5 mr-2">
         <div class="mr-2 basis-64">
-          <div class="text-2xl text-[#CD5555] font-bold">  {{ formattedSoThanhVien > 0 ? formattedSoThanhVien : "Loading..." }}</div>
+          <!-- {{ formattedSoThanhVien > 0 ? formattedSoThanhVien : "Loading..." }} -->
+          <div class="text-2xl text-[#CD5555] font-bold"> 6</div>
           <div class="text-sm mb-10">Thành viên</div>
           <div class="flex flex">
             <div class="text-xs mr-2 text-[#7A8B8B]">
@@ -118,7 +119,7 @@ export default {
         </div>
       </div>
 
-      <div class="flex-none mt-2 bg-white shadow-xl border-white p-5 flex flex basis-64 mr-2">
+      <div class="flex-none mt-2 bg-white shadow-xl border-white p-5 flex flex basis-1/4 mr-2">
         <div class="mr-5 basis-64">
           <div class="text-2xl text-[#FF1493] font-bold">123</div>
           <div class="text-sm mb-10">Sản phẩm</div>
@@ -166,12 +167,12 @@ export default {
             Week
           </button>
         </div>
-        <div class="mb-5 basis-2/3">
-          <component :is="selectedComponent" />
+        <div class="mb-5 basis-2/3 ">
+          <component class="flex basis-full" :is="selectedComponent" />
         </div>
       </div>
 
-      <div class="bg-white basis-64 flex-none p-8 mr-3">
+      <div class="bg-white basis-1/4 flex-none p-8 mr-3">
         <h1 class="mb-12">Số Laptop: </h1>
         <LaptopPT/>
       </div>
