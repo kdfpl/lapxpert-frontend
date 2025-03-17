@@ -23,6 +23,16 @@ const customerService = {
     }
   },
 
+  async getAddressrById(id) {
+    try {
+      return await api.get(`${API_URL}/dia-chi/get-one/${id}`);
+
+    } catch (error) {
+      console.error(`Lỗi khi lấy địa chỉ khách hàng ${id}:`, error.response?.data || error.message);
+      throw error;
+    }
+  },
+
   async addCustomer(customer) {
     try {
       return await api.post(`${API_URL}/add`, customer);

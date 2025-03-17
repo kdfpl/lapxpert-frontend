@@ -59,6 +59,18 @@ const customerService = {
       throw error;
     }
   },
+
+  async getAddressrById(id) {
+    try {
+      return await api.get(`${API_URL}/dia-chi/get-one/${id}`);
+
+    } catch (error) {
+      console.error(`Lỗi khi lấy địa chỉ khách hàng ${id}:`, error.response?.data || error.message);
+      throw error;
+    }
+  },
 };
+
+
 
 export default customerService;

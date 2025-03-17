@@ -127,7 +127,7 @@ const submitForm = async () => {
       await staffService.addStaff(staffData);
       alert("Thêm nhân viên thành công!");
     }
-    router.push("/NhanVien");
+    router.push("/admin/nhan-vien")
   } catch (error) {
     console.error("Lỗi khi gửi dữ liệu:", error);
     alert("Có lỗi xảy ra, vui lòng thử lại!");

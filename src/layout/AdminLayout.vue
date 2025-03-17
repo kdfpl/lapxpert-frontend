@@ -1,14 +1,16 @@
 <template>
   <div class="h-screen flex">
     <!-- Sidebar bên trái -->
-    <Sidebar />
-    <!-- Phần Main bên phải với Scroll Panel -->
-    <div class="flex flex-col flex-grow bg-base h-screen overflow-hidden">
+    <Sidebar class="flex-shrink-0" />
+
+    <!-- Phần Main bên phải -->
+    <div class="flex flex-col flex-grow bg-base h-screen">
       <!-- Global Bar (Cố định trên cùng) -->
-      <GlobalBar class="flex-shrink-0" />
+      <GlobalBar class="flex-shrink-0 z-20" />
+
       <!-- Nội dung chính có thanh cuộn -->
-      <div class="flex-grow pl-6 pr-6 pt-6 overflow-auto">
-        <router-view />       
+      <div class="flex-grow pl-6 pr-6 z-10 pt-6 overflow-y-auto">
+        <router-view />
       </div>
     </div>
   </div>

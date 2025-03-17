@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Login from "@/views/User/Login.vue";
+import Login from "@/views/Auth/Login.vue";
 import Profile from "@/views/User/Profile.vue";
 import ThongKe from "@/views/Statistical/ThongKe.vue";
 import HoaDon from "@/views/Invoice/HoaDon.vue";
 import ChiTietHoaDon from "@/views/Invoice/ChiTietHoaDon.vue";
 import GiamGia from "@/views/Voucher/GiamGia.vue";
-import SaleoffMain from "@/views/saleOff/SaleoffMain.vue";
-import AddSaleoff from "@/views/saleOff/AddSaleoff.vue";
+import SaleoffMain from "@/views/Sale/SaleoffMain.vue";
+import AddSaleoff from "@/views/Sale/AddSaleoff.vue";
 
 const routes = [
   { path: "/", name: "Home", component: ThongKe },

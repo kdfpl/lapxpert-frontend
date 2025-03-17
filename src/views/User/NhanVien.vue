@@ -21,17 +21,84 @@
 
     <!-- Search & Filter -->
     <section class="mb-5 flex w-full items-center justify-end gap-2">
-      <label class="input input-ghost bg-base-200 focus-within:bg-base-200 grow focus-within:outline-none">
-        <Icon icon="streamline:search-visual-solid" class=" size-5 text-primary" />
-        <input v-model="search" type="search" placeholder="Tìm kiếm nhân viên..." />
-      </label>
+      <div class="relative w-full">
+        <div class="flex">
+          <label
+            class="input input-ghost bg-base-200 focus-within:bg-base-200 grow focus-within:outline-none"
+          >
+            <Icon
+              icon="streamline:search-visual-solid"
+              class="size-5 text-primary"
+            />
+            <input
+              v-model="search"
+              @focus="handleInputFocus"
+              type="search"
+              placeholder="Tìm kiếm nhân viên..."
+              class="w-full"
+            />
+          </label>
+        </div>
+
+        <!-- Danh sách gợi ý -->
+        <ul
+          v-if="showSuggestions && searchSuggestions.length"
+          class="mt-1 z-10 bg-base-300 shadow-md w-full rounded-md border"
+          @click.outside="hideSuggestions"
+        >
+          <li
+            v-for="(suggestion, index) in searchSuggestions"
+            :key="index"
+            @click="selectSuggestion(suggestion)"
+            class="p-2 cursor-pointer hover:bg-base-200"
+          >
+            {{ suggestion }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="join">
+        <!-- Nút xóa bộ lọc -->
+        <button
+          class="btn btn-soft btn-primary join-item border-none"
+          @click="resetFilters"
+        >
+          <Icon icon="line-md:filter-remove" class="size-5" />
+        </button>
+        <!-- Dropdown lọc trạng thái -->
+        <select
+          v-model="statusFilter"
+          @change="setStatusFilter(statusFilter)"
+          class="select w-fit custom-input"
+        >
+          <option value="all">Trạng thái</option>
+          <option value="active">Đang làm</option>
+          <option value="inactive">Nghỉ làm</option>
+        </select>
+      </div>
     </section>
 
+    <!-- Loading Overlay -->
+    <div
+      v-if="!store.initialized"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+    >
+      <span class="loading loading-ring loading-lg text-white"></span>
+    </div>
+
+    <!-- Empty state -->
+    <div v-if="filteredData.length === 0" class="flex-1 empty-state">
+      <Icon icon="mdi:account-search" class="empty-icon" />
+      <p>Không tìm thấy nhân viên phù hợp</p>
+      <button @click="resetFilters" class="btn btn-primary">
+        Đặt lại bộ lọc
+      </button>
+    </div>
     <!-- Table -->
-    <section class="relative flex-1">
+    <section v-else class="relative flex-1">
       <div class="absolute inset-0 overflow-auto">
-        <table class="table-pin-rows text-primary table text-center w-full">
-          <thead class="text-primary">
+        <table class="table-pin-rows table text-center w-full">
+          <thead class="">
             <tr>
               <th>STT</th>
               <th>Mã nhân viên</th>
@@ -39,6 +106,7 @@
               <th>Email</th>
               <th>SĐT</th>
               <th>Chức Vụ</th>
+              <th>Trạng thái</th>
               <th>Thao tác</th>
             </tr>
           </thead>
@@ -51,12 +119,45 @@
               <td>{{ nv.sdt }}</td>
               <td>{{ nv.chucVu.tenChucVu }}</td>
               <td>
+                <div v-if="nv.tinhTrang" class="badge badge-soft badge-success">
+                  Đang làm
+                </div>
+                <div v-if="!nv.tinhTrang" class="badge badge-soft badge-error">
+                  Nghỉ làm
+                </div>
+              </td>
+
+              <td>
                 <div class="join">
-                  <RouterLink :to="`/admin/nhan-vien-crud/${nv.id}`" class="join-item btn btn-soft btn-sm">
-                    <Icon icon="heroicons-outline:pencil-alt" class="size-4 text-primary" />
+                  <RouterLink
+                    :to="`/admin/nhan-vien-crud/${nv.id}`"
+                    class="join-item btn btn-soft btn-sm"
+                  >
+                    <Icon
+                      icon="heroicons-outline:pencil-alt"
+                      class="size-4 text-primary"
+                    />
                   </RouterLink>
-                  <button @click="deleteNhanVien(nv)" class="join-item btn btn-soft btn-sm">
-                    <Icon icon="mdi:bin-outline" class="size-4 text-primary" />
+                  <button
+                    @click="deleteNhanVien(nv)"
+                    class="join-item btn btn-soft btn-sm"
+                    v-if="nv.tinhTrang"
+                  >
+                    <Icon
+                      icon="material-symbols:delete-outline"
+                      class="size-4 text-red-500"
+                    />
+                  </button>
+
+                  <button
+                    @click="reviveNhanVien(nv)"
+                    class="join-item btn btn-soft btn-sm"
+                    v-if="!nv.tinhTrang"
+                  >
+                    <Icon
+                      icon="mdi:account-arrow-up-outline"
+                      class="size-4 text-green-500"
+                    />
                   </button>
                 </div>
               </td>
@@ -70,7 +171,7 @@
     <section class="flex justify-between border-t pt-2 mt-4">
       <div class="flex items-center">
         <span>Xem</span>
-        <select v-model="itemsPerPage" class="ml-2 px-2 py-1 border rounded">
+        <select v-model="itemsPerPage" class="ml-2 px-2 bg-base-300 py-1 border rounded">
           <option :value="5">5</option>
           <option :value="10">10</option>
           <option :value="20">20</option>
@@ -78,13 +179,27 @@
         <span class="ml-2">dòng 1 trang</span>
       </div>
       <div class="flex gap-2">
-        <button @click="setPage(currentPage - 1)" :disabled="currentPage === 1" class="btn btn-soft">
+        <button
+          @click="setPage(currentPage - 1)"
+          :disabled="currentPage === 1"
+          class="btn btn-soft"
+        >
           <Icon icon="ep:arrow-left-bold" />
         </button>
-        <button v-for="page in totalPages" :key="page" @click="setPage(page)" :class="{'btn-primary': currentPage === page}" class="btn btn-soft">
+        <button
+          v-for="page in totalPages"
+          :key="page"
+          @click="setPage(page)"
+          :class="{ 'btn-primary': currentPage === page }"
+          class="btn btn-soft"
+        >
           {{ page }}
         </button>
-        <button @click="setPage(currentPage + 1)" :disabled="currentPage === totalPages" class="btn btn-soft">
+        <button
+          @click="setPage(currentPage + 1)"
+          :disabled="currentPage === totalPages"
+          class="btn btn-soft"
+        >
           <Icon icon="ep:arrow-right-bold" />
         </button>
       </div>
@@ -93,71 +208,62 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue';
-import NhanVienService from '@/api/service/NhanVienService';
-import { Icon } from '@iconify/vue';
-import ExcelJS from "exceljs";
-import { saveAs } from "file-saver";
+import { storeToRefs } from "pinia";
+import { useNhanVienStore } from "@/stores/nhanvienstore";
+import { onMounted, watch } from "vue";
+import { Icon } from "@iconify/vue";
 
-const exportToExcel = async () => {
-  const workbook = new ExcelJS.Workbook();
-  const worksheet = workbook.addWorksheet("Nhân viên");
+const store = useNhanVienStore();
+const {
+  currentPage,
+  itemsPerPage,
+  search,
+  filteredData,
+  totalPages,
+  paginatedData,
+  statusFilter,
+  searchSuggestions,
+  showSuggestions,
+} = storeToRefs(store);
 
-  worksheet.addRow(["STT", "Mã NV", "Họ tên", "Email", "SĐT","Chức vụ"]);
+const {
+  initialize,
+  deleteNhanVien,
+  reviveNhanVien,
+  exportToExcel,
+  setPage,
+  setItemsPerPage,
+  setStatusFilter,
+  resetFilters,
+  toggleSuggestions,
+} = store;
 
-  nhanVienList.value.forEach((nv, index) => {
-    worksheet.addRow([index + 1, nv.maNhanVien, nv.hoTen, nv.email, nv.sdt,nv.chucVu.tenChucVu]);
-  });
-
-  const buffer = await workbook.xlsx.writeBuffer();
-  const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-  saveAs(blob, "DanhSachNhanVien.xlsx");
+const selectSuggestion = (suggestion) => {
+  search.value = suggestion;
+  toggleSuggestions(false);
 };
 
-const currentPage = ref(1);
-const itemsPerPage = ref(5);
-const nhanVienList = ref([]);
-const search = ref('');
-
-watch(itemsPerPage, () => (currentPage.value = 1));
-
-const totalPages = computed(() => Math.ceil(filteredData.value.length / itemsPerPage.value));
-
-const paginatedData = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage.value;
-  return filteredData.value.slice(start, start + itemsPerPage.value);
-});
-
-const setPage = (page) => {
-  if (page >= 1 && page <= totalPages.value) currentPage.value = page;
+const hideSuggestions = () => {
+  toggleSuggestions(false);
 };
 
-const fetchNhanVien = async () => {
-  try {
-    const data = await NhanVienService.getAllStaff();
-    if (Array.isArray(data)) nhanVienList.value = data;
-  } catch (error) {
-    console.error("Lỗi khi lấy danh sách nhân viên:", error.message);
+const handleInputFocus = () => {
+  if (search.value.length > 0) {
+    toggleSuggestions(true);
   }
 };
 
-const filteredData = computed(() => {
-  return nhanVienList.value.filter(nv =>
-    nv.hoTen.toLowerCase().includes(search.value.toLowerCase()) ||
-    nv.email.toLowerCase().includes(search.value.toLowerCase()) ||
-    nv.sdt.toLowerCase().includes(search.value.toLowerCase())
-  );
+watch(search, (newVal) => {
+  toggleSuggestions(newVal.length > 0);
 });
 
-const deleteNhanVien = async (nv) => {
-  if (!confirm('Bạn có chắc chắn muốn xóa nhân viên này?')) return;
-  try {
-    await NhanVienService.deleteStaff(nv.id);
-    await fetchNhanVien();
-  } catch (error) {
-    console.error('Lỗi khi xóa nhân viên:', error);
+watch(search, (newValue) => {
+  if (newValue === "") {
+    store.resetFilters();
   }
-};
+});
 
-onMounted(fetchNhanVien);
+onMounted(() => {
+  initialize();
+});
 </script>

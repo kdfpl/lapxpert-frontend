@@ -190,7 +190,7 @@
   import { onMounted } from "vue"
   import { useDotGiamGiaStore } from "@/stores/dotgiamgiastore"
   import { deleteDotGiamGia } from "@/api/service/dotgiamgia"
-  
+  import { Icon } from '@iconify/vue'
   
   const store = useDotGiamGiaStore()
   

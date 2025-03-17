@@ -2,7 +2,7 @@ import api from "../axiosAPI";
 
 export const fetchDotGiamGiaList = async () => {
   try {
-    const response = await api.get("/dotgiamgia/fetch");
+    const response = await api.get("/dot-giam-gia/fetch");
     return response.data;
   } catch (error) {
     console.error("Lỗi khi lấy danh sách DotGiamGia:", error);
