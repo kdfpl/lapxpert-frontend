@@ -86,65 +86,77 @@
     <section class="relative flex-1">
       <div class="absolute inset-0 overflow-auto">
         <table class="table-pin-rows table text-center">
-        <thead>
-          <tr>
-            <th>STT</th>
-            <th>Mã</th>
-            <th>Tên</th>
-            <th>Giá trị giảm</th>
-            <th>Loại giảm giá</th>
-            <th>Mô tả</th>
-            <th>Thời gian bắt đầu</th>
-            <th>Thời gian kết thúc</th>
-            <th>Trạng thái</th>
-            <th>Thao tác</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="dot, index in store.dotGiamGiaList" :key="dot.id">
-            <td>{{ index + 1 }}</td>
-            <td>{{ dot.maDot }}</td>
-            <td>{{ dot.tenDot }}</td>
-            <td>{{ dot.giaTriGiam }}</td>
-            <td>{{ dot.loaiGiamGia }}</td>
-            <td>{{ dot.moTa }}</td>
-            <td>{{ dot.thoiGianBatDau }}</td>
-            <td>{{ dot.thoiGianKetThuc }}</td>
-            <td>
-              <div class="badge badge-soft badge-success">{{ dot.trangThai }}</div>
-            </td>
-            <td>
-              <div class="join">
-                <button
-                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Mã</th>
+              <th>Tên</th>
+              <th>Giá trị giảm</th>
+              <th>Loại giảm giá</th>
+              <th>Mô tả</th>
+              <th>Thời gian bắt đầu</th>
+              <th>Thời gian kết thúc</th>
+              <th>Trạng thái</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(dotGiamGia, index) in store.dotGiamGiaList"
+              :key="dotGiamGia.id"
+            >
+              <td>{{ index + 1 }}</td>
+              <td>{{ dotGiamGia.maDot }}</td>
+              <td>{{ dotGiamGia.tenDot }}</td>
+              <td>{{ dotGiamGia.giaTriGiam }}</td>
+              <td>{{ dotGiamGia.loaiGiamGia }}</td>
+              <td>{{ dotGiamGia.moTa }}</td>
+              <td>{{ dotGiamGia.thoiGianBatDau }}</td>
+              <td>{{ dotGiamGia.thoiGianKetThuc }}</td>
+              <td>
+                <div
+                  :class="
+                    dotGiamGia.trangThai === 'Đang diễn ra'
+                      ? 'badge badge-soft badge-success'
+                      : 'badge badge-soft badge-error'
+                  "
                 >
-                  <!-- Icon mặc định -->
-                  <span
-                    class="icon-[heroicons-outline--pencil-alt] size-4 group-hover:hidden"
-                  ></span>
-                  <!-- Icon khi hover -->
-                  <span
-                    class="icon-[heroicons-solid--pencil-alt] hidden size-4 group-hover:inline"
-                  ></span>
-                </button>
-                <button  @click="deleteRow(dot.id)"
-                  class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
-                >
-                  <!-- Icon mặc định -->
-                  <span
-                    class="icon-[mdi--bin-outline] size-4 group-hover:hidden"
-                  ></span>
-                  <!-- Icon khi hover -->
-                  <span
-                    class="icon-[mdi--bin] hidden size-4 group-hover:inline"
-                  ></span>
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+                  {{ dotGiamGia.trangThai }}
+                </div>
+              </td>
+              <td>
+                <div class="join">
+                  <button
+                    class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                  >
+                    <!-- Icon mặc định -->
+                    <span
+                      class="icon-[heroicons-outline--pencil-alt] size-4 group-hover:hidden"
+                    ></span>
+                    <!-- Icon khi hover -->
+                    <span
+                      class="icon-[heroicons-solid--pencil-alt] hidden size-4 group-hover:inline"
+                    ></span>
+                  </button>
+                  <button
+                    @click="deleteRow(dotGiamGia.id)"
+                    class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                  >
+                    <!-- Icon mặc định -->
+                    <span
+                      class="icon-[mdi--bin-outline] size-4 group-hover:hidden"
+                    ></span>
+                    <!-- Icon khi hover -->
+                    <span
+                      class="icon-[mdi--bin] hidden size-4 group-hover:inline"
+                    ></span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
     <div class="divider divider-primary"></div>
     <!-- pagination -->
@@ -186,25 +198,19 @@
     </section>
   </section>
 </template>
-<script setup>
-import { onMounted } from "vue"
-import { useDotGiamGiaStore } from "../../stores/dotgiamgiastore"
-import { deleteDotGiamGia } from "../../apis/services/dotgiamgia"
 
+<script setup lang="ts">
+import { onMounted } from "vue";
+import { useDotGiamGiaStore } from "../../stores/dotgiamgiastore";
+import { deleteDotGiamGia } from "../../apis/services/dotgiamgia";
 
-const store = useDotGiamGiaStore()
+const store = useDotGiamGiaStore();
 
 onMounted(() => {
-  store.getDotGiamGiaList()
-})
+  store.getDotGiamGiaList();
+});
 
-const deleteRow = async (id) => {
-  const success = await deleteDotGiamGia(id);
-  if (success) {
-    console.log("Xóa thành công, cập nhật danh sách...");
-    await store.getDotGiamGiaList();
-  } else {
-    console.error("Xóa thất bại!");
-  }
+const deleteRow = async (id: number) => {
+  await deleteDotGiamGia(id);
 };
 </script>

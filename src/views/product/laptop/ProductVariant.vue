@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { useSanPhamStore } from "../../../stores/sanphamstore";
+import { useSpctStore } from "../../../stores/spctstore";
 
-const store = useSanPhamStore();
+const store = useSpctStore();
 
 onMounted(() => {
-  store.fetchSanPhamList();
+  store.fetchSpct();
 });
 </script>
 
@@ -76,49 +76,35 @@ onMounted(() => {
         <table class="table-pin-rows table">
           <thead>
             <tr>
-              <th>STT</th>
-              <th>Mã SKU</th>
-              <th>Tên laptop</th>
-              <th>Loại</th>
-              <th>Hệ điều hành</th>
-              <th>Thương hiệu</th>
-              <th>Thời gian bảo hành</th>
-              <th>Trạng thái</th>
-              <th>Hình ảnh</th>
-              <th>Mô tả</th>
+              <th>#</th>
+              <th>ID</th>
+              <th>Tên Sản Phẩm</th>
+              <th>RAM</th>
+              <th>Màn</th>
+              <th>Pin</th>
+              <th>Màu</th>
+              <th>GPU</th>
+              <th>CPU</th>
+              <th>Drive</th>
+              <th>Seri</th>
+              <th>Giá bán</th>
               <th>Thao tác</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(sanPham, index) in store.sanPhamList" :key="sanPham.id">
+            <tr v-for="(spct, index) in store.spctList" :key="spct.id">
               <td>{{ index + 1 }}</td>
-              <td>{{ sanPham.maSp }}</td>
-              <td>{{ sanPham.tenSp }}</td>
-              <td>{{ sanPham.loai.tenLoai }}</td>
-              <td>{{ sanPham.heDieuHanh.tenHeDieuHanh }}</td>
-              <td>{{ sanPham.thuongHieu.tenThuongHieu }}</td>
-              <td>{{ sanPham.baoHanhThang }} tháng</td>
-              <td>
-                <div
-                  :class="
-                    sanPham.trangThai
-                      ? 'badge badge-soft badge-success'
-                      : 'badge badge-soft badge-error'
-                  "
-                >
-                  {{ sanPham.trangThai ? "Hoạt động" : "Ngừng hoạt động" }}
-                </div>
-              </td>
-              <td>
-                <div class="flex items-center gap-3">
-                  <div class="avatar">
-                    <div class="mask mask-squircle h-10 w-10">
-                      <img :src="sanPham.hinhAnh" alt="Hình ảnh" />
-                    </div>
-                  </div>
-                </div>
-              </td>
-              <td>{{ sanPham.moTa }}</td>
+              <td>{{ spct.id }}</td>
+              <td>{{ spct.sanPham.tenSp }}</td>
+              <td>{{ spct.ram.loaiRam.tenLoaiRam }}</td>
+              <td>{{ spct.manHinh.id }}</td>
+              <td>{{ spct.pin.maPin }}</td>
+              <td>{{ spct.mau.tenMau }}</td>
+              <td>{{ spct.gpu.tenGpu }}</td>
+              <td>{{ spct.cpu.tenCpu }}</td>
+              <td>{{ spct.ocung.maOCung }}</td>
+              <td>{{ spct.seri.maSeri }}</td>
+              <td>{{ spct.giaBan }}</td>
               <td>
                 <div class="join">
                   <button
