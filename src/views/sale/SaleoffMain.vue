@@ -207,7 +207,7 @@ import { deleteDotGiamGia } from "../../apis/services/dotgiamgia";
 const store = useDotGiamGiaStore();
 
 onMounted(() => {
-  store.getDotGiamGiaList();
+  store.fetchDotGiamGiaList();
 });
 
 const deleteRow = async (id: number) => {

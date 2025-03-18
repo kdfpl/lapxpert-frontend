@@ -1,106 +1,238 @@
+<script setup>
+import { useKhachHangStore } from "../../../stores/khachhangstore";
+import { onMounted, watch } from "vue";
+import { Icon } from "@iconify/vue";
+import { storeToRefs } from "pinia";
+const store = useKhachHangStore();
+const {
+  currentPage,
+  itemsPerPage,
+  search,
+  filteredData,
+  totalPages,
+  paginatedData,
+  statusFilter,
+  searchSuggestions,
+  showSuggestions,
+  diaChiMacDinh,
+} = storeToRefs(store);
+
+const {
+  initialize,
+  deleteKhachHang,
+  reviveKhachHang,
+  exportToExcel,
+  setPage,
+  setItemsPerPage,
+  setStatusFilter,
+  resetFilters,
+  toggleSuggestions,
+  getDiaChiMacDinh,
+} = store;
+
+// Xử lý tìm kiếm
+const selectSuggestion = (suggestion) => {
+  search.value = suggestion;
+  toggleSuggestions(false);
+};
+
+const hideSuggestions = () => {
+  toggleSuggestions(false);
+};
+
+const handleInputFocus = () => {
+  if (search.value.length > 0) {
+    toggleSuggestions(true);
+  }
+};
+
+watch(search, (newVal) => {
+  toggleSuggestions(newVal.length > 0);
+});
+
+onMounted(() => {
+  initialize();
+});
+</script>
 <template>
   <section class="flex h-full w-full flex-col">
-    <!-- search&filter -->
-    <section class="mb-2 flex w-full items-center justify-end gap-2">
-      <label class="input input-ghost bg-base-200 custom-input grow">
-        <span
-          class="icon-[streamline--search-visual-solid] bg-primary size-5"
-        ></span>
-        <input type="search" placeholder="Tên nhân viên..." />
-      </label>
-      <div class="join px-5 gap-6">
-        <label class="label join-item">Trạng thái: </label>
-        <label class="label join-item">
-          <input
-            class="radio radio-primary radio-xs"
-            type="radio"
-            name="options"
-            checked
-          />Tất cả
-        </label>
-        <label class="label join-item">
-          <input
-            class="radio radio-primary radio-xs"
-            type="radio"
-            name="options"
-          />Hoạt động
-        </label>
-        <label class="label join-item">
-          <input
-            class="radio radio-primary radio-xs"
-            type="radio"
-            name="options"
-          />Ngưng hoạt động
-        </label>
+    <!-- Header -->
+    <section
+      class="text-base-content mb-5 flex w-full items-center justify-between"
+    >
+      <h1 class="text-base-content text-3xl font-bold">DANH SÁCH KHÁCH HÀNG</h1>
+      <div class="flex gap-2">
+        <RouterLink
+          to="/customer/crud"
+          class="btn btn-primary btn-soft"
+        >
+          <Icon icon="icon-park-outline:add-four" class="size-5" />
+          Thêm khách hàng
+        </RouterLink>
+        <button @click="exportToExcel" class="btn btn-primary btn-soft">
+          <Icon icon="ph:microsoft-excel-logo" class="size-5" />
+          Xuất Excel
+        </button>
+        <button class="btn btn-primary btn-soft">
+          <Icon icon="ph:microsoft-excel-logo" class="size-5" />
+          Nhập Excel
+        </button>
       </div>
     </section>
 
-    <!-- button -->
-    <section class="mb-2 flex w-full items-center justify-end gap-2">
-      <button class="btn btn-primary btn-soft">
-        <span class="icon-[ph--microsoft-excel-logo] size-5"></span>
-        Nhập Excel
-      </button>
-      <button class="btn btn-primary btn-soft">
-        <span class="icon-[ph--microsoft-excel-logo] size-5"></span>
-        Xuất Excel
-      </button>
-      <RouterLink to="/saleoff/add" class="btn btn-primary btn-soft">
-        <span class="icon-[icon-park-outline--add-four] size-5"></span>
-        Thêm khách hàng
-      </RouterLink>
+    <!-- Search & Filter -->
+    <section class="mb-5 flex w-full items-center justify-end gap-2">
+      <div class="relative w-full">
+        <div class="flex">
+          <label
+            class="input input-ghost bg-base-200 focus-within:bg-base-200 grow focus-within:outline-none"
+          >
+            <Icon
+              icon="streamline:search-visual-solid"
+              class="text-primary size-5"
+            />
+            <input
+              v-model="search"
+              @focus="handleInputFocus"
+              type="search"
+              placeholder="Tìm kiếm nhân viên..."
+              class="w-full"
+            />
+          </label>
+        </div>
+
+        <!-- Danh sách gợi ý -->
+        <ul
+          v-if="showSuggestions && searchSuggestions.length"
+          class="bg-base-300 z-10 mt-1 w-full rounded-md border shadow-md"
+          @click.outside="hideSuggestions"
+        >
+          <li
+            v-for="(suggestion, index) in searchSuggestions"
+            :key="index"
+            @click="selectSuggestion(suggestion)"
+            class="hover:bg-base-200 cursor-pointer p-2"
+          >
+            {{ suggestion }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="join">
+        <button
+          class="btn btn-soft btn-primary join-item border-none"
+          @click="resetFilters"
+        >
+          <Icon icon="line-md:filter-remove" class="size-5" />
+        </button>
+
+        <select
+          v-model="statusFilter"
+          @change="setStatusFilter(statusFilter)"
+          class="select custom-input w-fit"
+        >
+          <option value="all">Tất cả</option>
+          <option value="active">Đang hoạt động</option>
+          <option value="inactive">Ngừng hoạt động</option>
+        </select>
+      </div>
     </section>
-    <!-- table -->
-    <section class="relative flex-1">
-      <div class="absolute inset-0 overflow-auto">
-        <table class="table-pin-rows table text-center">
-          <thead>
+
+    <!-- Loading Overlay -->
+    <!-- <div
+      v-if="!store.initialized"
+      class="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black"
+    >
+      <span class="loading loading-ring loading-lg text-base-content"></span>
+    </div> -->
+
+    <!-- Empty state -->
+    <div v-if="filteredData.length === 0" class="empty-state flex-1">
+      <Icon icon="mdi:account-search" class="empty-icon" />
+      <p>Không tìm thấy nhân viên phù hợp</p>
+      <button @click="resetFilters" class="btn btn-primary">
+        Đặt lại bộ lọc
+      </button>
+    </div>
+
+    <!-- Table -->
+    <section v-else class="relative flex-1">
+      <div class="text-neutral absolute inset-0 overflow-auto">
+        <table class="table-pin-rows table w-full text-center">
+          <thead class="text-base-content font-extrabold">
             <tr>
               <th>STT</th>
-              <th>Mã</th>
+              <th>Mã KH</th>
               <th>Họ tên</th>
-              <th>Số điện thoại</th>
-              <th>Địa chỉ</th>
+              <th>Email</th>
+              <th>SĐT</th>
               <th>Trạng thái</th>
+              <th>Địa chỉ</th>
               <th>Thao tác</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Linhhm</td>
-              <td>Hoàng Mai Linh</td>
-              <td>0123456789</td>
-              <td>3 P. Trịnh Văn Bô, Hà Nội</td>
+            <tr
+              class="text-base-content"
+              v-for="(kh, index) in paginatedData"
+              :key="kh.id"
+            >
+              <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
+              <td>{{ kh.maKhachHang }}</td>
+              <td>{{ kh.hoTen }}</td>
+              <td>{{ kh.email }}</td>
+              <td>{{ kh.sdt }}</td>
               <td>
-                <div class="badge badge-soft badge-success">Hoạt động</div>
+                <div v-if="kh.tinhTrang" class="badge badge-soft badge-success">
+                  Hoạt động
+                </div>
+                <div v-if="!kh.tinhTrang" class="badge badge-soft badge-error">
+                  Ngừng hoạt động
+                </div>
+              </td>
+              <td>
+                {{
+                  diaChiMacDinh[kh.id].thanhPho +
+                    ", " +
+                    diaChiMacDinh[kh.id].quanHuyen +
+                    ", " +
+                    diaChiMacDinh[kh.id].phuongXa +
+                    ", " +
+                    diaChiMacDinh[kh.id].soNhaDuong || "Đang tải..."
+                }}
               </td>
               <td>
                 <div class="join">
-                  <button
-                    class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                  <RouterLink
+                    :to="`/admin/khach-hang-crud/${kh.id}`"
+                    class="join-item btn btn-soft btn-sm"
                   >
-                    <!-- Icon mặc định -->
-                    <span
-                      class="icon-[heroicons-outline--pencil-alt] size-4 group-hover:hidden"
-                    ></span>
-                    <!-- Icon khi hover -->
-                    <span
-                      class="icon-[heroicons-solid--pencil-alt] hidden size-4 group-hover:inline"
-                    ></span>
+                    <Icon
+                      icon="heroicons-outline:pencil-alt"
+                      class="text-base-content size-4"
+                    />
+                  </RouterLink>
+
+                  <button
+                    @click="deleteKhachHang(kh)"
+                    class="join-item btn btn-soft btn-sm"
+                    v-if="kh.tinhTrang"
+                  >
+                    <Icon
+                      icon="material-symbols:delete-outline"
+                      class="size-4 text-red-500"
+                    />
                   </button>
+
                   <button
-                    @click=""
-                    class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                    @click="reviveKhachHang(kh)"
+                    class="join-item btn btn-soft btn-sm"
+                    v-if="!kh.tinhTrang"
                   >
-                    <!-- Icon mặc định -->
-                    <span
-                      class="icon-[mdi--bin-outline] size-4 group-hover:hidden"
-                    ></span>
-                    <!-- Icon khi hover -->
-                    <span
-                      class="icon-[mdi--bin] hidden size-4 group-hover:inline"
-                    ></span>
+                    <Icon
+                      icon="mdi:account-arrow-up-outline"
+                      class="size-4 text-green-500"
+                    />
                   </button>
                 </div>
               </td>
@@ -109,40 +241,47 @@
         </table>
       </div>
     </section>
-    <!-- pagination -->
+
+    <!-- Pagination -->
     <section class="flex justify-between">
       <div class="flex items-center">
         <label class="label">
           <span>Xem</span>
           <span class="badge badge-soft badge-primary">
-            <select class="focus:outline-none">
-              <option>5</option>
-              <option>10</option>
-              <option>20</option>
+            <select v-model="itemsPerPage" class="focus:outline-none">
+              <option :value="5">5</option>
+              <option :value="10">10</option>
+              <option :value="20">20</option>
             </select>
           </span>
-          <span>dòng 1 trang</span>
+
+          <span class="ml-2">dòng 1 trang</span>
         </label>
       </div>
 
-      <div class="join gap-2">
-        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
-          <span class="icon-[ep--arrow-left-bold]"></span>
+      <div class="flex gap-2">
+        <button
+          @click="setPage(currentPage - 1)"
+          :disabled="currentPage === 1"
+          class="btn btn-soft btn-primary"
+        >
+          <Icon icon="ep:arrow-left-bold" />
         </button>
-        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
-          1
+        <button
+          v-for="page in totalPages"
+          :key="page"
+          @click="setPage(page)"
+          :class="{ 'btn-primary': currentPage === page }"
+          class="btn btn-soft"
+        >
+          {{ page }}
         </button>
-        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
-          2
-        </button>
-        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
-          3
-        </button>
-        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
-          4
-        </button>
-        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
-          <span class="icon-[ep--arrow-right-bold]"></span>
+        <button
+          @click="setPage(currentPage + 1)"
+          :disabled="currentPage === totalPages"
+          class="btn btn-soft btn-primary"
+        >
+          <Icon icon="ep:arrow-right-bold" />
         </button>
       </div>
     </section>
