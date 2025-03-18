@@ -120,7 +120,7 @@ export default {
       </div>
 
       <div class="flex-none mt-2 bg-white shadow-xl border-white p-5 flex flex basis-1/5 mr-2">
-        <div class="mr-2 basis-64">
+        <div class=" basis-64">
           <div class="text-2xl text-[#CD5555] font-bold">           {{ formattedSoThanhVien > 0 ? formattedSoThanhVien : "Loading..." }}
           </div>
           <div class="text-sm mb-10">Thành viên</div>
@@ -130,13 +130,13 @@ export default {
             </div>
           </div>
         </div>
-        <div class="ml-10 mt-4 w-[90px]">
+        <div class=" mt-4 w-[90px]">
           <img src="/src/assets/img/group.png" alt="" />
         </div>
       </div>
 
       <div class="flex-none mt-2 bg-white shadow-xl border-white p-5 flex flex basis-1/4 mr-2">
-        <div class="mr-5 basis-64">
+        <div class=" basis-64">
           <div class="text-2xl text-[#FF1493] font-bold">   {{ formattedSoSP > 0 ? formattedSoSP : "Loading..." }}</div>
           <div class="text-sm mb-10">Sản phẩm</div>
           <div class="flex flex">
@@ -152,7 +152,7 @@ export default {
 
       <div
         class="flex-none mt-2 bg-white shadow-xl border-white p-5 flex flex basis-1/4 mr-2">
-        <div class="mr-5 basis-64">
+        <div class=" basis-64">
           <div class="text-2xl text-[#FFD700] font-bold">5</div>
           <div class="text-sm mb-10">Đánh giá</div>
           <div class="flex flex">
@@ -161,7 +161,7 @@ export default {
             </div>
           </div>
         </div>
-        <div class="ml-14 mt-4 w-[90px]">
+        <div class=" mt-4 w-[90px]">
           <img
             src="/src/assets/img/star.png"
             alt="" />
@@ -189,7 +189,7 @@ export default {
       </div>
 
       <div class="bg-white basis-1/4 flex-none p-8 mr-3">
-        <h1 class="mb-12">Số Laptop: </h1>
+        <h1 class="mb-12">Số Laptop:  /</h1>
         <LaptopPT/>
       </div>
     </div>
