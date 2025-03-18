@@ -1,18 +1,18 @@
 <template>
   <section class="flex h-full w-full flex-col">
     <!-- Header -->
-    <section class="mb-5 flex w-full items-center justify-between">
-      <h1 class="text-3xl text-primary font-bold">DANH SÁCH NHÂN VIÊN</h1>
+    <section class="mb-5 text-base-content flex w-full items-center justify-between">
+      <h1 class="text-3xl  font-bold">DANH SÁCH NHÂN VIÊN</h1>
       <div class="flex gap-2">
-        <RouterLink to="/admin/nhan-vien-crud" class="btn btn-primary btn-soft">
+        <RouterLink to="/admin/nhan-vien-crud" class="btn text-base-content btn-primary btn-soft">
           <Icon icon="icon-park-outline:add-four" class="size-5" />
           Thêm nhân viên
         </RouterLink>
-        <button @click="exportToExcel" class="btn btn-primary btn-soft">
+        <button @click="exportToExcel" class="btn btn-base-content btn-soft">
           <Icon icon="ph:microsoft-excel-logo" class="size-5" />
           Xuất Excel
         </button>
-        <button class="btn btn-primary btn-soft">
+        <button class="btn btn-base-content btn-soft">
           <Icon icon="ph:microsoft-excel-logo" class="size-5" />
           Nhập Excel
         </button>
@@ -98,7 +98,7 @@
     <section v-else class="relative flex-1">
       <div class="absolute inset-0 overflow-auto">
         <table class="table-pin-rows table text-center w-full">
-          <thead class="">
+          <thead class="text-base-content font-extrabold">
             <tr>
               <th>STT</th>
               <th>Mã Voucher</th>
@@ -113,7 +113,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(nv, index) in paginatedData" :key="nv.id">
+            <tr class="text-base-content" v-for="(nv, index) in paginatedData" :key="nv.id">
               <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
               <td>{{ nv.maPhieuGiamGia }}</td>
               <td>{{ nv.loaiGiamGia? "Theo phần trăm" : "Theo tiền" }}</td>

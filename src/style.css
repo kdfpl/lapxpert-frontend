@@ -45,7 +45,7 @@
 }
 
 .logo {
-  background-color: var(--color-primary);
+  background-color: var(--color-base-content);
   mask-image: url('./assets/img/logo.png');
   mask-size: cover;
   mask-repeat: no-repeat;

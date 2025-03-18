@@ -1,21 +1,21 @@
 <template>
   <section class="flex h-full w-full flex-col">
     <!-- Header -->
-    <section class="mb-5 text-primary flex w-full items-center justify-between">
+    <section class="mb-5 text-base-content flex w-full items-center justify-between">
       <h1 class="text-3xl font-bold">DANH SÁCH KHÁCH HÀNG</h1>
       <div class="flex gap-2">
         <RouterLink
           to="/admin/khach-hang-crud"
-          class="btn btn-primary btn-soft"
+          class="btn btn-base-content btn-soft"
         >
           <Icon icon="icon-park-outline:add-four" class="size-5" />
           Thêm khách hàng
         </RouterLink>
-        <button @click="exportToExcel" class="btn btn-primary btn-soft">
+        <button @click="exportToExcel" class="btn btn-base-content btn-soft">
           <Icon icon="ph:microsoft-excel-logo" class="size-5" />
           Xuất Excel
         </button>
-        <button class="btn btn-primary btn-soft">
+        <button class="btn btn-base-content btn-soft">
           <Icon icon="ph:microsoft-excel-logo" class="size-5" />
           Nhập Excel
         </button>
@@ -31,7 +31,7 @@
           >
             <Icon
               icon="streamline:search-visual-solid"
-              class="size-5 text-primary"
+              class="size-5 text-base-content"
             />
             <input
               v-model="search"
@@ -62,7 +62,7 @@
 
       <div class="join">
         <button
-          class="btn btn-soft btn-primary join-item border-none"
+          class="btn btn-soft btn-base-content join-item border-none"
           @click="resetFilters"
         >
           <Icon icon="line-md:filter-remove" class="size-5" />
@@ -85,23 +85,23 @@
       v-if="!store.initialized"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
     >
-      <span class="loading loading-ring loading-lg text-primary"></span>
+      <span class="loading loading-ring loading-lg text-base-content"></span>
     </div>
 
     <!-- Empty state -->
     <div v-if="filteredData.length === 0" class="flex-1 empty-state">
       <Icon icon="mdi:account-search" class="empty-icon" />
       <p>Không tìm thấy nhân viên phù hợp</p>
-      <button @click="resetFilters" class="btn btn-primary">
+      <button @click="resetFilters" class="btn btn-base-content">
         Đặt lại bộ lọc
       </button>
     </div>
 
     <!-- Table -->
     <section v-else class="relative flex-1">
-      <div class="absolute inset-0 overflow-auto">
+      <div class="absolute text-neutral inset-0 overflow-auto">
         <table class="table-pin-rows table text-center w-full">
-          <thead class="font-extrabold">
+          <thead class="text-base-content font-extrabold">
             <tr>
               <th>STT</th>
               <th>Mã KH</th>
@@ -114,7 +114,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(kh, index) in paginatedData" :key="kh.id">
+            <tr class="text-base-content" v-for="(kh, index) in paginatedData" :key="kh.id">
               <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
               <td>{{ kh.maKhachHang }}</td>
               <td>{{ kh.hoTen }}</td>
@@ -145,7 +145,7 @@
                     :to="`/admin/khach-hang-crud/${kh.id}`"
                     class="join-item btn btn-soft btn-sm"
                   >
-                    <Icon icon="heroicons-outline:pencil-alt" class="size-4 text-primary" />
+                    <Icon icon="heroicons-outline:pencil-alt" class="size-4 text-base-content" />
                   </RouterLink>
 
                   <button
@@ -200,7 +200,7 @@
           v-for="page in totalPages"
           :key="page"
           @click="setPage(page)"
-          :class="{ 'btn-primary': currentPage === page }"
+          :class="{ 'btn-base-content': currentPage === page }"
           class="btn btn-soft"
         >
           {{ page }}
