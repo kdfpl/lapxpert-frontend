@@ -35,6 +35,10 @@ export default {
     const ThanhViens = ref([]); 
     const SanPhams = ref([]); 
 
+
+
+
+
     const formattedHoaDon = computed(() => {
       return hoaDons.value.map((hoaDon, index) => ({
         index: index + 1,
@@ -46,7 +50,6 @@ export default {
         trangThai: hoaDon.trangThai || "Chưa xác định",
       }));
     });
-
     const fetchHoaDons = async () => {
       try {
         const response = await axios.get("http://localhost:8080/thong-ke/hien-thi");
@@ -57,6 +60,7 @@ export default {
     };
 
     onMounted(fetchHoaDons);
+
 
 
 
@@ -71,8 +75,8 @@ export default {
         console.error("Lỗi khi lấy dữ liệu thành viên:", error);
       }
     };
-
     onMounted(fetchSoThanhVien);
+
 
 
     const formattedSoSP = computed(() => {
@@ -81,13 +85,13 @@ export default {
     const fetchSoSP = async () => {
       try {
         const response = await axios.get("http://localhost:8080/api/san-pham/fetch");
-        ThanhViens.value = response.data || [];
+        SanPhams.value = response.data || [];
       } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu thành viên:", error);
+        console.error("Lỗi khi lấy dữ liệu SP:", error);
       }
     };
 
-    onMounted(fetchSoThanhVien);
+    onMounted(fetchSoSP);
 
     return {
       headers,
@@ -97,7 +101,8 @@ export default {
       hoaDons,
       fetchSoThanhVien,
       ThanhViens,
-      formattedSoThanhVien
+      formattedSoThanhVien,
+      formattedSoSP
     };
   },
 };
@@ -189,7 +194,7 @@ export default {
       </div>
 
       <div class="bg-white basis-1/4 flex-none p-8 mr-3">
-        <h1 class="mb-12">Số Laptop:  /</h1>
+        <h1 class="mb-12">Số Laptop:   {{ formattedSoSP > 0 ? formattedSoSP : "Loading..." }}</h1>
         <LaptopPT/>
       </div>
     </div>
