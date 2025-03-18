@@ -34,10 +34,10 @@ import ProductMain from "../views/product/laptop/ProductMain.vue";
 import ProductAdd from "../views/product/laptop/ProductAdd.vue";
 import Employee from "../views/user/employee/Employee.vue";
 import EmployeeMain from "../views/user/employee/EmployeeMain.vue";
-import EmployeeAdd from "../views/user/employee/EmployeeAdd.vue";
-import CustomerMain from "../views/user/customer/CustomerMain.vue";
-import CustomerAdd from "../views/user/customer/CustomerCRUD.vue";
 import ProductDetail from "../views/product/laptop/ProductVariant.vue";
+import CustomerCRUD from "../views/user/customer/CustomerCRUD.vue";
+import EmployeeCRUD from "../views/user/employee/EmployeeCRUD.vue";
+import CustomerMain from "../views/user/customer/CustomerMain.vue";
 
 const routes = [
   {
@@ -66,9 +66,9 @@ const routes = [
             component: EmployeeMain,
           },
           {
-            path: "/employee/add",
-            name: "EmployeeAdd",
-            component: EmployeeAdd,
+            path: "/employee/crud",
+            name: "EmployeeCRUD",
+            component: EmployeeCRUD,
           },
         ],
       },
@@ -83,9 +83,9 @@ const routes = [
             component: CustomerMain,
           },
           {
-            path: "/customer/add",
-            name: "CustomerAdd",
-            component: CustomerAdd,
+            path: "/customer/crud",
+            name: "CustomerCRUD",
+            component: CustomerCRUD,
           },
         ],
       },

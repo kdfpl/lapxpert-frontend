@@ -65,7 +65,7 @@ onMounted(() => {
       <h1 class="text-base-content text-3xl font-bold">DANH SÁCH NHÂN VIÊN</h1>
       <div class="flex gap-2">
         <RouterLink
-          to="/admin/nhan-vien-crud"
+          to="/employee/crud"
           class="btn btn-primary btn-soft"
         >
           <Icon icon="icon-park-outline:add-four" class="size-5" />
