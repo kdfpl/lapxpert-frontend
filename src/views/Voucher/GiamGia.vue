@@ -1,220 +1,273 @@
-<script setup>
-import { ref, computed, onMounted } from "vue";
-import { Icon } from "@iconify/vue";
-import axios from "axios";
-import GlassTable from "@/components/customTable.vue";
-import { useRouter } from "vue-router";
-
-const router = useRouter();
-const activePanel = ref("right");
-
-const headers = ["STT","id", "Mã Voucher", "Loại", "Giá Trị", "Điều kiện", "Ngày BĐ", "Ngày KT", "Số Lượng", "Trạng Thái", "Thao Tác"];
-const vouchers = ref([]);
-const searchQuery = ref("");
-const selectedStatus = ref("all");
-const startDate = ref("");
-const endDate = ref("");
-const sortOrder = ref("latest")
-
-const formattedVouchers = computed(() => {
-  return vouchers.value.map((voucher, index) => ({
-    index: index + 1,
-    id: voucher.id,
-    maVoucher: voucher.maPhieuGiamGia,
-    loai: voucher.loaiGiamGia ? "Theo tiền" : "Theo %",
-    giaTri: voucher.giaTriGiam.toLocaleString("vi-VN"),
-    dieuKien: voucher.giaTriDonHangToiThieu.toLocaleString("vi-VN"),
-    ngayBD: new Date(voucher.thoiGianBatDau).toISOString().split("T")[0],
-    ngayKT: new Date(voucher.thoiGianKetThuc).toISOString().split("T")[0],
-    soLuong: voucher.soLuong,
-    trangThai: voucher.trangThai ? "Còn hiệu lực" : "Hết hạn",
-    thaoTac: "actions",
-
-  }));
-});
-
-const getStatusClass = (trangThai) => {
-  return trangThai === "Còn hiệu lực"
-    ? "bg-green-200 text-green-700 px-3 py-1 rounded-full"
-    : "bg-red-200 text-red-700 px-3 py-1 rounded-full";
-};
-
-const filteredVouchers = computed(() => {
-  let result = formattedVouchers.value.filter((voucher) => {
-    const matchesSearch = searchQuery.value
-      ? voucher.maVoucher.toLowerCase().includes(searchQuery.value.toLowerCase())
-      : true;
-
-    const matchesStatus =
-      selectedStatus.value === "all" ||
-      (selectedStatus.value === "active" && voucher.trangThai === "Còn hiệu lực") ||
-      (selectedStatus.value === "expired" && voucher.trangThai === "Hết hạn");
-
-    const matchesDate =
-      (!startDate.value || new Date(voucher.ngayBD) >= new Date(startDate.value)) &&
-      (!endDate.value || new Date(voucher.ngayKT) <= new Date(endDate.value));
-
-    return matchesSearch && matchesStatus && matchesDate;
-  });
-  result.sort((a, b) => {
-    const dateA = new Date(a.ngayKT);
-    const dateB = new Date(b.ngayKT);
-    return sortOrder.value === "latest" ? dateB - dateA : dateA - dateB;
-  });
-  // Cập nhật lại STT
-  return result.map((voucher, index) => ({
-    ...voucher,
-    index: index + 1, // Giữ STT đúng
-  }));
-});
-
-const fetchVouchers = async () => {
-  try {
-    const response = await axios.get("http://localhost:8080/phieu-giam-gia/hien-thi");
-    vouchers.value = response.data;
-  } catch (error) {
-    console.error("Lỗi khi lấy dữ liệu voucher:", error);
-  }
-};
-
-const selectedVoucher = ref(null);
-onMounted(() => {
-  fetchVouchers();
-});
-
-const editVoucher = (voucher) => {
-  if (voucher && voucher.id) {
-    router.push(`/admin/crud-giam-gia/${voucher.id}`);
-  } else {
-    alert("Không thể xác định voucher để chỉnh sửa!");
-  }
-};
-const addVoucher = (voucher) => {
-    router.push(`/admin/crud-giam-gia`);
-};
-
-const deleteVoucher = async (voucher) => {
-  if (confirm("Bạn có chắc chắn muốn xóa không?")) {
-    try {
-      await axios.delete(`http://localhost:8080/phieu-giam-gia/delete/${voucher.id}`);
-      alert("Xóa thành công!");
-      vouchers.value = vouchers.value.filter(v => v.id !== voucher.id);
-    } catch (error) {
-      alert("Xóa thất bại!");
-    }
-  }
-};
-
-const viewVoucher = (voucher) => {
-  selectedVoucher.value = voucher;
-  activePanel.value = "details";
-};
-
-const closeDetailsPanel = () => {
-  selectedVoucher.value = null;
-  activePanel.value = "right";
-};
-</script>
 <template>
-  <div class="h-screen flex flex-col">
-    <div v-if="activePanel === 'right'" class="w-full bg-gray-200 p-4 z-10">
-      <h2 class="text-xl font-bold">Danh Sách Voucher</h2>
-
-      <!-- Tìm kiếm và lọc -->
-      <div class="flex items-center justify-between mt-5">
-        <!-- Ô tìm kiếm -->
-        <div class="flex items-center gap-3 mb-4 ml-2">
-          <input v-model="searchQuery" type="text" placeholder="Tìm kiếm phiếu giảm giá"
-            class="border border-black rounded-lg p-2 w-64 outline-none pl-2" />
-        </div>
-
-        <!-- Bộ lọc ngày -->
-        <div class="flex items-center gap-x-5">
-          <label class="font-medium mb-1">Ngày bắt đầu</label>
-          <input v-model="startDate" type="date" class="border border-gray-400 rounded-lg p-2 w-50 outline-none" />
-
-          <label class="font-medium mb-1">Ngày kết thúc</label>
-          <input v-model="endDate" type="date"
-            class="border border-gray-400 rounded-lg p-2 w-50 outline-none mr-[10px]" />
-        </div>
-      </div>
-
-      <!-- Bộ lọc trạng thái -->
-      <div class="flex items-center gap-4 mb-4 ml-12">
-        <span class="text-black-600 font-semibold">Trạng thái:</span>
-        <label class="flex items-center">
-          <input v-model="selectedStatus" type="radio" value="all" class="mr-2" />
-          Tất cả
-        </label>
-        <label class="flex items-center">
-          <input v-model="selectedStatus" type="radio" value="active" class="mr-2" />
-          Còn hiệu lực
-        </label>
-        <label class="flex items-center">
-          <input v-model="selectedStatus" type="radio" value="expired" class="mr-2" />
-          Hết hạn
-        </label>
-      </div>
-      <!-- Sắp xếp -->
-      <div class="flex items-center gap-4 mb-4 ml-12">
-        <span class="text-black-600 font-semibold">Sắp xếp theo:</span>
-        <label class="flex items-center">
-          <input v-model="sortOrder" type="radio" value="latest" class="mr-2" />
-          Kết thúc muộn nhất
-        </label>
-        <label class="flex items-center">
-          <input v-model="sortOrder" type="radio" value="oldest" class="mr-2" />
-          Kết thúc sớm nhất
-        </label>
-      </div>
-      <!-- Nút thêm phiếu giảm giá -->
-      <div class="flex justify-end mt-5">
-        <button class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-opacity-90 hover:scale-105" @click="addVoucher()">
-          THÊM PHIẾU GIẢM GIÁ
+  <section class="flex h-full w-full flex-col">
+    <!-- Header -->
+    <section class="mb-5 flex w-full items-center justify-between">
+      <h1 class="text-3xl text-primary font-bold">DANH SÁCH NHÂN VIÊN</h1>
+      <div class="flex gap-2">
+        <RouterLink to="/admin/nhan-vien-crud" class="btn btn-primary btn-soft">
+          <Icon icon="icon-park-outline:add-four" class="size-5" />
+          Thêm nhân viên
+        </RouterLink>
+        <button @click="exportToExcel" class="btn btn-primary btn-soft">
+          <Icon icon="ph:microsoft-excel-logo" class="size-5" />
+          Xuất Excel
+        </button>
+        <button class="btn btn-primary btn-soft">
+          <Icon icon="ph:microsoft-excel-logo" class="size-5" />
+          Nhập Excel
         </button>
       </div>
+    </section>
 
-      <!-- Bảng hiển thị danh sách -->
-      <div class="mt-5 border-black-400">
-        <GlassTable :headers="headers" :data="filteredVouchers" rowHeight="h-20">
-          <!-- Custom slot cho trạng thái -->
-          <template #cell-trangThai="{ item }">
-            <div :class="getStatusClass(item.trangThai)"
-              class="px-3 py-1 rounded-full text-sm font-semibold text-center">
-              {{ item.trangThai }}
-            </div>
-          </template>
-
-          <!-- Slot cho cột Thao Tác -->
-          <template #cell-thaoTac="{ item }">
-            <div class="flex space-x-2">
-              <Icon icon="line-md:pencil" width="24" height="24" @click="editVoucher(item)" />
-              <Icon icon="mdi:delete" width="24" height="24" @click="deleteVoucher(item)" />
-              <Icon icon="mdi-eye" width="20" height="24" @click="viewVoucher(item)" />
-            </div>
-          </template>
-
-        </GlassTable>
-      </div>
-    </div>
-    <div v-if="activePanel === 'details'"
-      class="fixed inset-0 flex justify-center items-center bg-[rgba(0,0,0,0.5)] z-50 bg-opacity-50">
-      <div class="bg-white p-6 rounded-lg w-96 max-h-[80vh] overflow-y-auto shadow-lg">
-        <h3 class="text-xl font-bold mb-4">Chi Tiết Voucher</h3>
-        <p><strong>Mã Voucher:</strong> {{ selectedVoucher?.maVoucher }}</p>
-        <p><strong>Loại:</strong> {{ selectedVoucher?.loai }}</p>
-        <p><strong>Giá Trị:</strong> {{ selectedVoucher?.giaTri }}</p>
-        <p><strong>Điều Kiện:</strong> {{ selectedVoucher?.dieuKien }}</p>
-        <p><strong>Ngày BĐ:</strong> {{ selectedVoucher?.ngayBD }}</p>
-        <p><strong>Ngày KT:</strong> {{ selectedVoucher?.ngayKT }}</p>
-        <p><strong>Số Lượng:</strong> {{ selectedVoucher?.soLuong }}</p>
-        <p><strong>Trạng Thái:</strong> {{ selectedVoucher?.trangThai }}</p>
-        <div class="flex justify-end mt-4">
-          <button class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-700" @click="closeDetailsPanel">
-            Đóng
-          </button>
+    <!-- Search & Filter -->
+    <section class="mb-5 flex w-full items-center justify-end gap-2">
+      <div class="relative w-full">
+        <div class="flex">
+          <label
+            class="input input-ghost bg-base-200 focus-within:bg-base-200 grow focus-within:outline-none"
+          >
+            <Icon
+              icon="streamline:search-visual-solid"
+              class="size-5 text-primary"
+            />
+            <input
+              v-model="search"
+              @focus="handleInputFocus"
+              type="search"
+              placeholder="Tìm kiếm nhân viên..."
+              class="w-full"
+            />
+          </label>
         </div>
+
+        <!-- Danh sách gợi ý -->
+        <ul
+          v-if="showSuggestions && searchSuggestions.length"
+          class="mt-1 z-10 bg-base-300 shadow-md w-full rounded-md border"
+          @click.outside="hideSuggestions"
+        >
+          <li
+            v-for="(suggestion, index) in searchSuggestions"
+            :key="index"
+            @click="selectSuggestion(suggestion)"
+            class="p-2 cursor-pointer hover:bg-base-200"
+          >
+            {{ suggestion }}
+          </li>
+        </ul>
       </div>
+
+      <div class="join">
+        <!-- Nút xóa bộ lọc -->
+        <button
+          class="btn btn-soft btn-primary join-item border-none"
+          @click="resetFilters"
+        >
+          <Icon icon="line-md:filter-remove" class="size-5" />
+        </button>
+        <!-- Dropdown lọc trạng thái -->
+        <select
+          v-model="statusFilter"
+          @change="setStatusFilter(statusFilter)"
+          class="select w-fit custom-input"
+        >
+          <option value="all">Trạng thái</option>
+          <option value="active">Còn hiệu lực</option>
+          <option value="inactive">Hết hiệu lực</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Loading Overlay -->
+    <div
+      v-if="!store.initialized"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+    >
+      <span class="loading loading-ring loading-lg text-white"></span>
     </div>
-  </div>
+
+    <!-- Empty state -->
+    <div v-if="filteredData.length === 0" class="flex-1 empty-state">
+      <Icon icon="mdi:account-search" class="empty-icon" />
+      <p>Không tìm thấy nhân viên phù hợp</p>
+      <button @click="resetFilters" class="btn btn-primary">
+        Đặt lại bộ lọc
+      </button>
+    </div>
+    <!-- Table -->
+    <section v-else class="relative flex-1">
+      <div class="absolute inset-0 overflow-auto">
+        <table class="table-pin-rows table text-center w-full">
+          <thead class="">
+            <tr>
+              <th>STT</th>
+              <th>Mã Voucher</th>
+              <th>Loại</th>
+              <th>Giá Trị</th>
+              <th>Điều kiện</th>
+              <th>Ngày BĐ</th>
+              <th>Ngày KT</th>
+              <th>Số Lượng</th>
+              <th>Trạng thái</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(nv, index) in paginatedData" :key="nv.id">
+              <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
+              <td>{{ nv.maPhieuGiamGia }}</td>
+              <td>{{ nv.loaiGiamGia? "Theo phần trăm" : "Theo tiền" }}</td>
+              <td>{{ nv.giaTriGiam }}</td>
+              <td>{{ nv.giaTriDonHangToiThieu }}</td>
+              <td>{{ nv.thoiGianBatDau }}</td>
+              <td>{{ nv.thoiGianKetThuc }}</td>
+              <td>{{ nv.soLuong }}</td>
+              <td>
+                <div v-if="nv.trangThai" class="badge badge-soft badge-success">
+                  Còn hiệu lực
+                </div>
+                <div v-if="!nv.trangThai" class="badge badge-soft badge-error">
+                  Hết hiệu lực
+                </div>
+              </td>
+
+              <td>
+                <div class="join">
+                  <RouterLink
+                    :to="`/admin/crud-giam-gia/${nv.id}`"
+                    class="join-item btn btn-soft btn-sm"
+                  >
+                    <Icon
+                      icon="heroicons-outline:pencil-alt"
+                      class="size-4 text-primary"
+                    />
+                  </RouterLink>
+                  <button
+                    @click="deletePhieuGiamGia(nv)"
+                    class="join-item btn btn-soft btn-sm"
+                    v-if="nv.tinhTrang"
+                  >
+                    <Icon
+                      icon="material-symbols:delete-outline"
+                      class="size-4 text-red-500"
+                    />
+                  </button>
+
+                  <button
+                    @click="revivePhieuGiamGia(nv)"
+                    class="join-item btn btn-soft btn-sm"
+                    v-if="!nv.tinhTrang"
+                  >
+                    <Icon
+                      icon="mdi:account-arrow-up-outline"
+                      class="size-4 text-green-500"
+                    />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Pagination -->
+    <section class="flex justify-between border-t pt-2 mt-4">
+      <div class="flex items-center">
+        <span>Xem</span>
+        <select v-model="itemsPerPage" class="ml-2 px-2 bg-base-300 py-1 border rounded">
+          <option :value="5">5</option>
+          <option :value="10">10</option>
+          <option :value="20">20</option>
+        </select>
+        <span class="ml-2">dòng 1 trang</span>
+      </div>
+      <div class="flex gap-2">
+        <button
+          @click="setPage(currentPage - 1)"
+          :disabled="currentPage === 1"
+          class="btn btn-soft"
+        >
+          <Icon icon="ep:arrow-left-bold" />
+        </button>
+        <button
+          v-for="page in totalPages"
+          :key="page"
+          @click="setPage(page)"
+          :class="{ 'btn-primary': currentPage === page }"
+          class="btn btn-soft"
+        >
+          {{ page }}
+        </button>
+        <button
+          @click="setPage(currentPage + 1)"
+          :disabled="currentPage === totalPages"
+          class="btn btn-soft"
+        >
+          <Icon icon="ep:arrow-right-bold" />
+        </button>
+      </div>
+    </section>
+  </section>
 </template>
+
+<script setup>
+import { storeToRefs } from "pinia";
+import { usePhieuGiamGiaStore } from "@/stores/phieugiamgiastore";
+import { onMounted, watch } from "vue";
+import { Icon } from "@iconify/vue";
+
+const store = usePhieuGiamGiaStore();
+const {
+  currentPage,
+  itemsPerPage,
+  search,
+  filteredData,
+  totalPages,
+  paginatedData,
+  statusFilter,
+  searchSuggestions,
+  showSuggestions,
+} = storeToRefs(store);
+
+const {
+  initialize,
+  deletePhieuGiamGia,
+  revivePhieuGiamGia,
+  exportToExcel,
+  setPage,
+  setItemsPerPage,
+  setStatusFilter,
+  resetFilters,
+  toggleSuggestions,
+} = store;
+
+const selectSuggestion = (suggestion) => {
+  search.value = suggestion;
+  toggleSuggestions(false);
+};
+
+const hideSuggestions = () => {
+  toggleSuggestions(false);
+};
+
+const handleInputFocus = () => {
+  if (search.value.length > 0) {
+    toggleSuggestions(true);
+  }
+};
+
+watch(search, (newVal) => {
+  toggleSuggestions(newVal.length > 0);
+});
+
+watch(search, (newValue) => {
+  if (newValue === "") {
+    store.resetFilters();
+  }
+});
+
+onMounted(() => {
+  initialize();
+});
+</script>

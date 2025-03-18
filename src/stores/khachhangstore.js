@@ -346,7 +346,9 @@ export const useKhachHangStore = defineStore("khachHang", {
           await KhachHangService.addCustomer(customerData);
           this.errorMessage = "Thêm khách hàng thành công!";
         }
+        await this.fetchKhachHang();
         router.push("/admin/khach-hang");
+        
         return true;
       } catch (error) {
         console.error("Lỗi khi gửi dữ liệu:", error);

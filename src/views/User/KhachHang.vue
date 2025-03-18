@@ -2,7 +2,7 @@
   <section class="flex h-full w-full flex-col">
     <!-- Header -->
     <section class="mb-5 text-primary flex w-full items-center justify-between">
-      <h1 class="text-4xl font-bold">DANH SÁCH KHÁCH HÀNG</h1>
+      <h1 class="text-3xl font-bold">DANH SÁCH KHÁCH HÀNG</h1>
       <div class="flex gap-2">
         <RouterLink
           to="/admin/khach-hang-crud"
@@ -85,7 +85,7 @@
       v-if="!store.initialized"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
     >
-      <span class="loading loading-ring loading-lg text-white"></span>
+      <span class="loading loading-ring loading-lg text-primary"></span>
     </div>
 
     <!-- Empty state -->
@@ -145,7 +145,7 @@
                     :to="`/admin/khach-hang-crud/${kh.id}`"
                     class="join-item btn btn-soft btn-sm"
                   >
-                    <Icon icon="heroicons-outline:pencil-alt" class="size-4" />
+                    <Icon icon="heroicons-outline:pencil-alt" class="size-4 text-primary" />
                   </RouterLink>
 
                   <button

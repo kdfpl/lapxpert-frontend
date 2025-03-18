@@ -2,7 +2,7 @@
   <section class="flex h-full w-full flex-col">
     <!-- Header -->
     <section class="mb-5 flex w-full items-center justify-between">
-      <h1 class="text-4xl text-primary font-bold">DANH SÁCH NHÂN VIÊN</h1>
+      <h1 class="text-3xl text-primary font-bold">DANH SÁCH NHÂN VIÊN</h1>
       <div class="flex gap-2">
         <RouterLink to="/admin/nhan-vien-crud" class="btn btn-primary btn-soft">
           <Icon icon="icon-park-outline:add-four" class="size-5" />
