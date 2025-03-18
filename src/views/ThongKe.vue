@@ -33,6 +33,7 @@ export default {
 
     const hoaDons = ref([]); 
     const ThanhViens = ref([]); 
+    const SanPhams = ref([]); 
 
     const formattedHoaDon = computed(() => {
       return hoaDons.value.map((hoaDon, index) => ({
@@ -64,7 +65,22 @@ export default {
 
     const fetchSoThanhVien = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/thong-ke/thanh-vien");
+        const response = await axios.get("http://localhost:8080/api/nhan-vien/fetch");
+        ThanhViens.value = response.data || [];
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu thành viên:", error);
+      }
+    };
+
+    onMounted(fetchSoThanhVien);
+
+
+    const formattedSoSP = computed(() => {
+      return SanPhams.value.length})
+
+    const fetchSoSP = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/san-pham/fetch");
         ThanhViens.value = response.data || [];
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu thành viên:", error);
@@ -105,8 +121,8 @@ export default {
 
       <div class="flex-none mt-2 bg-white shadow-xl border-white p-5 flex flex basis-1/5 mr-2">
         <div class="mr-2 basis-64">
-          <!-- {{ formattedSoThanhVien > 0 ? formattedSoThanhVien : "Loading..." }} -->
-          <div class="text-2xl text-[#CD5555] font-bold"> 6</div>
+          <div class="text-2xl text-[#CD5555] font-bold">           {{ formattedSoThanhVien > 0 ? formattedSoThanhVien : "Loading..." }}
+          </div>
           <div class="text-sm mb-10">Thành viên</div>
           <div class="flex flex">
             <div class="text-xs mr-2 text-[#7A8B8B]">
@@ -121,7 +137,7 @@ export default {
 
       <div class="flex-none mt-2 bg-white shadow-xl border-white p-5 flex flex basis-1/4 mr-2">
         <div class="mr-5 basis-64">
-          <div class="text-2xl text-[#FF1493] font-bold">123</div>
+          <div class="text-2xl text-[#FF1493] font-bold">   {{ formattedSoSP > 0 ? formattedSoSP : "Loading..." }}</div>
           <div class="text-sm mb-10">Sản phẩm</div>
           <div class="flex flex">
             <div class="text-xs mr-2 text-[#7A8B8B]">
@@ -168,7 +184,7 @@ export default {
           </button>
         </div>
         <div class="mb-5 basis-2/3 ">
-          <component class="flex basis-full" :is="selectedComponent" />
+          <component class="flex basis-3/3" :is="selectedComponent" />
         </div>
       </div>
 
