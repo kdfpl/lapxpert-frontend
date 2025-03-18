@@ -53,7 +53,7 @@ export default {
 </script>
 
 <template>
-  <div >
+  <div class="flex basic-full">
     <Line :data="chartData" :options="chartOptions" />
   </div>
 </template>
