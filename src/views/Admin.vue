@@ -1,3 +1,6 @@
+<script setup>
+import { DotLottieVue } from "@lottiefiles/dotlottie-vue";
+</script>
 <template>
   <div class="grid h-screen grid-cols-[256px_1fr] grid-rows-[70px_1fr]">
     <!-- sidebar -->
@@ -11,7 +14,11 @@
           href="/dashboard"
           data-discover="true"
         >
-          <div class="logo h-full w-full"></div>
+          <DotLottieVue
+            src="/src/assets/lapxpert/lapxpert.json"
+            autoplay
+            speed=1
+          />
         </a>
       </div>
 
@@ -251,12 +258,11 @@
     >
       <div class="flex h-full w-full flex-col">
         <!-- breadcrumbs -->
-        <div class="flex items-center justify-between px-2.5 mb-2">
+        <div class="mb-2 flex items-center justify-between px-2.5">
           <h3 class="text-base-content text-3xl font-bold">Thống kê</h3>
           <div class="breadcrumbs text-sm">
             <ul>
               <li><a href="#" class="hover:text-primary">Thống kê</a></li>
-            
             </ul>
           </div>
         </div>
