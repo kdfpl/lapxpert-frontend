@@ -30,26 +30,13 @@ export default {
   },
   setup() {
     const selectedComponent = ref(Year); 
-
     const hoaDons = ref([]); 
     const ThanhViens = ref([]); 
     const SanPhams = ref([]); 
+    const selectedStatus = ref(""); // Lưu trạng thái đơn hàng được chọn
+    const dateRange = ref({ from: "", to: "" }); // Lưu khoảng thời gian lọc
 
 
-
-
-
-    const formattedHoaDon = computed(() => {
-      return hoaDons.value.map((hoaDon, index) => ({
-        index: index + 1,
-        tenKhachHang: hoaDon.tenKhachHang || "N/A",
-        soDienThoai: hoaDon.sdt || "N/A",
-        diaChi: hoaDon.diaChi || "N/A",
-        tongTien: hoaDon.tongTien ? hoaDon.tongTien.toLocaleString() + " VNĐ" : "0 VNĐ",
-        ngayDat: hoaDon.ngayDat ? new Date(hoaDon.ngayDat).toISOString().split("T")[0] : "N/A",
-        trangThai: hoaDon.trangThai || "Chưa xác định",
-      }));
-    });
     const fetchHoaDons = async () => {
       try {
         const response = await axios.get("http://localhost:8080/thong-ke/hien-thi");
@@ -60,8 +47,30 @@ export default {
     };
 
     onMounted(fetchHoaDons);
+    const filteredHoaDon = computed(() => {
+      return hoaDons.value.filter((hoaDon) => {
+        const isStatusMatch =
+          !selectedStatus.value || hoaDon.trangThai === selectedStatus.value;
 
+        const ngayDat = new Date(hoaDon.ngayDat);
+        const fromDate = dateRange.value.from ? new Date(dateRange.value.from) : null;
+        const toDate = dateRange.value.to ? new Date(dateRange.value.to) : null;
 
+        const isDateMatch =
+          (!fromDate || ngayDat >= fromDate) &&
+          (!toDate || ngayDat <= toDate);
+
+        return isStatusMatch && isDateMatch;
+      }).map((hoaDon, index) => ({
+        index: index + 1,
+        tenKhachHang: hoaDon.tenKhachHang || "N/A",
+        soDienThoai: hoaDon.sdt || "N/A",
+        diaChi: hoaDon.diaChi || "N/A",
+        tongTien: hoaDon.tongTien ? hoaDon.tongTien.toLocaleString() + " VNĐ" : "0 VNĐ",
+        ngayDat: hoaDon.ngayDat ? new Date(hoaDon.ngayDat).toISOString().split("T")[0] : "N/A",
+        trangThai: hoaDon.trangThai || "Chưa xác định",
+      }));
+    });
 
 
     const formattedSoThanhVien = computed(() => {
@@ -96,8 +105,10 @@ export default {
     return {
       headers,
       selectedComponent,
-      formattedHoaDon,
+      filteredHoaDon,
+      selectedStatus,
       fetchHoaDons,
+      dateRange,
       hoaDons,
       fetchSoThanhVien,
       ThanhViens,
@@ -204,9 +215,37 @@ export default {
         <h1 class="mb-12">Tăng trưởng khách hàng</h1>
         <TTKH />
       </div>
+      
       <div class="bg-white flex-none p-2 basis-2/3 mr-3">
         <h1 class="mb-6 mt-2 ml-2">Đơn hàng gần đây</h1>
-        <GlassTable :headers="headers" :data="formattedHoaDon" />
+        <div class="p-3 flex flex-row bg-gray-100">
+      <div class="bg-white p-4 rounded shadow-lg mb-4 w-full">
+        <h2 class="text-lg font-semibold mb-2">Bộ lọc</h2>
+
+        <!-- Lọc theo trạng thái đơn hàng -->
+        <div class="mb-2">
+          <label class="block text-gray-700">Trạng thái đơn hàng:</label>
+          <select v-model="selectedStatus" class="border p-2 rounded w-full">
+            <option value="">Tất cả</option>
+            <option value="Chờ xác nhận">Chờ xác nhận</option>
+            <option value="Đã thanh toán">Đã thanh toán</option>
+            <option value="Hủy đơn">Hủy đơn</option>
+          </select>
+        </div>
+
+        <!-- Lọc theo khoảng thời gian -->
+        <!-- <div class="mb-2">
+          <label class="block text-gray-700">Từ ngày:</label>
+          <input type="date" v-model="dateRange.from" class="border p-2 rounded w-full" />
+        </div>
+        <div class="mb-2">
+          <label class="block text-gray-700">Đến ngày:</label>
+          <input type="date" v-model="dateRange.to" class="border p-2 rounded w-full" />
+        </div> -->
+      </div>
+    </div>
+
+        <GlassTable :headers="headers" :data="filteredHoaDon" />
       </div>
     </div>
   </div>
