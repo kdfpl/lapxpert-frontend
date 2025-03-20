@@ -229,7 +229,7 @@ export default {
             <option value="">Tất cả</option>
             <option value="Chờ xác nhận">Chờ xác nhận</option>
             <option value="Đã thanh toán">Đã thanh toán</option>
-            <option value="Hủy đơn">Hủy đơn</option>
+            <option value="Đã hủy">Đã Hủy</option>
           </select>
         </div>
 
