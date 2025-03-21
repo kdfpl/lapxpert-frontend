@@ -31,6 +31,7 @@ export default {
   setup() {
     const selectedComponent = ref(Year); 
     const hoaDons = ref([]); 
+    const donHangs = ref([]); 
     const ThanhViens = ref([]); 
     const SanPhams = ref([]); 
     const selectedStatus = ref(""); // Lưu trạng thái đơn hàng được chọn
@@ -102,6 +103,20 @@ export default {
 
     onMounted(fetchSoSP);
 
+
+    const formattedSoDH = computed(() => {
+      return donHangs.value.length})
+
+    const fetchSoDH = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/don-hang/fetch");
+        donHangs.value = response.data || [];
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu SP:", error);
+      }
+    };
+
+    onMounted(fetchSoDH);
     return {
       headers,
       selectedComponent,
@@ -110,10 +125,12 @@ export default {
       fetchHoaDons,
       dateRange,
       hoaDons,
+      donHangs,
       fetchSoThanhVien,
       ThanhViens,
       formattedSoThanhVien,
-      formattedSoSP
+      formattedSoSP,
+      fetchSoDH
     };
   },
 };
@@ -124,7 +141,7 @@ export default {
     <div class="flex flex-row  justify-center  mb-3">
       <div class=" mt-2 bg-white shadow-xl border-white p-5 flex flex basis-1/4 mr-3">
         <div class="basis-64">
-          <div class="text-2xl text-[#8B658B] font-bold">1200</div>
+          <div class="text-2xl text-[#8B658B] font-bold"> {{ formattedSoDH > 0 ? formattedSoDH : "Loading..." }}</div>
           <div class="text-sm mb-10">Tổng số đơn hàng</div>
           <div>
             <div class="text-xs text-[#7A8B8B]"><a href="/order">See more</a></div>
@@ -233,7 +250,7 @@ export default {
         <!-- Lọc theo trạng thái đơn hàng -->
         <div class="mb-2">
           <label class="block text-gray-700">Trạng thái đơn hàng:</label>
-          <select v-model="selectedStatus" class="border p-2 rounded w-full">
+          <select v-model="selectedStatus" class="  border p-2 rounded w-23">
             <option value="">Tất cả</option>
             <option value="Chờ xác nhận">Chờ xác nhận</option>
             <option value="Đã thanh toán">Đã thanh toán</option>
