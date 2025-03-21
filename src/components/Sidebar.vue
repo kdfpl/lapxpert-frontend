@@ -1,12 +1,26 @@
 <template>
   <div
-    :class="['transition-all duration-300 border-r shadow-lg flex flex-col backdrop-blur-lg overflow-hidden',
-      isCollapsed ? 'w-fit bg-base-100' : 'w-72 bg-base-100']"
+    :class="[
+      'transition-all duration-300 bg-base-100 flex flex-col overflow-hidden',
+      isCollapsed ? 'w-fit' : 'w-72 ',
+    ]"
   >
     <!-- Logo + Toggle Button -->
-    <div class="flex justify-between items-center gap-4 p-4 border-b border-base-300">
-      <div v-if="!isCollapsed" class="logo h-7 w-50"></div>
-      <button @click="toggleSidebar" class="btn btn-ghost text-base-content btn-sm">
+    <div
+      class="flex justify-between items-center gap-4 p-4 border-b border-base-300"
+    >
+      <DotLottieVue
+        src="/src/assets/lapxpert/lapxpert.json"
+        autoplay
+        speed="1"
+        v-if="!isCollapsed"
+        class="text-primary"
+      />
+
+      <button
+        @click="toggleSidebar"
+        class="btn btn-ghost text-base-content btn-sm"
+      >
         <FontAwesomeIcon :icon="faList" class="text-2xl" />
       </button>
     </div>
@@ -16,25 +30,57 @@
       <li v-for="(menu, index) in menuItems" :key="index">
         <details v-if="menu.subItems">
           <summary class="flex items-center">
-            <FontAwesomeIcon :icon="menu.icon" class="text-xl text-base-content" />
-            <span v-if="!isCollapsed" class="ml-3 text-base-content">{{ menu.name }}</span>
+            <FontAwesomeIcon
+              :icon="menu.icon"
+              class="text-xl text-base-content"
+            />
+            <span v-if="!isCollapsed" class="ml-3 text-base-content">{{
+              menu.name
+            }}</span>
           </summary>
           <ul>
             <li v-for="(subMenu, subIndex) in menu.subItems" :key="subIndex">
-              <RouterLink v-if="!subMenu.subItems" :to="subMenu.link" class="hover:bg-base-200 rounded">
-                <FontAwesomeIcon :icon="subMenu.icon" class="text-lg text-base-content" />
-                <span v-if="!isCollapsed" class="ml-3 text-base-content">{{ subMenu.name }}</span>
+              <RouterLink
+                v-if="!subMenu.subItems"
+                :to="subMenu.link"
+                class="hover:bg-base-200 rounded"
+              >
+                <FontAwesomeIcon
+                  :icon="subMenu.icon"
+                  class="text-lg text-base-content"
+                />
+                <span v-if="!isCollapsed" class="ml-3 text-base-content">{{
+                  subMenu.name
+                }}</span>
               </RouterLink>
               <details v-else>
-                <summary class="flex items-center ">
-                  <FontAwesomeIcon :icon="subMenu.icon" class="text-lg text-base-content" />
-                  <span v-if="!isCollapsed" class="ml-3 text-base-content">{{ subMenu.name }}</span>
+                <summary class="flex items-center">
+                  <FontAwesomeIcon
+                    :icon="subMenu.icon"
+                    class="text-lg text-base-content"
+                  />
+                  <span v-if="!isCollapsed" class="ml-3 text-base-content">{{
+                    subMenu.name
+                  }}</span>
                 </summary>
                 <ul>
-                  <li v-for="(subSubMenu, subSubIndex) in subMenu.subItems" :key="subSubIndex">
-                    <RouterLink :to="subSubMenu.link" class="hover:bg-base-200 rounded">
-                      <FontAwesomeIcon :icon="subSubMenu.icon" class="text-base-content"/>
-                      <span v-if="!isCollapsed" class="ml-3 text-base-content">{{ subSubMenu.name }}</span>
+                  <li
+                    v-for="(subSubMenu, subSubIndex) in subMenu.subItems"
+                    :key="subSubIndex"
+                  >
+                    <RouterLink
+                      :to="subSubMenu.link"
+                      class="hover:bg-base-200 rounded"
+                    >
+                      <FontAwesomeIcon
+                        :icon="subSubMenu.icon"
+                        class="text-base-content"
+                      />
+                      <span
+                        v-if="!isCollapsed"
+                        class="ml-3 text-base-content"
+                        >{{ subSubMenu.name }}</span
+                      >
                     </RouterLink>
                   </li>
                 </ul>
@@ -43,8 +89,13 @@
           </ul>
         </details>
         <RouterLink v-else :to="menu.link" class="hover:bg-base-200 rounded">
-          <FontAwesomeIcon :icon="menu.icon" class="text-xl text-base-content" />
-          <span v-if="!isCollapsed" class="ml-3 text-base-content">{{ menu.name }}</span>
+          <FontAwesomeIcon
+            :icon="menu.icon"
+            class="text-xl text-base-content"
+          />
+          <span v-if="!isCollapsed" class="ml-3 text-base-content">{{
+            menu.name
+          }}</span>
         </RouterLink>
       </li>
     </ul>
@@ -52,6 +103,7 @@
 </template>
 
 <script setup>
+import { DotLottieVue } from "@lottiefiles/dotlottie-vue";
 import { ref } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faList } from "@fortawesome/free-solid-svg-icons";
@@ -95,7 +147,11 @@ const menuItems = ref([
     icon: faBox,
     subItems: [
       { name: "Danh sách sản phẩm", icon: faLaptop, link: "/admin/san-pham" },
-      { name: "Danh sách phiên bản", icon: faClipboardList, link: "/admin/san-pham-chi-tiet" },
+      {
+        name: "Danh sách phiên bản",
+        icon: faClipboardList,
+        link: "/admin/san-pham-chi-tiet",
+      },
       {
         name: "Thuộc tính",
         icon: faMicrochip,

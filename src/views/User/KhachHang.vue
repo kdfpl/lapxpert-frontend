@@ -1,7 +1,9 @@
 <template>
   <section class="flex h-full w-full flex-col">
     <!-- Header -->
-    <section class="mb-5 text-base-content flex w-full items-center justify-between">
+    <section
+      class="mb-5 text-base-content flex w-full items-center justify-between"
+    >
       <h1 class="text-3xl font-bold">DANH SÁCH KHÁCH HÀNG</h1>
       <div class="flex gap-2">
         <RouterLink
@@ -85,7 +87,19 @@
       v-if="!store.initialized"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
     >
-      <span class="loading loading-ring loading-lg text-base-content"></span>
+    <div class="fixed inset-0 flex items-center justify-center bg-base-200">
+        <div class="relative flex items-center justify-center">
+          <div
+            class="absolute w-32 h-32 border-8 border-primary rounded-full animate-spin"
+          ></div>
+          <div
+            class="absolute w-28 h-28 border-8 border-secondary rounded-full animate-ping"
+          ></div>
+          <div
+            class="absolute w-24 h-24 border-8 border-accent rounded-full animate-pulse"
+          ></div>
+        </div>
+      </div>
     </div>
 
     <!-- Empty state -->
@@ -114,7 +128,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="text-base-content" v-for="(kh, index) in paginatedData" :key="kh.id">
+            <tr
+              class="text-base-content"
+              v-for="(kh, index) in paginatedData"
+              :key="kh.id"
+            >
               <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
               <td>{{ kh.maKhachHang }}</td>
               <td>{{ kh.hoTen }}</td>
@@ -145,7 +163,10 @@
                     :to="`/admin/khach-hang-crud/${kh.id}`"
                     class="join-item btn btn-soft btn-sm"
                   >
-                    <Icon icon="heroicons-outline:pencil-alt" class="size-4 text-base-content" />
+                    <Icon
+                      icon="heroicons-outline:pencil-alt"
+                      class="size-4 text-base-content"
+                    />
                   </RouterLink>
 
                   <button
@@ -181,7 +202,10 @@
     <section class="flex justify-between border-t pt-2 mt-4">
       <div class="flex items-center">
         <span>Xem</span>
-        <select v-model="itemsPerPage" class="ml-2 bg-base-300 px-2 py-1 border rounded">
+        <select
+          v-model="itemsPerPage"
+          class="ml-2 bg-base-300 px-2 py-1 border rounded"
+        >
           <option :value="5">5</option>
           <option :value="10">10</option>
           <option :value="20">20</option>

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="navbar bg-base-100 backdrop-blur-lg border-b border-gray-300 shadow-md"
+    class="navbar bg-base-100 backdrop-blur-lg"
   >
     <div class="ml-auto flex gap-1 items-center">
       <!-- Chọn Theme -->

@@ -27,10 +27,9 @@ const routes = [
   { path: "/admin/saleoff/add", name: "AddSaleoff", component: AddSaleoff },
 
   // Quản lý sản phẩm
-  { path: "/admin/san-pham", name: "SanPham", component: () => import("@/views/Product/SanPham.vue") },
-  { path: "/admin/san-pham-chi-tiet", name: "SanPhamChiTiet", component: () => import("@/views/Product/SanPhamChiTiet.vue") },
-  { path: "/admin/san-pham-crud/:id?", name: "SanPhamCRUD", component: () => import("@/views/Product/crud/SanPhamCRUD.vue"), props: true },
-  { path: "/admin/spct-crud/:id?", name: "SpctCRUD", component: () => import("@/views/Product/crud/SpctCRUD.vue"), props: true },
+  { path: "/admin/san-pham", name: "SanPham", component: () => import("@/views/product/laptop/ProductMain.vue") },
+  { path: "/admin/san-pham-chi-tiet", name: "SanPhamChiTiet", component: () => import("@/views/product/laptop/ProductVariant.vue") },
+  { path: "/admin/san-pham-crud/:id?", name: "SanPhamCRUD", component: () => import("@/views/product/laptop/ProductAdd.vue"), props: true },
 
   // Quản lý nhân viên và khách hàng
   { path: "/admin/khach-hang", name: "KhachHang", component: () => import("@/views/User/KhachHang.vue") },
@@ -39,22 +38,22 @@ const routes = [
   { path: "/admin/nhan-vien-crud/:id?", name: "NhanVienCRUD", component: () => import("@/views/User/NhanVienCRUD.vue"), props: true },
 
   // Quản lý linh kiện
-  { path: "/admin/cpu", name: "CPU", component: () => import("@/views/Product/list/cpu.vue") },
-  { path: "/admin/gpu", name: "GPU", component: () => import("@/views/Product/list/gpu.vue") },
-  { path: "/admin/o-cung", name: "OCung", component: () => import("@/views/Product/list/oCung.vue") },
-  { path: "/admin/ram", name: "Ram", component: () => import("@/views/Product/list/Ram.vue") },
-  { path: "/admin/man-hinh", name: "ManHinh", component: () => import("@/views/Product/list/ManHInh.vue") },
-  { path: "/admin/pin", name: "Pin", component: () => import("@/views/Product/list/pin.vue") },
-  { path: "/admin/mau-sac", name: "Color", component: () => import("@/views/Product/list/color.vue") },
+  { path: "/admin/cpu", name: "CPU", component: () => import("@/views/product/cpu/CpuMain.vue") },
+  { path: "/admin/gpu", name: "GPU", component: () => import("@/views/product/gpu/GpuMain.vue") },
+  { path: "/admin/o-cung", name: "OCung", component: () => import("@/views/product/disk/DiskMain.vue") },
+  { path: "/admin/ram", name: "Ram", component: () => import("@/views/product/ram/RamMain.vue") },
+  { path: "/admin/man-hinh", name: "ManHinh", component: () => import("@/views/product/display/DisplayMain.vue") },
+  { path: "/admin/pin", name: "Pin", component: () => import("@/views/product/laptop/ProductMain.vue") },
+  { path: "/admin/mau-sac", name: "Color", component: () => import("@/views/product/color/Color.vue") },
 
   // CRUD linh kiện
-  { path: "/admin/cpu-crud/:id?", name: "CpuCRUD", component: () => import("@/views/Product/crud/CpuCRUD.vue"), props: true },
-  { path: "/admin/gpu-crud/:id?", name: "GpuCRUD", component: () => import("@/views/Product/crud/GpuCRUD.vue"), props: true },
-  { path: "/admin/o-cung-crud/:id?", name: "OCungCRUD", component: () => import("@/views/Product/crud/OCungCRUD.vue"), props: true },
-  { path: "/admin/ram-crud/:id?", name: "RamCRUD", component: () => import("@/views/Product/crud/RamCRUD.vue"), props: true },
-  { path: "/admin/man-hinh-crud/:id?", name: "ManHinhCRUD", component: () => import("@/views/Product/crud/ManHinhCRUD.vue"), props: true },
-  { path: "/admin/pin-crud/:id?", name: "PinCRUD", component: () => import("@/views/Product/crud/PinCRUD.vue"), props: true },
-  { path: "/admin/mau-sac-crud/:id?", name: "MauSacCRUD", component: () => import("@/views/Product/crud/MauSacCRUD.vue"), props: true },
+  { path: "/admin/cpu-crud/:id?", name: "CpuCRUD", component: () => import("@/views/product/cpu/CpuAdd.vue"), props: true },
+  { path: "/admin/gpu-crud/:id?", name: "GpuCRUD", component: () => import("@/views/product/gpu/GpuAdd.vue"), props: true },
+  { path: "/admin/o-cung-crud/:id?", name: "OCungCRUD", component: () => import("@/views/product/disk/DiskAdd.vue"), props: true },
+  { path: "/admin/ram-crud/:id?", name: "RamCRUD", component: () => import("@/views/product/ram/RamAdd.vue"), props: true },
+  { path: "/admin/man-hinh-crud/:id?", name: "ManHinhCRUD", component: () => import("@/views/product/display/DisplayAdd.vue"), props: true },
+  { path: "/admin/pin-crud/:id?", name: "PinCRUD", component: () => import("@/views/product/laptop/ProductAdd.vue"), props: true },
+  { path: "/admin/mau-sac-crud/:id?", name: "MauSacCRUD", component: () => import("@/views/product/color/Color.vue"), props: true },
 ];
 
 const router = createRouter({

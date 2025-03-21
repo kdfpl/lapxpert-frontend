@@ -1,36 +1,32 @@
+<script setup lang="ts">
+import { onMounted } from "vue";
+import { useSpctStore } from "@/stores/spctstore";
+
+const store = useSpctStore();
+
+onMounted(() => {
+  store.fetchSpct();
+});
+</script>
+
 <template>
   <section class="flex h-full w-full flex-col">
     <!-- search&filter -->
     <section class="mb-2 flex w-full items-center justify-end gap-2">
-      <label
-        class="input input-ghost bg-base-200 focus-within:bg-base-200 grow focus-within:outline-none"
-      >
+      <label class="input input-ghost bg-base-200 custom-input grow">
         <span
           class="icon-[streamline--search-visual-solid] bg-primary size-5"
         ></span>
-        <input type="search" placeholder="Tên đợt giảm giá..." />
+        <input type="search" placeholder="Tên cpu..." />
       </label>
-
-      <label class="input custom-input w-fit">
-        <span class="label text-primary font-medium">Ngày bắt đầu</span>
-        <input type="datetime-local" />
-      </label>
-
-      <label class="input custom-input w-fit">
-        <span class="label text-primary font-medium">Ngày kết thúc</span>
-        <input type="datetime-local" />
-      </label>
-    </section>
-
-    <section class="mb-2 flex w-full items-center justify-end gap-2">
       <div class="join">
         <button class="btn btn-soft btn-primary join-item border-none">
           <span class="icon-[line-md--filter-remove] size-5"></span>
         </button>
         <select class="select custom-input">
           <option selected disabled>Trạng thái</option>
-          <option>Đang diễn ra</option>
-          <option>Ngừng/Hết hạn</option>
+          <option>Hoạt động</option>
+          <option>Ngừng hoạt động</option>
         </select>
       </div>
 
@@ -44,28 +40,21 @@
           <option>Ngừng/Hết hạn</option>
         </select>
       </div>
+    </section>
 
+    <section class="mb-2 flex w-full items-center justify-end gap-2">
       <div class="join">
         <button class="btn btn-soft btn-primary join-item border-none">
           <span class="icon-[line-md--filter-remove] size-5"></span>
         </button>
-        <div class="bg-base-200 join-item flex items-center gap-2">
-          <input
-            type="text"
-            placeholder="%"
-            class="input input-ghost join-item custom-input w-15"
-          />
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value="40"
-            class="range range-primary range-xs mr-3 w-100"
-          />
-        </div>
+        <select class="select custom-input">
+          <option selected disabled>Hãng</option>
+          <option>Intel</option>
+          <option>AMD</option>
+          <option>Qualcomm</option>
+        </select>
       </div>
     </section>
-
     <!-- button -->
     <section class="mb-2 flex w-full items-center justify-end gap-2">
       <button class="btn btn-primary btn-soft">
@@ -76,54 +65,46 @@
         <span class="icon-[ph--microsoft-excel-logo] size-5"></span>
         Xuất Excel
       </button>
-      <RouterLink to="/admin/saleoff/add" class="btn btn-primary btn-soft">
+      <RouterLink to="/product/add" class="btn btn-primary btn-soft">
         <span class="icon-[icon-park-outline--add-four] size-5"></span>
-        Thêm đợt giảm giá
+        Thêm sản phẩm
       </RouterLink>
     </section>
-
     <!-- table -->
     <section class="relative flex-1">
       <div class="absolute inset-0 overflow-auto">
-        <table class="table-pin-rows table text-center">
+        <table class="table-pin-rows table">
           <thead>
             <tr>
-              <th>STT</th>
-              <th>Mã</th>
-              <th>Tên</th>
-              <th>Giá trị giảm</th>
-              <th>Loại giảm giá</th>
-              <th>Mô tả</th>
-              <th>Thời gian bắt đầu</th>
-              <th>Thời gian kết thúc</th>
-              <th>Trạng thái</th>
+              <th>#</th>
+              <th>ID</th>
+              <th>Tên Sản Phẩm</th>
+              <th>RAM</th>
+              <th>Màn</th>
+              <th>Pin</th>
+              <th>Màu</th>
+              <th>GPU</th>
+              <th>CPU</th>
+              <th>Drive</th>
+              <th>Seri</th>
+              <th>Giá bán</th>
               <th>Thao tác</th>
             </tr>
           </thead>
           <tbody>
-            <tr
-              v-for="(dotGiamGia, index) in store.dotGiamGiaList"
-              :key="dotGiamGia.id"
-            >
+            <tr v-for="(spct, index) in store.spctList" :key="spct.id">
               <td>{{ index + 1 }}</td>
-              <td>{{ dotGiamGia.maDot }}</td>
-              <td>{{ dotGiamGia.tenDot }}</td>
-              <td>{{ dotGiamGia.giaTriGiam }}</td>
-              <td>{{ dotGiamGia.loaiGiamGia }}</td>
-              <td>{{ dotGiamGia.moTa }}</td>
-              <td>{{ dotGiamGia.thoiGianBatDau }}</td>
-              <td>{{ dotGiamGia.thoiGianKetThuc }}</td>
-              <td>
-                <div
-                  :class="
-                    dotGiamGia.trangThai === 'Đang diễn ra'
-                      ? 'badge badge-soft badge-success'
-                      : 'badge badge-soft badge-error'
-                  "
-                >
-                  {{ dotGiamGia.trangThai }}
-                </div>
-              </td>
+              <td>{{ spct.id }}</td>
+              <td>{{ spct.sanPham.tenSp }}</td>
+              <td>{{ spct.ram.loaiRam.tenLoaiRam }}</td>
+              <td>{{ spct.manHinh.id }}</td>
+              <td>{{ spct.pin.maPin }}</td>
+              <td>{{ spct.mau.tenMau }}</td>
+              <td>{{ spct.gpu.tenGpu }}</td>
+              <td>{{ spct.cpu.tenCpu }}</td>
+              <td>{{ spct.ocung.maOCung }}</td>
+              <td>{{ spct.seri.maSeri }}</td>
+              <td>{{ spct.giaBan }}</td>
               <td>
                 <div class="join">
                   <button
@@ -139,7 +120,7 @@
                     ></span>
                   </button>
                   <button
-                    @click="deleteRow(dotGiamGia.id)"
+                    @click=""
                     class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
                   >
                     <!-- Icon mặc định -->
@@ -158,7 +139,7 @@
         </table>
       </div>
     </section>
-    <div class="divider divider-primary"></div>
+
     <!-- pagination -->
     <section class="flex justify-between">
       <div class="flex items-center">
@@ -198,19 +179,3 @@
     </section>
   </section>
 </template>
-
-<script setup lang="ts">
-import { onMounted } from "vue";
-import { useDotGiamGiaStore } from "@/stores/dotgiamgiastore";
-import { deleteDotGiamGia } from "@/api/service/dotgiamgia";
-import { Icon } from "@iconify/vue";
-const store = useDotGiamGiaStore();
-
-onMounted(() => {
-  store.fetchDotGiamGiaList();
-});
-
-const deleteRow = async (id: number) => {
-  await deleteDotGiamGia(id);
-};
-</script>

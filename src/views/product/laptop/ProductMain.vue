@@ -1,36 +1,32 @@
+<script setup lang="ts">
+import { onMounted } from "vue";
+import { useSanPhamStore } from "@/stores/sanphamstore";
+
+const store = useSanPhamStore();
+
+onMounted(() => {
+  store.fetchSanPhamList();
+});
+</script>
+
 <template>
   <section class="flex h-full w-full flex-col">
     <!-- search&filter -->
     <section class="mb-2 flex w-full items-center justify-end gap-2">
-      <label
-        class="input input-ghost bg-base-200 focus-within:bg-base-200 grow focus-within:outline-none"
-      >
+      <label class="input input-ghost bg-base-200 custom-input grow">
         <span
           class="icon-[streamline--search-visual-solid] bg-primary size-5"
         ></span>
-        <input type="search" placeholder="Tên đợt giảm giá..." />
+        <input type="search" placeholder="Tên cpu..." />
       </label>
-
-      <label class="input custom-input w-fit">
-        <span class="label text-primary font-medium">Ngày bắt đầu</span>
-        <input type="datetime-local" />
-      </label>
-
-      <label class="input custom-input w-fit">
-        <span class="label text-primary font-medium">Ngày kết thúc</span>
-        <input type="datetime-local" />
-      </label>
-    </section>
-
-    <section class="mb-2 flex w-full items-center justify-end gap-2">
       <div class="join">
         <button class="btn btn-soft btn-primary join-item border-none">
           <span class="icon-[line-md--filter-remove] size-5"></span>
         </button>
         <select class="select custom-input">
           <option selected disabled>Trạng thái</option>
-          <option>Đang diễn ra</option>
-          <option>Ngừng/Hết hạn</option>
+          <option>Hoạt động</option>
+          <option>Ngừng hoạt động</option>
         </select>
       </div>
 
@@ -44,28 +40,21 @@
           <option>Ngừng/Hết hạn</option>
         </select>
       </div>
+    </section>
 
+    <section class="mb-2 flex w-full items-center justify-end gap-2">
       <div class="join">
         <button class="btn btn-soft btn-primary join-item border-none">
           <span class="icon-[line-md--filter-remove] size-5"></span>
         </button>
-        <div class="bg-base-200 join-item flex items-center gap-2">
-          <input
-            type="text"
-            placeholder="%"
-            class="input input-ghost join-item custom-input w-15"
-          />
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value="40"
-            class="range range-primary range-xs mr-3 w-100"
-          />
-        </div>
+        <select class="select custom-input">
+          <option selected disabled>Hãng</option>
+          <option>Intel</option>
+          <option>AMD</option>
+          <option>Qualcomm</option>
+        </select>
       </div>
     </section>
-
     <!-- button -->
     <section class="mb-2 flex w-full items-center justify-end gap-2">
       <button class="btn btn-primary btn-soft">
@@ -76,54 +65,60 @@
         <span class="icon-[ph--microsoft-excel-logo] size-5"></span>
         Xuất Excel
       </button>
-      <RouterLink to="/admin/saleoff/add" class="btn btn-primary btn-soft">
+      <RouterLink to="/admin/san-pham-crud" class="btn btn-primary btn-soft">
         <span class="icon-[icon-park-outline--add-four] size-5"></span>
-        Thêm đợt giảm giá
+        Thêm sản phẩm
       </RouterLink>
     </section>
-
     <!-- table -->
     <section class="relative flex-1">
       <div class="absolute inset-0 overflow-auto">
-        <table class="table-pin-rows table text-center">
+        <table class="table-pin-rows table">
           <thead>
             <tr>
               <th>STT</th>
-              <th>Mã</th>
-              <th>Tên</th>
-              <th>Giá trị giảm</th>
-              <th>Loại giảm giá</th>
-              <th>Mô tả</th>
-              <th>Thời gian bắt đầu</th>
-              <th>Thời gian kết thúc</th>
+              <th>Mã SKU</th>
+              <th>Tên laptop</th>
+              <th>Loại</th>
+              <th>Hệ điều hành</th>
+              <th>Thương hiệu</th>
+              <th>Thời gian bảo hành</th>
               <th>Trạng thái</th>
+              <th>Hình ảnh</th>
+              <th>Mô tả</th>
               <th>Thao tác</th>
             </tr>
           </thead>
           <tbody>
-            <tr
-              v-for="(dotGiamGia, index) in store.dotGiamGiaList"
-              :key="dotGiamGia.id"
-            >
+            <tr v-for="(sanPham, index) in store.sanPhamList" :key="sanPham.id">
               <td>{{ index + 1 }}</td>
-              <td>{{ dotGiamGia.maDot }}</td>
-              <td>{{ dotGiamGia.tenDot }}</td>
-              <td>{{ dotGiamGia.giaTriGiam }}</td>
-              <td>{{ dotGiamGia.loaiGiamGia }}</td>
-              <td>{{ dotGiamGia.moTa }}</td>
-              <td>{{ dotGiamGia.thoiGianBatDau }}</td>
-              <td>{{ dotGiamGia.thoiGianKetThuc }}</td>
+              <td>{{ sanPham.maSp }}</td>
+              <td>{{ sanPham.tenSp }}</td>
+              <td>{{ sanPham.loai.tenLoai }}</td>
+              <td>{{ sanPham.heDieuHanh.tenHeDieuHanh }}</td>
+              <td>{{ sanPham.thuongHieu.tenThuongHieu }}</td>
+              <td>{{ sanPham.baoHanhThang }} tháng</td>
               <td>
                 <div
                   :class="
-                    dotGiamGia.trangThai === 'Đang diễn ra'
+                    sanPham.trangThai
                       ? 'badge badge-soft badge-success'
                       : 'badge badge-soft badge-error'
                   "
                 >
-                  {{ dotGiamGia.trangThai }}
+                  {{ sanPham.trangThai ? "Hoạt động" : "Ngừng hoạt động" }}
                 </div>
               </td>
+              <td>
+                <div class="flex items-center gap-3">
+                  <div class="avatar">
+                    <div class="mask mask-squircle h-10 w-10">
+                      <img :src="sanPham.hinhAnh" alt="Hình ảnh" />
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td>{{ sanPham.moTa }}</td>
               <td>
                 <div class="join">
                   <button
@@ -139,7 +134,7 @@
                     ></span>
                   </button>
                   <button
-                    @click="deleteRow(dotGiamGia.id)"
+                    @click=""
                     class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
                   >
                     <!-- Icon mặc định -->
@@ -158,7 +153,7 @@
         </table>
       </div>
     </section>
-    <div class="divider divider-primary"></div>
+
     <!-- pagination -->
     <section class="flex justify-between">
       <div class="flex items-center">
@@ -198,19 +193,3 @@
     </section>
   </section>
 </template>
-
-<script setup lang="ts">
-import { onMounted } from "vue";
-import { useDotGiamGiaStore } from "@/stores/dotgiamgiastore";
-import { deleteDotGiamGia } from "@/api/service/dotgiamgia";
-import { Icon } from "@iconify/vue";
-const store = useDotGiamGiaStore();
-
-onMounted(() => {
-  store.fetchDotGiamGiaList();
-});
-
-const deleteRow = async (id: number) => {
-  await deleteDotGiamGia(id);
-};
-</script>

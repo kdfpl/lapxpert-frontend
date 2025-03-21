@@ -1,12 +1,17 @@
 <template>
   <section class="flex h-full w-full flex-col">
     <!-- Header -->
-    <section class="mb-5 text-base-content flex w-full items-center justify-between">
-      <h1 class="text-3xl  font-bold">DANH SÁCH NHÂN VIÊN</h1>
+    <section
+      class="mb-5 text-base-content flex w-full items-center justify-between"
+    >
+      <h1 class="text-3xl font-bold">DANH SÁCH PHIẾU GIẢM GIÁ</h1>
       <div class="flex gap-2">
-        <RouterLink to="/admin/nhan-vien-crud" class="btn text-base-content btn-primary btn-soft">
+        <RouterLink
+          to="/admin/nhan-vien-crud"
+          class="btn text-base-content btn-primary btn-soft"
+        >
           <Icon icon="icon-park-outline:add-four" class="size-5" />
-          Thêm nhân viên
+          Thêm phiếu giảm giá
         </RouterLink>
         <button @click="exportToExcel" class="btn btn-base-content btn-soft">
           <Icon icon="ph:microsoft-excel-logo" class="size-5" />
@@ -34,7 +39,7 @@
               v-model="search"
               @focus="handleInputFocus"
               type="search"
-              placeholder="Tìm kiếm nhân viên..."
+              placeholder="Tìm kiếm phiếu giảm giá..."
               class="w-full"
             />
           </label>
@@ -83,13 +88,25 @@
       v-if="!store.initialized"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
     >
-      <span class="loading loading-ring loading-lg text-white"></span>
+      <div class="fixed inset-0 flex items-center justify-center bg-base-200">
+        <div class="relative flex items-center justify-center">
+          <div
+            class="absolute w-32 h-32 border-8 border-primary rounded-full animate-spin"
+          ></div>
+          <div
+            class="absolute w-28 h-28 border-8 border-secondary rounded-full animate-ping"
+          ></div>
+          <div
+            class="absolute w-24 h-24 border-8 border-accent rounded-full animate-pulse"
+          ></div>
+        </div>
+      </div>
     </div>
 
     <!-- Empty state -->
     <div v-if="filteredData.length === 0" class="flex-1 empty-state">
       <Icon icon="mdi:account-search" class="empty-icon" />
-      <p>Không tìm thấy nhân viên phù hợp</p>
+      <p>Không tìm thấy phiếu giảm giá phù hợp</p>
       <button @click="resetFilters" class="btn btn-primary">
         Đặt lại bộ lọc
       </button>
@@ -113,10 +130,14 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="text-base-content" v-for="(nv, index) in paginatedData" :key="nv.id">
+            <tr
+              class="text-base-content"
+              v-for="(nv, index) in paginatedData"
+              :key="nv.id"
+            >
               <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
               <td>{{ nv.maPhieuGiamGia }}</td>
-              <td>{{ nv.loaiGiamGia? "Theo phần trăm" : "Theo tiền" }}</td>
+              <td>{{ nv.loaiGiamGia ? "Theo phần trăm" : "Theo tiền" }}</td>
               <td>{{ nv.giaTriGiam }}</td>
               <td>{{ nv.giaTriDonHangToiThieu }}</td>
               <td>{{ nv.thoiGianBatDau }}</td>
@@ -175,7 +196,10 @@
     <section class="flex justify-between border-t pt-2 mt-4">
       <div class="flex items-center">
         <span>Xem</span>
-        <select v-model="itemsPerPage" class="ml-2 px-2 bg-base-300 py-1 border rounded">
+        <select
+          v-model="itemsPerPage"
+          class="ml-2 px-2 bg-base-300 py-1 border rounded"
+        >
           <option :value="5">5</option>
           <option :value="10">10</option>
           <option :value="20">20</option>

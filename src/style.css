@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
-
 @plugin "daisyui" {
   themes: all;
 }
@@ -45,26 +44,10 @@
 }
 
 .logo {
-  background-color: var(--color-base-content);
-  mask-image: url('./assets/img/logo.png');
+  width: 216px;
+  height: 34px;
+  background-color: var(--color-primary);
+  mask-image: url('./assets/brand-logo/lapxpert-logo.png');
   mask-size: cover;
   mask-repeat: no-repeat;
-}
-.loading-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.8);
-  display: grid;
-  place-items: center;
-}
-
-.empty-state {
-  text-align: center;
-  padding: 2rem;
-  color: #666;
-}
-
-.empty-icon {
-  font-size: 4rem;
-  margin-bottom: 1rem;
 }

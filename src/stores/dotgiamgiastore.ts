@@ -1,13 +1,19 @@
 import { defineStore } from "pinia"
-import { fetchDotGiamGiaList } from "@/api/service/dotgiamgia"
+import { getAllDotGiamGia, getAllDotGiamGiaChiTiet } from "@/api/service/dotgiamgia.ts"
+import type { DotGiamGia, DotGiamGiaChiTiet } from "@/types/dotgiamgiatypes"
 
 export const useDotGiamGiaStore = defineStore("dotGiamGia", {
   state: () => ({
-    dotGiamGiaList: []
+    dotGiamGiaList: [] as DotGiamGia[],
+    DotGiamGiaChiTietList: [] as DotGiamGiaChiTiet[],
   }),
   actions: {
-    async getDotGiamGiaList() {
-      this.dotGiamGiaList = await fetchDotGiamGiaList();
+    async fetchDotGiamGiaList() {
+      this.dotGiamGiaList = await getAllDotGiamGia();
+    },
+
+    async fetchDotGiamGiaChiTietList() {
+      this.DotGiamGiaChiTietList = await getAllDotGiamGiaChiTiet();
     }
   }
 })
