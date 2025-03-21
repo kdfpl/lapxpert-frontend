@@ -44,7 +44,7 @@ export default {
 </script>
 
 <template>
-  <div>
-    <Bar :data="chartData" :options="chartOptions" />
+  <div class="flex flex">
+    <Bar :data="chartData"   :options="chartOptions" />
   </div>
 </template>

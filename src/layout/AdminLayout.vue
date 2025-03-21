@@ -7,7 +7,7 @@
       <!-- Global Bar (Cố định trên cùng) -->
       <GlobalBar class="flex-shrink-0" />
       <!-- Nội dung chính có thanh cuộn -->
-      <div class="flex-grow pl-6 pr-6 pt-6 overflow-auto">
+      <div class="flex-grow pl-6 pr-6 pt-6 overflow-auto bg-gray-100">
         <router-view />       
       </div>
     </div>

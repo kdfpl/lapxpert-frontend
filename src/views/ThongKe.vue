@@ -121,8 +121,8 @@ export default {
 
 <template>
   <div >
-    <div class="flex flex-row p-3  bg-gray-100">
-      <div class="flex-none mt-2 bg-white shadow-xl border-white p-5 flex flex basis-1/4 mr-2">
+    <div class="flex flex-row  justify-center  mb-3">
+      <div class=" mt-2 bg-white shadow-xl border-white p-5 flex flex basis-1/4 mr-3">
         <div class="basis-64">
           <div class="text-2xl text-[#8B658B] font-bold">1200</div>
           <div class="text-sm mb-10">Tổng số đơn hàng</div>
@@ -135,7 +135,7 @@ export default {
         </div>
       </div>
 
-      <div class="flex-none mt-2 bg-white shadow-xl border-white p-5 flex flex basis-1/5 mr-2">
+      <div class=" mt-2 bg-white shadow-xl border-white p-5 flex flex basis-1/4 mr-3">
         <div class=" basis-64">
           <div class="text-2xl text-[#CD5555] font-bold">           {{ formattedSoThanhVien > 0 ? formattedSoThanhVien : "Loading..." }}
           </div>
@@ -151,7 +151,7 @@ export default {
         </div>
       </div>
 
-      <div class="flex-none mt-2 bg-white shadow-xl border-white p-5 flex flex basis-1/4 mr-2">
+      <div class=" mt-2 bg-white shadow-xl border-white p-5 flex flex basis-1/4 mr-3">
         <div class=" basis-64">
           <div class="text-2xl text-[#FF1493] font-bold">   {{ formattedSoSP > 0 ? formattedSoSP : "Loading..." }}</div>
           <div class="text-sm mb-10">Sản phẩm</div>
@@ -167,7 +167,7 @@ export default {
       </div>
 
       <div
-        class="flex-none mt-2 bg-white shadow-xl border-white p-5 flex flex basis-1/4 mr-2">
+        class=" mt-2 bg-white shadow-xl border-white p-5 flex flex basis-1/5 ">
         <div class=" basis-64">
           <div class="text-2xl text-[#FFD700] font-bold">5</div>
           <div class="text-sm mb-10">Đánh giá</div>
@@ -185,11 +185,15 @@ export default {
       </div>
     </div>
 
-    <div class="p-3 flex flex-row bg-gray-100">
-      <div class="bg-white flex-none p-8 basis-2/3 mr-3">
+    <div class=" flex flex-row mb-3">
+      <div 
+      ref="containerRef"
+      class="bg-white flex flex-col p-8 mr-3 transition-all duration-300 overflow-hidden"
+      :class="isScrollbarVisible ? 'basis-3/4' : 'basis-2/3'">
+
         <h1 class="mb-12">Biểu đồ doanh thu</h1>
         <div class="flex justify-center text-[#FFFFFF]">
-          <button @click="selectedComponent = 'Year'" class="px-3 py-1 rounded-l-lg bg-gray-400">
+          <button @click="selectedComponent = 'Year' " class="px-3 py-1 rounded-l-lg bg-gray-400">
             Year
           </button>
           <button @click="selectedComponent = 'Month'" class="px-3 py-1 bg-gray-400">
@@ -200,23 +204,27 @@ export default {
           </button>
         </div>
         <div class="mb-5 basis-2/3 ">
-          <component class="flex basis-3/3" :is="selectedComponent" />
+          <component  :is="selectedComponent" />
         </div>
       </div>
 
-      <div class="bg-white basis-1/4 flex-none p-8 mr-3">
+      <div 
+      ref="containerRef"
+      class="bg-white flex flex-col p-8 mr-3 transition-all duration-300 overflow-hidden"
+      :class="isScrollbarVisible ? 'basis-2/3' : 'basis-1/3'">
+
         <h1 class="mb-12">Số Laptop:   {{ formattedSoSP > 0 ? formattedSoSP : "Loading..." }}</h1>
         <LaptopPT/>
       </div>
     </div>
 
-    <div class="p-3 flex flex-row bg-gray-100">
-      <div class="bg-white basis-1/4 flex-none p-8 mr-3">
+    <div class=" flex flex-row ">
+      <div class="bg-white basis-1/3  p-8 mr-3">
         <h1 class="mb-12">Tăng trưởng khách hàng</h1>
         <TTKH />
       </div>
       
-      <div class="bg-white flex-none p-2 basis-2/3 mr-3">
+      <div class="bg-white  p-2 basis-2/3 mr-3">
         <h1 class="mb-6 mt-2 ml-2">Đơn hàng gần đây</h1>
         <div class="p-3 flex flex-row bg-gray-100">
       <div class="bg-white p-4 rounded shadow-lg mb-4 w-full">

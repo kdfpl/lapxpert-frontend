@@ -28,28 +28,31 @@ export default {
       },
       chartOptions: {
         responsive: true,
+        maintainAspectRatio: false, // Quan trọng để biểu đồ co giãn đúng cách
         plugins: {
           legend: {
             position: "bottom",
           },
         },
       },
+      windowWidth: window.innerWidth, // Theo dõi kích thước cửa sổ
     };
   },
 
   mounted() {
     this.fetchChartData();
+    window.addEventListener("resize", this.handleResize);
+  },
+
+  beforeUnmount() {
+    window.removeEventListener("resize", this.handleResize);
   },
 
   methods: {
     async fetchChartData() {
       try {
-        const response = await axios.get(
-          "http://localhost:8080/thong-ke/laptop"
-        );
+        const response = await axios.get("http://localhost:8080/thong-ke/laptop");
         const { labels, data } = response.data;
-
-        // Cập nhật biểu đồ
         this.updateChartData(labels, data);
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu:", error);
@@ -77,14 +80,16 @@ export default {
         ],
       };
     },
+
+    handleResize() {
+      this.windowWidth = window.innerWidth;
+    }
   },
 };
 </script>
 
 <template>
-  <div>
-    <Pie
-      :data="chartData"
-      :options="chartOptions" />
+  <div class=" transition-all duration-300 w-full h-[400px]">
+    <Pie :data="chartData" :options="chartOptions" />
   </div>
 </template>
