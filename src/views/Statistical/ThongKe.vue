@@ -6,7 +6,6 @@ import LaptopPT from "./ThongKe/LaptopPT.vue";
 import TTKH from "./ThongKe/TTKH.vue";
 import axios from "axios";
 import { ref, computed, onMounted } from "vue";
-import GlassTable from "@/components/customTable.vue";
 
 // Danh sách tiêu đề bảng
 const headers = [
@@ -25,7 +24,6 @@ export default {
     Month,
     Week,
     LaptopPT,
-    GlassTable,
     TTKH,
   },
   setup() {
@@ -184,7 +182,6 @@ export default {
       </div>
       <div class="bg-white flex-none p-8 basis-3/4 mr-3">
         <h1 class="mb-12">Đơn hàng gần đây</h1>
-        <GlassTable :headers="headers" :data="formattedHoaDon" />
       </div>
     </div>
   </div>

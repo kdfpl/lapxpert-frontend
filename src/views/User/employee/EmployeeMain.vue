@@ -122,6 +122,7 @@
               <th>SĐT</th>
               <th>Chức Vụ</th>
               <th>Trạng thái</th>
+              <th>Địa chỉ</th>
               <th>Thao tác</th>
             </tr>
           </thead>
@@ -145,7 +146,17 @@
                   Nghỉ làm
                 </div>
               </td>
-
+              <td>
+                {{
+                  diaChiMacDinh[nv.id].thanhPho +
+                    ", " +
+                    diaChiMacDinh[nv.id].quanHuyen +
+                    ", " +
+                    diaChiMacDinh[nv.id].phuongXa +
+                    ", " +
+                    diaChiMacDinh[nv.id].soNhaDuong || "Đang tải..."
+                }}
+              </td>
               <td>
                 <div class="join">
                   <RouterLink
@@ -246,6 +257,7 @@ const {
   statusFilter,
   searchSuggestions,
   showSuggestions,
+  diaChiMacDinh,
 } = storeToRefs(store);
 
 const {

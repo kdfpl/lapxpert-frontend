@@ -43,11 +43,14 @@
   outline: none;
 }
 
-.logo {
-  width: 216px;
-  height: 34px;
-  background-color: var(--color-primary);
-  mask-image: url('./assets/brand-logo/lapxpert-logo.png');
-  mask-size: cover;
-  mask-repeat: no-repeat;
+.lottie-wrapper {
+  background-color: var(--p);
+  mix-blend-mode: hue;
 }
+
+
+
+
+
+
+

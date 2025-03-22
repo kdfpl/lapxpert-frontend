@@ -16,8 +16,8 @@
 
 
         </ElementListLayout> -->
-        <CustomTable :data="hoaDons" :headers="headers" :deleteFunc="deleteHoaDonSanPham"
-            :detailLink="'/chi-tiet-hoa-don'" />
+        <!-- <CustomTable :data="hoaDons" :headers="headers" :deleteFunc="deleteHoaDonSanPham"
+            :detailLink="'/chi-tiet-hoa-don'" /> -->
     </div>
 </template>
 
@@ -26,7 +26,7 @@
 
 import { ref, onMounted } from "vue";
 import HoaDonService from "@/api/service/HoaDonService.js";
-import CustomTable from "@/components/CustomTable.vue"; // Import CustomTable
+
 import bannerImage from "@/assets/img/GPUBanner.jpg";
 
 // Các biến header và hoaDons vẫn như trước

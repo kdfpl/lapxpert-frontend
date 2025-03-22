@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Login from "@/views/Auth/Login.vue";
-import Profile from "@/views/User/Profile.vue";
-import ThongKe from "@/views/Statistical/ThongKe.vue";
-import HoaDon from "@/views/Invoice/HoaDon.vue";
-import ChiTietHoaDon from "@/views/Invoice/ChiTietHoaDon.vue";
-import GiamGia from "@/views/Voucher/GiamGia.vue";
-import SaleoffMain from "@/views/Sale/SaleoffMain.vue";
-import AddSaleoff from "@/views/Sale/AddSaleoff.vue";
+import Login from "@/views/auth/Login.vue";
+import Profile from "@/views/user/Profile.vue";
+import ThongKe from "@/views/statistical/ThongKe.vue";
+import HoaDon from "@/views/shop/InvoiceMain.vue";
+import ChiTietHoaDon from "@/views/shop/ChiTietHoaDon.vue";
+import GiamGia from "@/views/voucher/VoucherMain.vue";
+import SaleoffMain from "@/views/sale/SaleoffMain.vue";
+import AddSaleoff from "@/views/sale/AddSaleoff.vue";
 
 const routes = [
   { path: "/", name: "Home", component: ThongKe },
@@ -17,12 +17,12 @@ const routes = [
   // Quản lý hoá đơn
   { path: "/invoice", name: "HoaDon", component: HoaDon },
   { path: "/chi-tiet-hoa-don/:id", name: "ChiTietHoaDon", component: ChiTietHoaDon },
-  { path: "/admin/hoa-don-crud", name: "HoaDonCRUD", component: () => import("@/views/Invoice/HoaDonCRUD.vue") },
+  { path: "/admin/hoa-don-crud", name: "HoaDonCRUD", component: () => import("@/views/shop/InvoiceAdd.vue") },
 
   // Quản lý khuyến mãi
   { path: "/admin/giam-gia", name: "GiamGia", component: GiamGia },
-  { path: "/admin/crud-giam-gia/:id", name: "GiamGiaCRUD", component: () => import("@/views/Voucher/PhieuGiamGiaCRUD.vue"), props: true },
-  { path: "/admin/crud-giam-gia", name: "GiamGiaCRUD_Add", component: () => import("@/views/Voucher/PhieuGiamGiaCRUD.vue") },
+  { path: "/admin/crud-giam-gia/:id", name: "GiamGiaCRUD", component: () => import("@/views/voucher/VoucherAdd.vue"), props: true },
+  { path: "/admin/crud-giam-gia", name: "GiamGiaCRUD_Add", component: () => import("@/views/voucher/VoucherAdd.vue") },
   { path: "/admin/saleoff", name: "SaleoffDefault", component: SaleoffMain },
   { path: "/admin/saleoff/add", name: "AddSaleoff", component: AddSaleoff },
 
@@ -32,10 +32,10 @@ const routes = [
   { path: "/admin/san-pham-crud/:id?", name: "SanPhamCRUD", component: () => import("@/views/product/laptop/ProductAdd.vue"), props: true },
 
   // Quản lý nhân viên và khách hàng
-  { path: "/admin/khach-hang", name: "KhachHang", component: () => import("@/views/User/KhachHang.vue") },
-  { path: "/admin/nhan-vien", name: "NhanVien", component: () => import("@/views/User/NhanVien.vue") },
-  { path: "/admin/khach-hang-crud/:id?", name: "KhachHangCRUD", component: () => import("@/views/User/KhachHangCRUD.vue"), props: true },
-  { path: "/admin/nhan-vien-crud/:id?", name: "NhanVienCRUD", component: () => import("@/views/User/NhanVienCRUD.vue"), props: true },
+  { path: "/admin/khach-hang", name: "KhachHang", component: () => import("@/views/user/customer/CustomerMain.vue") },
+  { path: "/admin/nhan-vien", name: "NhanVien", component: () => import("@/views/user/employee/EmployeeMain.vue") },
+  { path: "/admin/khach-hang-crud/:id?", name: "KhachHangCRUD", component: () => import("@/views/user/customer/CustomerAdd.vue"), props: true },
+  { path: "/admin/nhan-vien-crud/:id?", name: "NhanVienCRUD", component: () => import("@/views/user/employee/EmployeeAdd.vue"), props: true },
 
   // Quản lý linh kiện
   { path: "/admin/cpu", name: "CPU", component: () => import("@/views/product/cpu/CpuMain.vue") },

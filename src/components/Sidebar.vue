@@ -12,9 +12,8 @@
       <DotLottieVue
         src="/src/assets/lapxpert/lapxpert.json"
         autoplay
-        speed="1"
+        :speed=1
         v-if="!isCollapsed"
-        class="text-primary"
       />
 
       <button

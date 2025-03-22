@@ -1,22 +1,23 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useKhachHangStore } from "@/stores/khachHangStore";
-import TabPanel from "../../components/TabPanel.vue";
+import { useNhanVienStore } from "@/stores/nhanVienStore";
+import TabPanel from "@/components/TabPanel.vue";
 import { Plus, Trash2 } from "lucide-vue-next";
 import { storeToRefs } from "pinia";
+import roleService from "@/api/service/ChucVuService";
 
 const route = useRoute();
 const router = useRouter();
-const customerId = route.params.id;
+const staffId = route.params.id;
 
-const store = useKhachHangStore();
-const { diaChiList, khachHang, diaChiHienThi, citis } = storeToRefs(store);
+const store = useNhanVienStore();
+const { diaChiList, nhanVien, diaChiHienThi, citis } = storeToRefs(store);
 
 const {
   validateAndProceed,
   fetchCityData,
-  fetchKhachHangById,
+  fetchNhanVienById,
   createNewAddress,
   updateDistrictsAndWards,
   submitForm,
@@ -26,22 +27,27 @@ const {
 } = store;
 
 const tabs = [
-  { label: "1. Thông tin khách hàng", key: "panel1" },
-  { label: "2. Địa chỉ khách hàng", key: "panel2" },
+  { label: "1. Thông tin nhân viên", key: "panel1" },
+  { label: "2. Địa chỉ nhân viên", key: "panel2" },
   { label: "3. Xác nhận thông tin", key: "panel3" },
 ];
 
 const activeTab = ref("panel1");
 const isLoading = ref(false);
+const chucVuList = ref([]);
 
 onMounted(async () => {
   isLoading.value = true;
   try {
     await fetchCityData();
-    if (customerId) {
-      await fetchKhachHangById(customerId);
+    const roleResponse = await roleService.getAllRoles();
+    chucVuList.value = roleResponse.data || [];
+
+    if (staffId) {
+      await fetchNhanVienById(staffId);
     } else {
       diaChiList.value = [createNewAddress(true)];
+      nhanVien.value.vaiTro = chucVuList.value[0]; 
     }
   } catch (error) {
     console.error("Lỗi khi tải dữ liệu:", error);
@@ -59,14 +65,14 @@ watch(
 );
 
 const handleProceed = async (nextTab) => {
-  const isValid = await validateAndProceed(nextTab, customerId);
+  const isValid = await validateAndProceed(nextTab, staffId);
   if (isValid) {
     activeTab.value = nextTab;
   }
 };
 
 const handleSubmit = async () => {
-  const success = await submitForm(customerId, router);
+  const success = await submitForm(staffId, router);
   if (success) {
     alert("Thao tác thành công!");
   }
@@ -76,19 +82,40 @@ const handleSubmit = async () => {
 <template>
   <div class="w-[90%] mx-auto mt-10">
     <TabPanel :tabs="tabs" v-model:activeTab="activeTab">
-      <!-- Panel 1: Thông tin khách hàng -->
+      <!-- Panel 1: Thông tin nhân viên -->
       <template #panel1>
         <form class="space-y-4 p-6 bg-base-100">
-          <div
-            v-for="(value, key) in khachHang"
-            :key="key"
-            class="flex items-center border rounded-lg p-2 w-full focus-within:ring-2 focus:ring-base-300"
-          >
+          <div class="flex items-center border rounded-lg p-2 w-full">
             <input
-              v-model="khachHang[key]"
-              :placeholder="key"
+              v-model="nhanVien.hoTen"
+              placeholder="Họ tên"
               class="w-full border-0 focus:outline-none"
             />
+          </div>
+          <div class="flex items-center border rounded-lg p-2 w-full">
+            <input
+              v-model="nhanVien.email"
+              placeholder="Email"
+              class="w-full border-0 focus:outline-none"
+            />
+          </div>
+          <div class="flex items-center border rounded-lg p-2 w-full">
+            <input
+              v-model="nhanVien.sdt"
+              placeholder="Số điện thoại"
+              class="w-full border-0 focus:outline-none"
+            />
+          </div>
+          <div class="flex items-center border rounded-lg p-2 w-full">
+            <select v-model="nhanVien.vaiTro" class="w-full select border-0">
+              <option
+                v-for="chucVu in chucVuList"
+                :key="chucVu.id"
+                :value="chucVu"
+              >
+                {{ chucVu.tenChucVu }}
+              </option>
+            </select>
           </div>
         </form>
         <button @click="handleProceed('panel2')" class="btn btn-primary">
@@ -96,7 +123,7 @@ const handleSubmit = async () => {
         </button>
       </template>
 
-      <!-- Panel 2: Địa chỉ khách hàng -->
+      <!-- Panel 2: Địa chỉ nhân viên -->
       <template #panel2>
         <div
           v-for="(dc, index) in diaChiHienThi"
@@ -180,13 +207,14 @@ const handleSubmit = async () => {
       <template #panel3>
         <div class="grid grid-cols-2 gap-6">
           <div class="p-6 bg-base border rounded-lg shadow-md">
-            <h2 class="text-lg font-semibold">Thông tin khách hàng</h2>
-            <p v-for="(value, key) in khachHang" :key="key" class="">
-              {{ key }}: {{ value || '""' }}
-            </p>
+            <h2 class="text-lg font-semibold">Thông tin nhân viên</h2>
+            <p>Họ tên: {{ nhanVien.hoTen }}</p>
+            <p>Email: {{ nhanVien.email }}</p>
+            <p>Số điện thoại: {{ nhanVien.sdt }}</p>
+            <p>Chức vụ: {{ nhanVien.vaiTro?.tenChucVu || "Không xác định" }}</p>
           </div>
           <div class="p-6 rounded-lg shadow-md">
-            <h2 class="text-lg font-semibold">Địa chỉ khách hàng</h2>
+            <h2 class="text-lg font-semibold">Địa chỉ nhân viên</h2>
             <table class="w-full border-collapse border">
               <thead>
                 <tr class="bg-base-200">

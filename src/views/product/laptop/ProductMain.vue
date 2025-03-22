@@ -1,8 +1,8 @@
-<script setup lang="ts">
+<script setup>
 import { onMounted } from "vue";
-import { useSanPhamStore } from "@/stores/sanphamstore";
+import { useCombinedStore } from "@/stores/sanphamstore";
 
-const store = useSanPhamStore();
+const store = useCombinedStore();
 
 onMounted(() => {
   store.fetchSanPhamList();
@@ -14,9 +14,7 @@ onMounted(() => {
     <!-- search&filter -->
     <section class="mb-2 flex w-full items-center justify-end gap-2">
       <label class="input input-ghost bg-base-200 custom-input grow">
-        <span
-          class="icon-[streamline--search-visual-solid] bg-primary size-5"
-        ></span>
+        <span class="icon-[streamline--search-visual-solid] bg-primary size-5"></span>
         <input type="search" placeholder="Tên cpu..." />
       </label>
       <div class="join">
@@ -99,13 +97,7 @@ onMounted(() => {
               <td>{{ sanPham.thuongHieu.tenThuongHieu }}</td>
               <td>{{ sanPham.baoHanhThang }} tháng</td>
               <td>
-                <div
-                  :class="
-                    sanPham.trangThai
-                      ? 'badge badge-soft badge-success'
-                      : 'badge badge-soft badge-error'
-                  "
-                >
+                <div :class="sanPham.trangThai ? 'badge badge-soft badge-success' : 'badge badge-soft badge-error'">
                   {{ sanPham.trangThai ? "Hoạt động" : "Ngừng hoạt động" }}
                 </div>
               </td>
@@ -121,30 +113,17 @@ onMounted(() => {
               <td>{{ sanPham.moTa }}</td>
               <td>
                 <div class="join">
-                  <button
-                    class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
-                  >
+                  <button class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white">
                     <!-- Icon mặc định -->
-                    <span
-                      class="icon-[heroicons-outline--pencil-alt] size-4 group-hover:hidden"
-                    ></span>
+                    <span class="icon-[heroicons-outline--pencil-alt] size-4 group-hover:hidden"></span>
                     <!-- Icon khi hover -->
-                    <span
-                      class="icon-[heroicons-solid--pencil-alt] hidden size-4 group-hover:inline"
-                    ></span>
+                    <span class="icon-[heroicons-solid--pencil-alt] hidden size-4 group-hover:inline"></span>
                   </button>
-                  <button
-                    @click=""
-                    class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
-                  >
+                  <button @click="" class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white">
                     <!-- Icon mặc định -->
-                    <span
-                      class="icon-[mdi--bin-outline] size-4 group-hover:hidden"
-                    ></span>
+                    <span class="icon-[mdi--bin-outline] size-4 group-hover:hidden"></span>
                     <!-- Icon khi hover -->
-                    <span
-                      class="icon-[mdi--bin] hidden size-4 group-hover:inline"
-                    ></span>
+                    <span class="icon-[mdi--bin] hidden size-4 group-hover:inline"></span>
                   </button>
                 </div>
               </td>
