@@ -196,13 +196,16 @@
         </button>
       </div>
     </section>
+
+    <!-- dialog -->
+     <dialog></dialog>
   </section>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { useDotGiamGiaStore } from "../../stores/dotgiamgiastore";
-import { deleteDotGiamGia } from "../../apis/graphql/dotgiamgiagql";
+import { deleteDotGiamGia } from "../../apis/graphql/dotgiamgia";
 
 const store = useDotGiamGiaStore();
 

@@ -5,7 +5,7 @@ import { useSpctStore } from "../../stores/spctstore";
 import {
   createDotGiamGia,
   createDotGiamGiaChiTiet,
-} from "../../apis/graphql/dotgiamgiagql";
+} from "../../apis/graphql/dotgiamgia";
 
 const sanPhamStore = useSanPhamStore();
 const sanPhamChiTietStore = useSpctStore();
