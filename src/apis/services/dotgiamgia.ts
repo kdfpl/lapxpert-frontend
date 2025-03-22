@@ -1,15 +1,5 @@
 import api from "../index";
 
-export const getAllDotGiamGia = async () => {
-  try {
-    const response = await api.get("/dot-giam-gia/fetch");
-    return response.data;
-  } catch (error) {
-    console.error("Lỗi khi lấy danh sách DotGiamGia:", error);
-    return [];
-  }
-};
-
 export const addDotGiamGia = async (dotGiamGiaData: any): Promise<any> => {
   try {
     const response = await api.post("/dot-giam-gia/add", dotGiamGiaData);
@@ -33,16 +23,6 @@ export const deleteDotGiamGia = async (id: number) => {
     console.error("Lỗi khi xóa:", error);
     alert("Xóa thất bại!");
     return false; // Trả về false nếu xóa thất bại
-  }
-};
-
-export const getAllDotGiamGiaChiTiet = async () => {
-  try {
-    const response = await api.get("/dot-giam-gia-chi-tiet/fetch");
-    return response.data;
-  } catch (error) {
-    console.error("Lỗi khi lấy danh sách DotGiamGiaCT:", error);
-    return [];
   }
 };
 

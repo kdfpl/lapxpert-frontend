@@ -3,13 +3,13 @@ import { onMounted, reactive, computed } from "vue";
 import { useSanPhamStore } from "../../stores/sanphamstore";
 import { useSpctStore } from "../../stores/spctstore";
 import {
-  addDotGiamGia,
-  addDotGiamGiaChiTiet,
-} from "../../apis/services/dotgiamgia";
+  createDotGiamGia,
+  createDotGiamGiaChiTiet,
+} from "../../apis/graphql/dotgiamgiagql";
 
 const sanPhamStore = useSanPhamStore();
 const sanPhamChiTietStore = useSpctStore();
-const selectedSanPhams = reactive<number[]>([]); // Lưu danh sách ID sản phẩm đã chọn
+const selectedSanPhams = reactive<number[]>([]);
 const selectedSanPhamChiTietIds = reactive(new Set<number>());
 
 onMounted(() => {
@@ -22,13 +22,23 @@ const dotGiamGiaData = reactive({
   tenDot: "",
   giaTriGiam: 0,
   loaiGiamGia: "",
-  soLuong: 0,
   moTa: "",
   thoiGianBatDau: "",
   thoiGianKetThuc: "",
   trangThai: "",
 });
 
+const thoiGianBatDauUTC = computed(() =>
+  dotGiamGiaData.thoiGianBatDau
+    ? new Date(dotGiamGiaData.thoiGianBatDau).toISOString()
+    : "",
+);
+
+const thoiGianKetThucUTC = computed(() =>
+  dotGiamGiaData.thoiGianKetThuc
+    ? new Date(dotGiamGiaData.thoiGianKetThuc).toISOString()
+    : "",
+);
 // Khi checkbox thay đổi, thêm hoặc xóa sản phẩm khỏi danh sách
 const toggleSanPhamSelection = (sanPhamId: number) => {
   const index = selectedSanPhams.indexOf(sanPhamId);
@@ -56,24 +66,32 @@ const selectedSanPhamChiTietList = computed(() => {
 
 const submitForm = async () => {
   try {
-    // Bước 1: Gửi request tạo Đợt giảm giá
-    const dotGiamGiaResponse = await addDotGiamGia(dotGiamGiaData);
+    const formattedData = {
+      ...dotGiamGiaData,
+      thoiGianBatDau: thoiGianBatDauUTC.value,
+      thoiGianKetThuc: thoiGianKetThucUTC.value,
+    };
+
+    const dotGiamGiaResponse = await createDotGiamGia(formattedData);
     const dotGiamGiaId = dotGiamGiaResponse.id;
 
-    // Bước 2: Tạo danh sách đợt giảm giá chi tiết
     const dotGiamGiaChiTietData = Array.from(selectedSanPhamChiTietIds).map(
       (spctId) => ({
-        dotGiamGia: { id: dotGiamGiaId },
-        sanPhamChiTiet: { id: spctId },
+        dotGiamGiaId,
+        sanPhamChiTietId: spctId,
         maDotChiTiet: `DGGCT-${dotGiamGiaId}-${spctId}`,
-        ngayTao: new Date().toISOString(),
         tinhTrang: true,
       }),
     );
 
-    // console.log("Got dam:", dotGiamGiaChiTietData);
-    // Gửi request thêm đợt giảm giá chi tiết
-    await addDotGiamGiaChiTiet(dotGiamGiaChiTietData);
+    for (const chiTiet of dotGiamGiaChiTietData) {
+      await createDotGiamGiaChiTiet({
+        dotGiamGiaId: chiTiet.dotGiamGiaId,
+        sanPhamChiTietId: chiTiet.sanPhamChiTietId,
+        maDotChiTiet: chiTiet.maDotChiTiet,
+        tinhTrang: chiTiet.tinhTrang,
+      });
+    }
 
     console.log("Thêm đợt giảm giá và chi tiết thành công!");
   } catch (error) {
@@ -172,9 +190,7 @@ const isDetailVisible = computed(() => selectedSanPhams.length > 0);
       <div
         class="rounded-box bg-base-200 border-base-300 flex h-full flex-1 flex-col border p-4"
       >
-      <span class="text-base-content mb-2 text-2xl font-bold"
-        >Sản phẩm</span
-      >
+        <span class="text-base-content mb-2 text-2xl font-bold">Sản phẩm</span>
         <!-- table-san-pham -->
         <div class="mb-2 max-h-[600px] w-full overflow-auto">
           <table class="table-pin-rows table w-full">

@@ -202,12 +202,12 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { useDotGiamGiaStore } from "../../stores/dotgiamgiastore";
-import { deleteDotGiamGia } from "../../apis/services/dotgiamgia";
+import { deleteDotGiamGia } from "../../apis/graphql/dotgiamgiagql";
 
 const store = useDotGiamGiaStore();
 
-onMounted(() => {
-  store.fetchDotGiamGiaList();
+onMounted(async () => {
+  await store.fetchDotGiamGiaList();
 });
 
 const deleteRow = async (id: number) => {

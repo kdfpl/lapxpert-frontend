@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
-import { getAllDotGiamGia, getAllDotGiamGiaChiTiet } from "../apis/services/dotgiamgia"
 import type { DotGiamGia, DotGiamGiaChiTiet } from "../types/dotgiamgiatypes"
+import { fetchAllDotGiamGia, fetchAllDotGiamGiaChiTiet } from "../apis/graphql/dotgiamgiagql"
 
 export const useDotGiamGiaStore = defineStore("dotGiamGia", {
   state: () => ({
@@ -9,11 +9,11 @@ export const useDotGiamGiaStore = defineStore("dotGiamGia", {
   }),
   actions: {
     async fetchDotGiamGiaList() {
-      this.dotGiamGiaList = await getAllDotGiamGia();
+      this.dotGiamGiaList = await fetchAllDotGiamGia();
     },
 
     async fetchDotGiamGiaChiTietList() {
-      this.DotGiamGiaChiTietList = await getAllDotGiamGiaChiTiet();
+      this.DotGiamGiaChiTietList = await fetchAllDotGiamGiaChiTiet();
     }
   }
 })
