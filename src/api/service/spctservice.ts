@@ -73,6 +73,17 @@ export const getAllSeri = async (): Promise<any> => {
 };
 
 /*cpu*/
+export const getCpuById = async (id: string | number): Promise<any> => {
+  try {
+    const response: any = await api.get(`${URL_API}/cpu/get-one/${id}`);
+    console.log("Phản hồi từ server:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Lỗi khi lấy thông tin CPU:", error);
+    throw error;
+  }
+};
+
 export const addCpu = async (cpuData: any): Promise<any> => {
   try {
     const response: any = await api.post(`${URL_API}/cpu/add`, cpuData);

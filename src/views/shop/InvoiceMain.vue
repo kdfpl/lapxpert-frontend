@@ -1,24 +1,5 @@
 <template>
-    <div class="main-container">
-        <!-- Phần thống kê trạng thái -->
-        <div class="trang-thai-container">
-            <div class="trang-thai-group">
-                <span v-for="(soLuong, trangThai) in thongKeTrangThai" :key="trangThai" class="trang-thai-item"
-                    :class="getTrangThaiClass(trangThai)">
-                    {{ trangThai }}: <span class="so-luong">{{ soLuong }}</span> đơn
-                </span>
-            </div>
-        </div>
 
-        <!-- Phần bảng danh sách hóa đơn -->
-        <!-- <ElementListLayout title="DANH SÁCH HÓA ĐƠN" :image="bannerImage" :headers="headers" :data="hoaDons"
-            :link="'/hoa-don-crud'" :detailLink="'/chi-tiet-hoa-don'">
-
-
-        </ElementListLayout> -->
-        <!-- <CustomTable :data="hoaDons" :headers="headers" :deleteFunc="deleteHoaDonSanPham"
-            :detailLink="'/chi-tiet-hoa-don'" /> -->
-    </div>
 </template>
 
 
@@ -27,7 +8,7 @@
 import { ref, onMounted } from "vue";
 import HoaDonService from "@/api/service/HoaDonService.js";
 
-import bannerImage from "@/assets/img/GPUBanner.jpg";
+
 
 // Các biến header và hoaDons vẫn như trước
 const headers = ref([

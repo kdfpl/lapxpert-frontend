@@ -2,20 +2,17 @@
   <section class="flex h-full w-full flex-col">
     <!-- Header -->
     <section class="mb-5 flex w-full items-center justify-between">
-      <h1 class="text-3xl text-base-content font-bold">DANH SÁCH NHÂN VIÊN</h1>
+      <h1 class="text-3xl text-primary font-bold">DANH SÁCH NHÂN VIÊN</h1>
       <div class="flex gap-2">
-        <RouterLink
-          to="/admin/nhan-vien-crud"
-          class="btn btn-base-content btn-soft"
-        >
+        <RouterLink to="/admin/nhan-vien-crud" class="btn btn-primary btn-soft">
           <Icon icon="icon-park-outline:add-four" class="size-5" />
           Thêm nhân viên
         </RouterLink>
-        <button @click="exportToExcel" class="btn btn-base-content btn-soft">
+        <button @click="exportToExcel" class="btn btn-primary btn-soft">
           <Icon icon="ph:microsoft-excel-logo" class="size-5" />
           Xuất Excel
         </button>
-        <button class="btn btn-base-content btn-soft">
+        <button class="btn btn-primary btn-soft">
           <Icon icon="ph:microsoft-excel-logo" class="size-5" />
           Nhập Excel
         </button>
@@ -31,7 +28,7 @@
           >
             <Icon
               icon="streamline:search-visual-solid"
-              class="size-5 text-base-content"
+              class="size-5 text-primary"
             />
             <input
               v-model="search"
@@ -63,7 +60,7 @@
       <div class="join">
         <!-- Nút xóa bộ lọc -->
         <button
-          class="btn btn-soft btn-base-content join-item border-none"
+          class="btn btn-soft btn-primary join-item border-none"
           @click="resetFilters"
         >
           <Icon icon="line-md:filter-remove" class="size-5" />
@@ -103,9 +100,9 @@
 
     <!-- Empty state -->
     <div v-if="filteredData.length === 0" class="flex-1 empty-state">
-      <Icon icon="mdi:account-search" class="empty-icon" />
+      <Icon icon="mdi:account-search" class="empty-icon size-20" />
       <p>Không tìm thấy nhân viên phù hợp</p>
-      <button @click="resetFilters" class="btn btn-base-content">
+      <button @click="resetFilters" class="btn btn-primary">
         Đặt lại bộ lọc
       </button>
     </div>
@@ -178,7 +175,6 @@
                       class="size-4 text-red-500"
                     />
                   </button>
-
                   <button
                     @click="reviveNhanVien(nv)"
                     class="join-item btn btn-soft btn-sm"
@@ -223,7 +219,7 @@
           v-for="page in totalPages"
           :key="page"
           @click="setPage(page)"
-          :class="{ 'btn-base-content': currentPage === page }"
+          :class="{ 'btn-primary': currentPage === page }"
           class="btn btn-soft"
         >
           {{ page }}
@@ -243,7 +239,7 @@
 <script setup>
 import { storeToRefs } from "pinia";
 import { useNhanVienStore } from "@/stores/nhanvienstore";
-import { onMounted, watch } from "vue";
+import { onMounted, computed, watch } from "vue";
 import { Icon } from "@iconify/vue";
 
 const store = useNhanVienStore();

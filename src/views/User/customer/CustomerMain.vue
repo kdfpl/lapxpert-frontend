@@ -4,20 +4,20 @@
     <section
       class="mb-5 text-base-content flex w-full items-center justify-between"
     >
-      <h1 class="text-3xl font-bold">DANH SÁCH KHÁCH HÀNG</h1>
+      <h1 class="text-3xl text-primary font-bold">DANH SÁCH KHÁCH HÀNG</h1>
       <div class="flex gap-2">
         <RouterLink
           to="/admin/khach-hang-crud"
-          class="btn btn-base-content btn-soft"
+          class="btn btn-primary btn-soft"
         >
           <Icon icon="icon-park-outline:add-four" class="size-5" />
           Thêm khách hàng
         </RouterLink>
-        <button @click="exportToExcel" class="btn btn-base-content btn-soft">
+        <button @click="exportToExcel" class="btn btn-primary btn-soft">
           <Icon icon="ph:microsoft-excel-logo" class="size-5" />
           Xuất Excel
         </button>
-        <button class="btn btn-base-content btn-soft">
+        <button class="btn btn-primary btn-soft">
           <Icon icon="ph:microsoft-excel-logo" class="size-5" />
           Nhập Excel
         </button>
@@ -33,7 +33,7 @@
           >
             <Icon
               icon="streamline:search-visual-solid"
-              class="size-5 text-base-content"
+              class="size-5 text-primary"
             />
             <input
               v-model="search"
@@ -64,7 +64,7 @@
 
       <div class="join">
         <button
-          class="btn btn-soft btn-base-content join-item border-none"
+          class="btn btn-soft btn-primary join-item border-none"
           @click="resetFilters"
         >
           <Icon icon="line-md:filter-remove" class="size-5" />
@@ -104,9 +104,9 @@
 
     <!-- Empty state -->
     <div v-if="filteredData.length === 0" class="flex-1 empty-state">
-      <Icon icon="mdi:account-search" class="empty-icon" />
+      <Icon icon="mdi:account-search" class="empty-icon size-20" />
       <p>Không tìm thấy nhân viên phù hợp</p>
-      <button @click="resetFilters" class="btn btn-base-content">
+      <button @click="resetFilters" class="btn btn-primary">
         Đặt lại bộ lọc
       </button>
     </div>
@@ -224,7 +224,7 @@
           v-for="page in totalPages"
           :key="page"
           @click="setPage(page)"
-          :class="{ 'btn-base-content': currentPage === page }"
+          :class="{ 'btn-primary': currentPage === page }"
           class="btn btn-soft"
         >
           {{ page }}

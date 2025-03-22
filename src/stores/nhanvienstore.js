@@ -19,6 +19,7 @@ export const useNhanVienStore = defineStore("nhanVien", {
     citis: [],
     errorMessage: "",
     initialized: false,
+    
   }),
 
   getters: {
