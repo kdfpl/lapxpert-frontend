@@ -33,8 +33,8 @@ export interface SanPhamChiTiet {
 
 export interface DotGiamGiaChiTiet {
   id: number;
-  dotGiamGia: DotGiamGia;
-  sanPhamChiTiet: SanPhamChiTiet;
+  dotGiamGiaId: number;
+  sanPhamChiTietId: number;
   maDotChiTiet: string;
   ngayTao: string;
   tinhTrang: boolean;

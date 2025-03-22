@@ -19,7 +19,7 @@ import Admin from "../views/Admin.vue";
 import AddVoucher from "../views/voucher/AddVoucher.vue";
 import VoucherMain from "../views/voucher/VoucherMain.vue";
 import SaleoffMain from "../views/sale/SaleoffMain.vue";
-import AddSaleoff from "../views/sale/AddSaleoff.vue";
+import AddSaleoff from "../views/sale/SaleoffAdd.vue";
 import AddCpu from "../views/product/cpu/CpuAdd.vue";
 import CpuMain from "../views/product/cpu/CpuMain.vue";
 import RamAdd from "../views/product/ram/RamAdd.vue";
