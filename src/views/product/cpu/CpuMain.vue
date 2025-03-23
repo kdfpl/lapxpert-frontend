@@ -1,72 +1,120 @@
 <template>
   <section class="flex h-full w-full flex-col">
-    <!-- search&filter -->
-    <section class="mb-2 flex w-full items-center justify-end gap-2">
-      <label class="input input-ghost bg-base-200 custom-input grow">
-        <span
-          class="icon-[streamline--search-visual-solid] bg-primary size-5"
-        ></span>
-        <input type="search" placeholder="Tên cpu..." />
-      </label>
-      <div class="join">
-        <button class="btn btn-soft btn-primary join-item border-none">
-          <span class="icon-[line-md--filter-remove] size-5"></span>
+    <!-- Header -->
+    <section class="mb-5 flex w-full items-center justify-between">
+      <h1 class="text-3xl text-primary font-bold">DANH SÁCH CPU</h1>
+      <div class="flex gap-2">
+        <RouterLink to="/cpu/crud" class="btn btn-primary btn-soft">
+          <Icon icon="icon-park-outline:add-four" class="size-5" />
+          Thêm CPU
+        </RouterLink>
+        <button @click="exportToExcel" class="btn btn-primary btn-soft">
+          <Icon icon="ph:microsoft-excel-logo" class="size-5" />
+          Xuất Excel
         </button>
-        <select class="select custom-input">
-          <option selected disabled>Trạng thái</option>
-          <option>Hoạt động</option>
-          <option>Ngừng hoạt động</option>
-        </select>
-      </div>
-
-      <div class="join">
-        <button class="btn btn-soft btn-primary join-item border-none">
-          <span class="icon-[line-md--filter-remove] size-5"></span>
+        <button class="btn btn-primary btn-soft">
+          <Icon icon="ph:microsoft-excel-logo" class="size-5" />
+          Nhập Excel
         </button>
-        <select class="select custom-input join-item">
-          <option selected disabled>Loại</option>
-          <option>Hoạt động</option>
-          <option>Ngừng/Hết hạn</option>
-        </select>
       </div>
     </section>
 
-    <section class="mb-2 flex w-full items-center justify-end gap-2">
+    <!-- Search & Filter -->
+    <section class="mb-5 flex w-full items-center justify-end gap-2">
+      <div class="relative w-full">
+        <div class="flex">
+          <label
+            class="input input-ghost bg-base-200 focus-within:bg-base-200 grow focus-within:outline-none"
+          >
+            <Icon
+              icon="streamline:search-visual-solid"
+              class="size-5 text-primary"
+            />
+            <input
+              v-model="search"
+              @focus="handleInputFocus"
+              type="search"
+              placeholder="Tìm kiếm CPU..."
+              class="w-full"
+            />
+          </label>
+        </div>
+
+        <!-- Danh sách gợi ý -->
+        <ul
+          v-if="showSuggestions && searchSuggestions.length"
+          class="mt-1 z-10 bg-base-300 shadow-md w-full rounded-md border"
+          @click.outside="hideSuggestions"
+        >
+          <li
+            v-for="(suggestion, index) in searchSuggestions"
+            :key="index"
+            @click="selectSuggestion(suggestion)"
+            class="p-2 cursor-pointer hover:bg-base-200"
+          >
+            {{ suggestion }}
+          </li>
+        </ul>
+      </div>
+
       <div class="join">
-        <button class="btn btn-soft btn-primary join-item border-none">
-          <span class="icon-[line-md--filter-remove] size-5"></span>
+        <!-- Nút xóa bộ lọc -->
+        <button
+          class="btn btn-soft btn-primary join-item border-none"
+          @click="resetFilters"
+        >
+          <Icon icon="line-md:filter-remove" class="size-5" />
         </button>
-        <select class="select custom-input">
-          <option selected disabled>Hãng</option>
-          <option>Intel</option>
-          <option>AMD</option>
-          <option>Qualcomm</option>
+        <!-- Dropdown lọc trạng thái -->
+        <select
+          v-model="statusFilter"
+          @change="setStatusFilter(statusFilter)"
+          class="select w-fit custom-input"
+        >
+          <option value="all">Trạng thái</option>
+          <option value="active">Hoạt động</option>
+          <option value="inactive">Ngừng hoạt động</option>
         </select>
       </div>
     </section>
-    <!-- button -->
-    <section class="mb-2 flex w-full items-center justify-end gap-2">
-      <button class="btn btn-primary btn-soft">
-        <span class="icon-[ph--microsoft-excel-logo] size-5"></span>
-        Nhập Excel
+
+    <!-- Loading Overlay -->
+    <div
+      v-if="!store.initialized"
+      class="fixed inset-0 bg-base-300 bg-opacity-50 flex items-center justify-center z-[999]"
+    >
+      <div class="fixed inset-0 flex items-center justify-center bg-base-200">
+        <div class="relative flex items-center justify-center">
+          <div
+            class="absolute w-32 h-32 border-8 border-primary rounded-full animate-spin"
+          ></div>
+          <div
+            class="absolute w-28 h-28 border-8 border-secondary rounded-full animate-ping"
+          ></div>
+          <div
+            class="absolute w-24 h-24 border-8 border-accent rounded-full animate-pulse"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div v-if="filteredData.length === 0" class="flex-1 empty-state">
+      <Icon icon="mdi:cpu-64-bit" class="size-20" />
+      <p>Không tìm thấy CPU phù hợp</p>
+      <button @click="resetFilters" class="btn btn-primary">
+        Đặt lại bộ lọc
       </button>
-      <button class="btn btn-primary btn-soft">
-        <span class="icon-[ph--microsoft-excel-logo] size-5"></span>
-        Xuất Excel
-      </button>
-      <RouterLink to="/saleoff/add" class="btn btn-primary btn-soft">
-        <span class="icon-[icon-park-outline--add-four] size-5"></span>
-        Thêm CPU
-      </RouterLink>
-    </section>
-    <!-- table -->
-    <section class="relative flex-1">
+    </div>
+
+    <!-- Table -->
+    <section v-else class="relative flex-1">
       <div class="absolute inset-0 overflow-auto">
-        <table class="table-pin-rows table text-center">
-          <thead>
+        <table class="table-pin-rows table text-center w-full">
+          <thead class="text-base-content font-extrabold">
             <tr>
               <th>STT</th>
-              <th>Mã (SKU)</th>
+              <th>Mã CPU</th>
               <th>Hãng</th>
               <th>Tên</th>
               <th>Thế hệ</th>
@@ -78,44 +126,57 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>BX8071513900K</td>
-              <td>Intel</td>
-              <td>Core i9-13900K</td>
-              <td>13</td>
-              <td>24</td>
-              <td>32</td>
-              <td>3.0 - 5.8</td>
+            <tr
+              class="text-base-content"
+              v-for="(cpu, index) in paginatedData"
+              :key="cpu.id"
+            >
+              <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
+              <td>{{ cpu.maCpu }}</td>
+              <td>{{ cpu.hangCpu }}</td>
+              <td>{{ cpu.tenCpu }}</td>
+              <td>{{ cpu.theHeCpu }}</td>
+              <td>{{ cpu.soNhan }}</td>
+              <td>{{ cpu.soLuong }}</td>
+              <td>{{ cpu.xungNhip }}</td>
               <td>
-                <div class="badge badge-soft badge-success">Hoạt động</div>
+                <div
+                  v-if="cpu.tinhTrang"
+                  class="badge badge-soft badge-success"
+                >
+                  Hoạt động
+                </div>
+                <div v-if="!cpu.tinhTrang" class="badge badge-soft badge-error">
+                  Ngừng hoạt động
+                </div>
               </td>
               <td>
                 <div class="join">
-                  <button
-                    class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                  <RouterLink
+                    :to="`/cpu/crud/${cpu.id}`"
+                    class="join-item btn btn-soft btn-sm"
                   >
-                    <!-- Icon mặc định -->
-                    <span
-                      class="icon-[heroicons-outline--pencil-alt] size-4 group-hover:hidden"
-                    ></span>
-                    <!-- Icon khi hover -->
-                    <span
-                      class="icon-[heroicons-solid--pencil-alt] hidden size-4 group-hover:inline"
-                    ></span>
+                    <Icon
+                      icon="heroicons-outline:pencil-alt"
+                      class="size-4 text-base-content"
+                    />
+                  </RouterLink>
+                  <button
+                    @click="deleteCpu(cpu)"
+                    class="join-item btn btn-soft btn-sm"
+                    v-if="cpu.tinhTrang"
+                  >
+                    <Icon
+                      icon="material-symbols:delete-outline"
+                      class="size-4 text-red-500"
+                    />
                   </button>
                   <button
-                    @click=""
-                    class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                    @click="reviveCpu(cpu)"
+                    class="join-item btn btn-soft btn-sm"
+                    v-if="!cpu.tinhTrang"
                   >
-                    <!-- Icon mặc định -->
-                    <span
-                      class="icon-[mdi--bin-outline] size-4 group-hover:hidden"
-                    ></span>
-                    <!-- Icon khi hover -->
-                    <span
-                      class="icon-[mdi--bin] hidden size-4 group-hover:inline"
-                    ></span>
+                    <Icon icon="mdi:cpu-64-bit" class="size-4 text-green-500" />
                   </button>
                 </div>
               </td>
@@ -124,42 +185,106 @@
         </table>
       </div>
     </section>
-    <!-- pagination -->
-    <section class="flex justify-between">
-      <div class="flex items-center">
-        <label class="label">
-          <span>Xem</span>
-          <span class="badge badge-soft badge-primary">
-            <select class="focus:outline-none">
-              <option>5</option>
-              <option>10</option>
-              <option>20</option>
-            </select>
-          </span>
-          <span>dòng 1 trang</span>
-        </label>
-      </div>
 
-      <div class="join gap-2">
-        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
-          <span class="icon-[ep--arrow-left-bold]"></span>
+    <!-- Pagination -->
+    <section class="flex justify-between border-t pt-2 mt-4">
+      <div class="flex items-center">
+        <span>Xem</span>
+        <select
+          v-model="itemsPerPage"
+          class="ml-2 px-2 bg-base-300 py-1 border rounded"
+        >
+          <option :value="5">5</option>
+          <option :value="10">10</option>
+          <option :value="20">20</option>
+        </select>
+        <span class="ml-2">dòng 1 trang</span>
+      </div>
+      <div class="flex gap-2">
+        <button
+          @click="setPage(currentPage - 1)"
+          :disabled="currentPage === 1"
+          class="btn btn-soft"
+        >
+          <Icon icon="ep:arrow-left-bold" />
         </button>
-        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
-          1
+        <button
+          v-for="page in totalPages"
+          :key="page"
+          @click="setPage(page)"
+          :class="{ 'btn-primary': currentPage === page }"
+          class="btn btn-soft"
+        >
+          {{ page }}
         </button>
-        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
-          2
-        </button>
-        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
-          3
-        </button>
-        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
-          4
-        </button>
-        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
-          <span class="icon-[ep--arrow-right-bold]"></span>
+        <button
+          @click="setPage(currentPage + 1)"
+          :disabled="currentPage === totalPages"
+          class="btn btn-soft"
+        >
+          <Icon icon="ep:arrow-right-bold" />
         </button>
       </div>
     </section>
   </section>
 </template>
+
+<script setup>
+import { storeToRefs } from "pinia";
+import { useCpuStore } from "@/stores/cpustore";
+import { onMounted, computed, watch } from "vue";
+import { Icon } from "@iconify/vue";
+const store = useCpuStore();
+const {
+  currentPage,
+  itemsPerPage,
+  search,
+  filteredData,
+  totalPages,
+  paginatedData,
+  statusFilter,
+  searchSuggestions,
+  showSuggestions,
+} = storeToRefs(store);
+
+const {
+  initialize,
+  deleteCpu,
+  reviveCpu,
+  exportToExcel,
+  setPage,
+  setItemsPerPage,
+  setStatusFilter,
+  resetFilters,
+  toggleSuggestions,
+} = store;
+
+const selectSuggestion = (suggestion) => {
+  search.value = suggestion;
+  toggleSuggestions(false);
+};
+
+const hideSuggestions = () => {
+  toggleSuggestions(false);
+};
+
+const handleInputFocus = () => {
+  if (search.value.length > 0) {
+    toggleSuggestions(true);
+  }
+};
+
+watch(search, (newVal) => {
+  toggleSuggestions(newVal.length > 0);
+});
+
+watch(search, (newValue) => {
+  if (newValue === "") {
+    store.resetFilters();
+  }
+});
+
+onMounted(() => {
+  initialize();
+});
+</script>

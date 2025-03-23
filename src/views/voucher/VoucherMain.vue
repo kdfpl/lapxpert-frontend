@@ -1,135 +1,188 @@
 <template>
-  <div class="flex h-full w-full flex-col">
-    <!-- search&filter -->
-    <div class="mb-2 flex w-full items-center justify-end gap-2">
-      <label
-        class="input input-ghost bg-base-200 focus-within:bg-base-200 grow focus-within:outline-none"
-      >
-        <span
-          class="icon-[streamline--search-visual-solid] bg-primary size-5"
-        ></span>
-        <input type="search" placeholder="Tên phiếu giảm giá..." />
-      </label>
-
-      <label class="input custom-input w-fit">
-        <span class="label text-primary font-medium">Ngày bắt đầu</span>
-        <input type="datetime-local" />
-      </label>
-
-      <label class="input custom-input w-fit">
-        <span class="label text-primary font-medium">Ngày kết thúc</span>
-        <input type="datetime-local" />
-      </label>
-    </div>
-
-    <div class="mb-2 flex w-full items-center justify-end gap-2">
-      <div class="join">
-        <button class="btn btn-soft btn-primary join-item border-none">
-          <span class="icon-[line-md--filter-remove] size-5"></span>
+  <section class="flex h-full w-full flex-col">
+    <!-- Header -->
+    <section
+      class="mb-5 text-base-content flex w-full items-center justify-between"
+    >
+      <h1 class="text-3xl font-bold">DANH SÁCH PHIẾU GIẢM GIÁ</h1>
+      <div class="flex gap-2">
+        <RouterLink
+          to="/admin/nhan-vien-crud"
+          class="btn text-base-content btn-primary btn-soft"
+        >
+          <Icon icon="icon-park-outline:add-four" class="size-5" />
+          Thêm phiếu giảm giá
+        </RouterLink>
+        <button @click="exportToExcel" class="btn btn-base-content btn-soft">
+          <Icon icon="ph:microsoft-excel-logo" class="size-5" />
+          Xuất Excel
         </button>
-        <select class="select custom-input">
-          <option selected disabled>Trạng thái</option>
-          <option>Đang diễn ra</option>
-          <option>Ngừng/Hết hạn</option>
-        </select>
+        <button class="btn btn-base-content btn-soft">
+          <Icon icon="ph:microsoft-excel-logo" class="size-5" />
+          Nhập Excel
+        </button>
+      </div>
+    </section>
+
+    <!-- Search & Filter -->
+    <section class="mb-5 flex w-full items-center justify-end gap-2">
+      <div class="relative w-full">
+        <div class="flex">
+          <label
+            class="input input-ghost bg-base-200 focus-within:bg-base-200 grow focus-within:outline-none"
+          >
+            <Icon
+              icon="streamline:search-visual-solid"
+              class="size-5 text-primary"
+            />
+            <input
+              v-model="search"
+              @focus="handleInputFocus"
+              type="search"
+              placeholder="Tìm kiếm phiếu giảm giá..."
+              class="w-full"
+            />
+          </label>
+        </div>
+
+        <!-- Danh sách gợi ý -->
+        <ul
+          v-if="showSuggestions && searchSuggestions.length"
+          class="mt-1 z-10 bg-base-300 shadow-md w-full rounded-md border"
+          @click.outside="hideSuggestions"
+        >
+          <li
+            v-for="(suggestion, index) in searchSuggestions"
+            :key="index"
+            @click="selectSuggestion(suggestion)"
+            class="p-2 cursor-pointer hover:bg-base-200"
+          >
+            {{ suggestion }}
+          </li>
+        </ul>
       </div>
 
       <div class="join">
-        <button class="btn btn-soft btn-primary join-item border-none">
-          <span class="icon-[line-md--filter-remove] size-5"></span>
+        <!-- Nút xóa bộ lọc -->
+        <button
+          class="btn btn-soft btn-primary join-item border-none"
+          @click="resetFilters"
+        >
+          <Icon icon="line-md:filter-remove" class="size-5" />
         </button>
-        <select class="select custom-input join-item">
-          <option selected disabled>Loại</option>
-          <option>Hoạt động</option>
-          <option>Ngừng/Hết hạn</option>
+        <!-- Dropdown lọc trạng thái -->
+        <select
+          v-model="statusFilter"
+          @change="setStatusFilter(statusFilter)"
+          class="select w-fit custom-input"
+        >
+          <option value="all">Trạng thái</option>
+          <option value="active">Còn hiệu lực</option>
+          <option value="inactive">Hết hiệu lực</option>
         </select>
       </div>
+    </section>
 
-      <div class="join">
-        <button class="btn btn-soft btn-primary join-item border-none">
-          <span class="icon-[line-md--filter-remove] size-5"></span>
-        </button>
-        <div class="bg-base-200 join-item flex items-center gap-2">
-          <input
-            type="text"
-            placeholder="%"
-            class="input input-ghost join-item custom-input w-15"
-          />
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value="40"
-            class="range range-primary range-xs mr-3 w-100"
-          />
+    <!-- Loading Overlay -->
+    <div
+      v-if="!store.initialized"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+    >
+      <div class="fixed inset-0 flex items-center justify-center bg-base-200">
+        <div class="relative flex items-center justify-center">
+          <div
+            class="absolute w-32 h-32 border-8 border-primary rounded-full animate-spin"
+          ></div>
+          <div
+            class="absolute w-28 h-28 border-8 border-secondary rounded-full animate-ping"
+          ></div>
+          <div
+            class="absolute w-24 h-24 border-8 border-accent rounded-full animate-pulse"
+          ></div>
         </div>
       </div>
     </div>
 
-    <!-- button -->
-    <div class="mb-2 flex w-full items-center justify-end gap-2">
-      <button class="btn btn-primary btn-soft">
-        <span class="icon-[ph--microsoft-excel-logo] size-5"></span>
-        Nhập Excel
+    <!-- Empty state -->
+    <div v-if="filteredData.length === 0" class="flex-1 empty-state">
+      <Icon icon="mdi:account-search" class="empty-icon" />
+      <p>Không tìm thấy phiếu giảm giá phù hợp</p>
+      <button @click="resetFilters" class="btn btn-primary">
+        Đặt lại bộ lọc
       </button>
-      <button class="btn btn-primary btn-soft">
-        <span class="icon-[ph--microsoft-excel-logo] size-5"></span>
-        Xuất Excel
-      </button>
-      <RouterLink to="/voucher/add" class="btn btn-primary btn-soft">
-        <span class="icon-[icon-park-outline--add-four] size-5"></span>
-        Thêm phiếu giảm giá
-      </RouterLink>
     </div>
-
-    <!-- table -->
-    <div class="relative flex-1">
+    <!-- Table -->
+    <section v-else class="relative flex-1">
       <div class="absolute inset-0 overflow-auto">
-        <table class="table-pin-rows table text-center">
-          <thead>
+        <table class="table-pin-rows table text-center w-full">
+          <thead class="text-base-content font-extrabold">
             <tr>
               <th>STT</th>
-              <th>Tên</th>
-              <th>Giá trị</th>
-              <th>Thời gian</th>
+              <th>Mã Voucher</th>
+              <th>Loại</th>
+              <th>Giá Trị</th>
+              <th>Điều kiện</th>
+              <th>Ngày BĐ</th>
+              <th>Ngày KT</th>
+              <th>Số Lượng</th>
               <th>Trạng thái</th>
               <th>Thao tác</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Phieu1</td>
-              <td>100.000 đ</td>
-              <td>1/1/2025 - 1/1/2026</td>
+            <tr
+              class="text-base-content"
+              v-for="(nv, index) in paginatedData"
+              :key="nv.id"
+            >
+              <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
+              <td>{{ nv.maPhieuGiamGia }}</td>
+              <td>{{ nv.loaiGiamGia ? "Theo phần trăm" : "Theo tiền" }}</td>
+              <td>{{ nv.giaTriGiam }}</td>
+              <td>{{ nv.giaTriDonHangToiThieu }}</td>
+              <td>{{ nv.thoiGianBatDau }}</td>
+              <td>{{ nv.thoiGianKetThuc }}</td>
+              <td>{{ nv.soLuong }}</td>
               <td>
-                <div class="badge badge-soft badge-success">Đang diễn ra</div>
+                <div v-if="nv.trangThai" class="badge badge-soft badge-success">
+                  Còn hiệu lực
+                </div>
+                <div v-if="!nv.trangThai" class="badge badge-soft badge-error">
+                  Hết hiệu lực
+                </div>
               </td>
+
               <td>
                 <div class="join">
-                  <button
-                    class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                  <RouterLink
+                    :to="`/admin/crud-giam-gia/${nv.id}`"
+                    class="join-item btn btn-soft btn-sm"
                   >
-                    <!-- Icon mặc định -->
-                    <span
-                      class="icon-[heroicons-outline--pencil-alt] size-4 group-hover:hidden"
-                    ></span>
-                    <!-- Icon khi hover -->
-                    <span
-                      class="icon-[heroicons-solid--pencil-alt] hidden size-4 group-hover:inline"
-                    ></span>
+                    <Icon
+                      icon="heroicons-outline:pencil-alt"
+                      class="size-4 text-primary"
+                    />
+                  </RouterLink>
+                  <button
+                    @click="deletePhieuGiamGia(nv)"
+                    class="join-item btn btn-soft btn-sm"
+                    v-if="nv.tinhTrang"
+                  >
+                    <Icon
+                      icon="material-symbols:delete-outline"
+                      class="size-4 text-red-500"
+                    />
                   </button>
+
                   <button
-                    class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
+                    @click="revivePhieuGiamGia(nv)"
+                    class="join-item btn btn-soft btn-sm"
+                    v-if="!nv.tinhTrang"
                   >
-                    <!-- Icon mặc định -->
-                    <span
-                      class="icon-[mdi--bin-outline] size-4 group-hover:hidden"
-                    ></span>
-                    <!-- Icon khi hover -->
-                    <span
-                      class="icon-[mdi--bin] hidden size-4 group-hover:inline"
-                    ></span>
+                    <Icon
+                      icon="mdi:account-arrow-up-outline"
+                      class="size-4 text-green-500"
+                    />
                   </button>
                 </div>
               </td>
@@ -137,44 +190,108 @@
           </tbody>
         </table>
       </div>
-    </div>
-    <div class="divider divider-primary"></div>
-    <!-- pagination -->
-    <div class="flex justify-between">
-      <div class="flex items-center">
-        <label class="label">
-          <span>Xem</span>
-          <span class="badge badge-soft badge-primary">
-            <select class="focus:outline-none">
-              <option>5</option>
-              <option>10</option>
-              <option>20</option>
-            </select>
-          </span>
-          <span>dòng 1 trang</span>
-        </label>
-      </div>
+    </section>
 
-      <div class="join gap-2">
-        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
-          <span class="icon-[ep--arrow-left-bold]"></span>
+    <!-- Pagination -->
+    <section class="flex justify-between border-t pt-2 mt-4">
+      <div class="flex items-center">
+        <span>Xem</span>
+        <select
+          v-model="itemsPerPage"
+          class="ml-2 px-2 bg-base-300 py-1 border rounded"
+        >
+          <option :value="5">5</option>
+          <option :value="10">10</option>
+          <option :value="20">20</option>
+        </select>
+        <span class="ml-2">dòng 1 trang</span>
+      </div>
+      <div class="flex gap-2">
+        <button
+          @click="setPage(currentPage - 1)"
+          :disabled="currentPage === 1"
+          class="btn btn-soft"
+        >
+          <Icon icon="ep:arrow-left-bold" />
         </button>
-        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
-          1
+        <button
+          v-for="page in totalPages"
+          :key="page"
+          @click="setPage(page)"
+          :class="{ 'btn-primary': currentPage === page }"
+          class="btn btn-soft"
+        >
+          {{ page }}
         </button>
-        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
-          2
-        </button>
-        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
-          3
-        </button>
-        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
-          4
-        </button>
-        <button class="join-item btn btn-circle btn-sm btn-soft btn-primary">
-          <span class="icon-[ep--arrow-right-bold]"></span>
+        <button
+          @click="setPage(currentPage + 1)"
+          :disabled="currentPage === totalPages"
+          class="btn btn-soft"
+        >
+          <Icon icon="ep:arrow-right-bold" />
         </button>
       </div>
-    </div>
-  </div>
+    </section>
+  </section>
 </template>
+
+<script setup>
+import { storeToRefs } from "pinia";
+import { usePhieuGiamGiaStore } from "@/stores/phieugiamgiastore";
+import { onMounted, watch } from "vue";
+import { Icon } from "@iconify/vue";
+
+const store = usePhieuGiamGiaStore();
+const {
+  currentPage,
+  itemsPerPage,
+  search,
+  filteredData,
+  totalPages,
+  paginatedData,
+  statusFilter,
+  searchSuggestions,
+  showSuggestions,
+} = storeToRefs(store);
+
+const {
+  initialize,
+  deletePhieuGiamGia,
+  revivePhieuGiamGia,
+  exportToExcel,
+  setPage,
+  setItemsPerPage,
+  setStatusFilter,
+  resetFilters,
+  toggleSuggestions,
+} = store;
+
+const selectSuggestion = (suggestion) => {
+  search.value = suggestion;
+  toggleSuggestions(false);
+};
+
+const hideSuggestions = () => {
+  toggleSuggestions(false);
+};
+
+const handleInputFocus = () => {
+  if (search.value.length > 0) {
+    toggleSuggestions(true);
+  }
+};
+
+watch(search, (newVal) => {
+  toggleSuggestions(newVal.length > 0);
+});
+
+watch(search, (newValue) => {
+  if (newValue === "") {
+    store.resetFilters();
+  }
+});
+
+onMounted(() => {
+  initialize();
+});
+</script>

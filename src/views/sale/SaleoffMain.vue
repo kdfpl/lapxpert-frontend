@@ -1,18 +1,21 @@
-<script setup lang="ts">
+<script setup>
 import { onMounted, reactive, computed } from "vue";
-import { useDotGiamGiaStore } from "../../stores/dotgiamgiastore";
-import { useSanPhamStore } from "../../stores/sanphamstore";
-import { useSpctStore } from "../../stores/spctstore";
-import { deleteDotGiamGia } from "../../apis/graphql/dotgiamgia";
-import type { DotGiamGia } from "../../types/dotgiamgiatypes";
-import type { SPCT } from "../../types/spcttypes";
-import { updateDotGiamGiaChiTiet, updateDotGiamGia } from "../../apis/graphql/dotgiamgia"
+import { useDotGiamGiaStore } from "@/stores/dotgiamgiastore";
+import { useSanPhamStore } from "@/stores/sanphamstore";
+import { useSpctStore } from "@/stores/spctstore";
+import { deleteDotGiamGia } from "@/apis/graphql/dotgiamgia";
+import { DotGiamGia } from "@/types/dotgiamgiatypes";
+import { SPCT } from "@/types/spcttypes";
+import {
+  updateDotGiamGiaChiTiet,
+  updateDotGiamGia,
+} from "@/apis/graphql/dotgiamgia";
 
 const store = useDotGiamGiaStore();
 const sanPhamStore = useSanPhamStore();
 const sanPhamChiTietStore = useSpctStore();
-const selectedSanPhams = reactive<number[]>([]);
-const selectedSanPhamChiTietIds = reactive(new Set<number>());
+const selectedSanPhams = reactive([]);
+const selectedSanPhamChiTietIds = reactive(new Set());
 
 onMounted(async () => {
   await store.fetchDotGiamGiaList();
@@ -21,7 +24,7 @@ onMounted(async () => {
   await sanPhamChiTietStore.fetchSpct();
 });
 
-const deleteRow = async (id: number) => {
+const deleteRow = async (id) => {
   await deleteDotGiamGia(id);
 };
 
@@ -50,7 +53,7 @@ const thoiGianKetThucUTC = computed(() =>
 );
 
 // Utility function to format date
-const formatDateForInput = (dateString: string) => {
+const formatDateForInput = (dateString) => {
   const date = new Date(dateString);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
@@ -62,7 +65,7 @@ const formatDateForInput = (dateString: string) => {
 };
 
 // Khi checkbox thay đổi, thêm hoặc xóa sản phẩm khỏi danh sách
-const toggleSanPhamSelection = (sanPhamId: number) => {
+const toggleSanPhamSelection = (sanPhamId) => {
   const index = selectedSanPhams.indexOf(sanPhamId);
   if (index === -1) {
     selectedSanPhams.push(sanPhamId);
@@ -71,7 +74,7 @@ const toggleSanPhamSelection = (sanPhamId: number) => {
   }
 };
 
-const toggleSanPhamChiTiet = (id: number) => {
+const toggleSanPhamChiTiet = (id) => {
   if (selectedSanPhamChiTietIds.has(id)) {
     selectedSanPhamChiTietIds.delete(id);
   } else {
@@ -87,7 +90,7 @@ const selectedSanPhamChiTietList = computed(() => {
 });
 
 const isDetailVisible = computed(() => selectedSanPhams.length > 0);
-const openModal = (dotGiamGia: DotGiamGia) => {
+const openModal = (dotGiamGia) => {
   console.log("Opening modal with DotGiamGia:", dotGiamGia);
   dotGiamGiaData.id = dotGiamGia.id;
   dotGiamGiaData.maDot = dotGiamGia.maDot;
@@ -104,9 +107,8 @@ const openModal = (dotGiamGia: DotGiamGia) => {
 
   dotGiamGiaData.trangThai = dotGiamGia.trangThai;
 
-
   // Open the modal
-  const modal = document.getElementById("saleoff_details") as HTMLDialogElement;
+  const modal = document.getElementById("saleoff_details");
   if (modal) {
     modal.showModal();
   }
@@ -206,7 +208,7 @@ const submitForm = async () => {
         <span class="icon-[ph--microsoft-excel-logo] size-5"></span>
         Xuất Excel
       </button>
-      <RouterLink to="/saleoff/add" class="btn btn-primary btn-soft">
+      <RouterLink to="/saleoff/crud" class="btn btn-primary btn-soft">
         <span class="icon-[icon-park-outline--add-four] size-5"></span>
         Thêm đợt giảm giá
       </RouterLink>
@@ -330,56 +332,62 @@ const submitForm = async () => {
 
     <!-- dialog -->
     <dialog id="saleoff_details" class="modal">
-      <div class="modal-box max-h-[800px] w-11/12 max-w-7xl">
-        <h1 class="mb-4 text-2xl font-bold">Update Đợt Giảm Giá</h1>
+      <div class="modal-box h-[800px] w-11/12 max-w-7xl">
+        <h1 class="mb-4 text-2xl font-bold">Chi tiết đợt giảm giá</h1>
         <!-- div-form -->
-        <section class="mb-4 flex h-[700px] items-center">
+        <section class="mb-4 flex flex-col items-center">
           <!-- form -->
           <div
-            class="rounded-box bg-base-200 border-base-300 h-full flex-1 border px-4 pb-4"
+            class="rounded-box bg-base-200 border-base-300 h-fit w-full border p-4"
           >
             <fieldset class="fieldset w-full">
-              <legend class="fieldset-legend">Thêm đợt giảm giá</legend>
-
-              <label class="fieldset-label">ID</label>
-              <input
-                v-model="dotGiamGiaData.id"
-                type="number"
-                class="input w-full"
-                readonly
-              />
-
-              <label class="fieldset-label">Mã</label>
-              <input
-                v-model="dotGiamGiaData.maDot"
-                type="text"
-                class="input w-full"
-                placeholder="KM100..."
-              />
-
-              <label class="fieldset-label">Tên</label>
-              <input
-                v-model="dotGiamGiaData.tenDot"
-                type="text"
-                class="input w-full"
-                placeholder="Flash Sale, Black Friday,..."
-              />
-
-              <label class="fieldset-label">Giá trị giảm</label>
-              <input
-                v-model="dotGiamGiaData.giaTriGiam"
-                type="number"
-                class="input w-full"
-                placeholder="100.000,..."
-              />
-
-              <label class="fieldset-label">Loại</label>
-              <input
-                v-model="dotGiamGiaData.loaiGiamGia"
-                type="text"
-                class="input w-full"
-                placeholder="Name"
-              />
+              <div class="flex gap-4">
+                <fieldset class="fieldset flex-1">
+                  <label class="fieldset-label">ID</label>
+                  <input
+                    v-model="dotGiamGiaData.id"
+                    type="number"
+                    class="input w-full"
+                    readonly
+                  />
+                </fieldset>
+                <fieldset class="fieldset flex-1">
+                  <label class="fieldset-label">Mã</label>
+                  <input
+                    v-model="dotGiamGiaData.maDot"
+                    type="text"
+                    class="input w-full"
+                    placeholder="KM100..."
+                  />
+                </fieldset>
+                <fieldset class="fieldset flex-1">
+                  <label class="fieldset-label">Tên</label>
+                  <input
+                    v-model="dotGiamGiaData.tenDot"
+                    type="text"
+                    class="input w-full"
+                    placeholder="Flash Sale, Black Friday,..."
+                  />
+                </fieldset>
+                <fieldset class="fieldset flex-1">
+                  <label class="fieldset-label">Giá trị giảm</label>
+                  <input
+                    v-model="dotGiamGiaData.giaTriGiam"
+                    type="number"
+                    class="input w-full"
+                    placeholder="100.000,..."
+                  />
+                </fieldset>
+                <fieldset class="fieldset flex-1">
+                  <label class="fieldset-label">Loại</label>
+                  <input
+                    v-model="dotGiamGiaData.loaiGiamGia"
+                    type="text"
+                    class="input w-full"
+                    placeholder="Name"
+                  />
+                </fieldset>
+              </div>
 
               <label class="fieldset-label">Mô tả</label>
               <textarea
@@ -406,13 +414,17 @@ const submitForm = async () => {
                     class="input w-full"
                   />
                 </fieldset>
+                <fieldset class="fieldset flex-1">
+                  <label class="fieldset-label">Tình trạng</label>
+                  <select
+                    class="select w-full"
+                    v-model="dotGiamGiaData.trangThai"
+                  >
+                    <option selected>Đang diễn ra</option>
+                    <option>Kết thúc</option>
+                  </select>
+                </fieldset>
               </div>
-
-              <label class="fieldset-label">Tình trạng</label>
-              <select class="select w-full" v-model="dotGiamGiaData.trangThai">
-                <option selected>Đang diễn ra</option>
-                <option>Kết thúc</option>
-              </select>
 
               <button @click="submitForm" class="btn btn-primary btn-soft mt-4">
                 Thêm
@@ -420,42 +432,59 @@ const submitForm = async () => {
             </fieldset>
           </div>
 
-          <div class="divider divider-primary divider-horizontal"></div>
+          <div class="divider divider-primary"></div>
 
           <!-- div-table -->
           <div
-            class="rounded-box bg-base-200 border-base-300 flex h-full flex-1 flex-col border p-4"
+            class="rounded-box bg-base-200 border-base-300 flex h-fit w-full flex-col border p-4"
           >
             <span class="text-base-content mb-2 text-2xl font-bold"
-              >Sản phẩm</span
+              >Sản phẩm áp dụng</span
             >
             <!-- table-san-pham -->
             <div class="mb-2 max-h-[600px] w-full overflow-auto">
               <table class="table-pin-rows table w-full">
                 <thead>
                   <tr>
-                    <th class="w-[20px]">
-                      <input type="checkbox" class="checkbox" />
-                    </th>
-                    <th class="w-[20px]">STT</th>
-                    <th>Tên</th>
+                    <th class="w-[30px]"></th>
+                    <th>#</th>
+                    <th>Tên Sản Phẩm</th>
+                    <th>RAM</th>
+                    <th>Màn</th>
+                    <th>Pin</th>
+                    <th>Màu</th>
+                    <th>GPU</th>
+                    <th>CPU</th>
+                    <th>Drive</th>
+                    <th>Seri</th>
+                    <th>Giá bán</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr
-                    v-for="(sanPham, index) in sanPhamStore.sanPhamList"
-                    :key="sanPham.id"
+                    v-for="(spct, index) in selectedSanPhamChiTietList"
+                    :key="spct.id"
                   >
+                    <td>{{ index + 1 }}</td>
                     <td>
                       <input
                         type="checkbox"
                         class="checkbox"
-                        :checked="selectedSanPhams.includes(sanPham.id)"
-                        @change="toggleSanPhamSelection(sanPham.id)"
+                        :value="spct.id"
+                        @change="toggleSanPhamChiTiet(spct.id)"
                       />
                     </td>
-                    <td>{{ index + 1 }}</td>
-                    <td>{{ sanPham.tenSp }}</td>
+                    <td>{{ spct.maChiTietSp }}</td>
+                    <td>{{ spct.sanPham.tenSp }}</td>
+                    <td>{{ spct.ram.loaiRam.tenLoaiRam }}</td>
+                    <td>{{ spct.manHinh.id }}</td>
+                    <td>{{ spct.pin.maPin }}</td>
+                    <td>{{ spct.mau.tenMau }}</td>
+                    <td>{{ spct.gpu.tenGpu }}</td>
+                    <td>{{ spct.cpu.tenCpu }}</td>
+                    <td>{{ spct.ocung.maOCung }}</td>
+                    <td>{{ spct.seri.maSeri }}</td>
+                    <td>{{ spct.giaBan }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -487,21 +516,6 @@ const submitForm = async () => {
                   class="join-item btn btn-circle btn-sm btn-soft btn-primary"
                 >
                   1
-                </button>
-                <button
-                  class="join-item btn btn-circle btn-sm btn-soft btn-primary"
-                >
-                  2
-                </button>
-                <button
-                  class="join-item btn btn-circle btn-sm btn-soft btn-primary"
-                >
-                  3
-                </button>
-                <button
-                  class="join-item btn btn-circle btn-sm btn-soft btn-primary"
-                >
-                  4
                 </button>
                 <button
                   class="join-item btn btn-circle btn-sm btn-soft btn-primary"
@@ -602,21 +616,6 @@ const submitForm = async () => {
               <button
                 class="join-item btn btn-circle btn-sm btn-soft btn-primary"
               >
-                2
-              </button>
-              <button
-                class="join-item btn btn-circle btn-sm btn-soft btn-primary"
-              >
-                3
-              </button>
-              <button
-                class="join-item btn btn-circle btn-sm btn-soft btn-primary"
-              >
-                4
-              </button>
-              <button
-                class="join-item btn btn-circle btn-sm btn-soft btn-primary"
-              >
                 <span class="icon-[ep--arrow-right-bold]"></span>
               </button>
             </div>
@@ -629,4 +628,3 @@ const submitForm = async () => {
     </dialog>
   </section>
 </template>
-

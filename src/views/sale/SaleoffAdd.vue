@@ -1,16 +1,16 @@
-<script setup lang="ts">
+<script setup>
 import { onMounted, reactive, computed } from "vue";
-import { useSanPhamStore } from "../../stores/sanphamstore";
-import { useSpctStore } from "../../stores/spctstore";
+import { useSanPhamStore } from "@/stores/sanphamstore";
+import { useSpctStore } from "@/stores/spctstore";
 import {
   createDotGiamGia,
   createDotGiamGiaChiTiet,
-} from "../../apis/graphql/dotgiamgia";
+} from "@/apis/graphql/dotgiamgia";
 
 const sanPhamStore = useSanPhamStore();
 const sanPhamChiTietStore = useSpctStore();
-const selectedSanPhams = reactive<number[]>([]);
-const selectedSanPhamChiTietIds = reactive(new Set<number>());
+const selectedSanPhams = reactive([]);
+const selectedSanPhamChiTietIds = reactive(new Set());
 
 onMounted(() => {
   sanPhamStore.fetchSanPhamList();
@@ -40,7 +40,7 @@ const thoiGianKetThucUTC = computed(() =>
     : "",
 );
 // Khi checkbox thay đổi, thêm hoặc xóa sản phẩm khỏi danh sách
-const toggleSanPhamSelection = (sanPhamId: number) => {
+const toggleSanPhamSelection = (sanPhamId) => {
   const index = selectedSanPhams.indexOf(sanPhamId);
   if (index === -1) {
     selectedSanPhams.push(sanPhamId);
@@ -49,7 +49,7 @@ const toggleSanPhamSelection = (sanPhamId: number) => {
   }
 };
 
-const toggleSanPhamChiTiet = (id: number) => {
+const toggleSanPhamChiTiet = (id) => {
   if (selectedSanPhamChiTietIds.has(id)) {
     selectedSanPhamChiTietIds.delete(id);
   } else {

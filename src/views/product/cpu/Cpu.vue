@@ -5,7 +5,7 @@
       class="tabs tabs-box mb-2 flex w-full justify-start gap-2"
     >
       <RouterLink to="/cpu" role="tab" class="tab text-primary" :class="{ 'tab-active': $route.path === '/cpu' }">Danh sách cpu</RouterLink>
-      <RouterLink to="/cpu/add" role="tab" class="tab text-primary" :class="{ 'tab-active': $route.path === '/cpu/add' }">Thêm mới</RouterLink>
+      <RouterLink to="/cpu/crud" role="tab" class="tab text-primary" :class="{ 'tab-active': $route.path === '/cpu/crud' }">Thêm mới</RouterLink>
     </div>
     <div class="relative flex-1">
       <div class="absolute inset-0 overflow-auto">

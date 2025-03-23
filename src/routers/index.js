@@ -16,10 +16,8 @@ import Profile from "../views/user/Profile.vue";
 import Saleoff from "../views/sale/Saleoff.vue";
 import DataDisplay from "../views/DataDisplay.vue";
 import Admin from "../views/Admin.vue";
-import AddVoucher from "../views/voucher/AddVoucher.vue";
 import VoucherMain from "../views/voucher/VoucherMain.vue";
 import SaleoffMain from "../views/sale/SaleoffMain.vue";
-import AddSaleoff from "../views/sale/SaleoffAdd.vue";
 import AddCpu from "../views/product/cpu/CpuAdd.vue";
 import CpuMain from "../views/product/cpu/CpuMain.vue";
 import RamAdd from "../views/product/ram/RamAdd.vue";
@@ -35,9 +33,14 @@ import ProductAdd from "../views/product/laptop/ProductAdd.vue";
 import Employee from "../views/user/employee/Employee.vue";
 import EmployeeMain from "../views/user/employee/EmployeeMain.vue";
 import ProductDetail from "../views/product/laptop/ProductVariant.vue";
-import CustomerCRUD from "../views/user/customer/CustomerCRUD.vue";
-import EmployeeCRUD from "../views/user/employee/EmployeeCRUD.vue";
 import CustomerMain from "../views/user/customer/CustomerMain.vue";
+import EmployeeAdd from "../views/user/employee/EmployeeAdd.vue";
+import CustomerAdd from "../views/user/customer/CustomerAdd.vue";
+import SaleoffAdd from "../views/sale/SaleoffAdd.vue";
+import Battery from "../views/product/battery/Battery.vue";
+import BatteryMain from "../views/product/battery/BatteryMain.vue";
+import VoucherAdd from "../views/voucher/VoucherAdd.vue";
+import ProductVariant from "../views/product/laptop/ProductVariant.vue";
 
 const routes = [
   {
@@ -66,9 +69,10 @@ const routes = [
             component: EmployeeMain,
           },
           {
-            path: "/employee/crud",
-            name: "EmployeeCRUD",
-            component: EmployeeCRUD,
+            path: "/employee/crud/:id?",
+            name: "EmployeeCrud",
+            component: () => import("../views/user/employee/EmployeeAdd.vue"),
+            props: true,
           },
         ],
       },
@@ -83,9 +87,10 @@ const routes = [
             component: CustomerMain,
           },
           {
-            path: "/customer/crud",
-            name: "CustomerCRUD",
-            component: CustomerCRUD,
+            path: "/customer/crud/:id?",
+            name: "CustomerCrud",
+            component: () => import("../views/user/customer/CustomerAdd.vue"),
+            props: true,
           },
         ],
       },
@@ -110,9 +115,9 @@ const routes = [
             component: SaleoffMain,
           },
           {
-            path: "/saleoff/add",
-            name: "AddSaleoff",
-            component: AddSaleoff,
+            path: "/saleoff/crud",
+            name: "SaleoffCrud",
+            component: SaleoffAdd,
           },
         ],
       },
@@ -127,9 +132,9 @@ const routes = [
             component: VoucherMain,
           },
           {
-            path: "/voucher/add",
-            name: "AddVoucher",
-            component: AddVoucher,
+            path: "/voucher/crud",
+            name: "VoucherCrud",
+            component: VoucherAdd,
           },
         ],
       },
@@ -144,15 +149,16 @@ const routes = [
             component: ProductMain,
           },
           {
-            path: "/product/add",
-            name: "ProductAdd",
+            path: "/product/crud",
+            name: "ProductCrud",
             component: ProductAdd,
           },
           {
-            path: "/product/variant",
+            path: "/product/variant/:id?",
             name: "ProductVariant",
-            component: ProductDetail,
-          }
+            component: () => import("../views/product/laptop/ProductVariant.vue"),
+            props: true,
+          },
         ],
       },
       {
@@ -166,9 +172,10 @@ const routes = [
             component: CpuMain,
           },
           {
-            path: "/cpu/add",
-            name: "CpuAdd",
-            component: AddCpu,
+            path: "/cpu/crud/:id?",
+            name: "CpuCrud",
+            component: () => import("../views/product/cpu/CpuAdd.vue"),
+            props: true,
           },
         ],
       },
@@ -183,9 +190,10 @@ const routes = [
             component: RamMain,
           },
           {
-            path: "/ram/add",
-            name: "RamAdd",
-            component: RamAdd,
+            path: "/ram/crud/:id?",
+            name: "RamCrud",
+            component: () => import("../views/product/ram/RamAdd.vue"),
+            props: true,
           },
         ],
       },
@@ -200,9 +208,10 @@ const routes = [
             component: GpuMain,
           },
           {
-            path: "/gpu/add",
-            name: "GpuAdd",
-            component: GpuAdd,
+            path: "/gpu/crud/:id?",
+            name: "GpuCrud",
+            component: () => import("../views/product/gpu/GpuAdd.vue"),
+            props: true,
           },
         ],
       },
@@ -217,9 +226,10 @@ const routes = [
             component: DiskMain,
           },
           {
-            path: "/disk/add",
-            name: "DiskAdd",
-            component: DiskAdd,
+            path: "/disk/crud/:id?",
+            name: "DiskCrud",
+            component: () => import("../views/product/disk/DiskAdd.vue"),
+            props: true,
           },
         ],
       },
@@ -234,9 +244,28 @@ const routes = [
             component: DisplayMain,
           },
           {
-            path: "/display/add",
-            name: "DisplayAdd",
-            component: DisplayAdd,
+            path: "/display/crud/:id?",
+            name: "DisplayCrud",
+            component: () => import("../views/product/display/DisplayAdd.vue"),
+            props: true,
+          },
+        ],
+      },
+      {
+        path: "/battery",
+        name: "battery",
+        component: Battery,
+        children: [
+          {
+            path: "",
+            name: "BatteryDefault",
+            component: BatteryMain,
+          },
+          {
+            path: "/battery/crud/:id?",
+            name: "BatteryCrud",
+            component: () => import("../views/product/battery/BatteryAdd.vue"),
+            props: true,
           },
         ],
       },
@@ -244,6 +273,14 @@ const routes = [
         path: "/color",
         name: "Color",
         component: Color,
+        children: [
+          {
+            path: "/color/crud/:id?",
+            name: "ColorCrud",
+            component: () => import("../views/product/color/Color.vue"),
+            props: true,
+          },
+        ]
       },
     ],
   },

@@ -6,7 +6,7 @@
     >
       <RouterLink to="/product" role="tab" class="tab text-primary" :class="{ 'tab-active': $route.path === '/product' }">Danh sách sản phẩm</RouterLink>
       <RouterLink to="/product/variant" role="tab" class="tab text-primary" :class="{ 'tab-active': $route.path === '/product/variant' }">Danh sách phiên bản sản phẩm</RouterLink>
-      <RouterLink to="/product/add" role="tab" class="tab text-primary" :class="{ 'tab-active': $route.path === '/product/add' }">Thêm mới</RouterLink>
+      <RouterLink to="/product/crud" role="tab" class="tab text-primary" :class="{ 'tab-active': $route.path === '/product/crud' }">Thêm mới</RouterLink>
     </div>
     <div class="relative flex-1">
       <div class="absolute inset-0 overflow-auto">
