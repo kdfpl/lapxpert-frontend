@@ -105,12 +105,12 @@ const isDetailVisible = computed(() => selectedSanPhams.length > 0);
 <template>
   <section class="flex h-full w-full flex-col">
     <!-- div-form -->
-    <section class="mb-4 flex h-[650px] w-full items-center">
+    <section class="my-4 flex h-[650px] w-full items-center">
       <!-- form -->
       <div
-        class="rounded-box bg-base-200 border-base-300 flex-1 border px-4 pb-4"
+        class="rounded-box bg-base-200 border-base-300 flex-1 border h-full"
       >
-        <fieldset class="fieldset w-full">
+        <fieldset class="fieldset w-full px-5">
           <legend class="fieldset-legend">Thêm đợt giảm giá</legend>
 
           <label class="fieldset-label">Mã</label>

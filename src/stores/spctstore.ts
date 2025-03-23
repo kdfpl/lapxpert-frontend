@@ -11,7 +11,7 @@ import {
   getAllMauSac,
   getAllSeri,
 } from "../apis/services/spctservice";
-import type { CPU, GPU, Ram, LoaiRam, ManHinh, OCung, Pin, MauSac, Seri, SPCT } from "../types/spcttypes";
+import type { CPU, GPU, Ram, LoaiRam, ManHinh, OCung, Pin, Mau, Seri, SPCT } from "../types/spcttypes";
 
 export const useSpctStore = defineStore("spctStore", {
   state: () => ({
@@ -23,7 +23,7 @@ export const useSpctStore = defineStore("spctStore", {
     manHinhList: [] as ManHinh[],
     ocungList: [] as OCung[],
     pinList: [] as Pin[],
-    mauSacList: [] as MauSac[],
+    mauSacList: [] as Mau[],
     seriList: [] as Seri[],
     loading: false,
     error: null as string | null,
