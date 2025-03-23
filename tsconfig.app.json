@@ -10,5 +10,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "src/apis/services/chucvu.js", "src/apis/services/khachhang.js", "src/routers/index.ts", "src/apis/services/sanphamservice.ts", "src/apis/services/chucvuservice.js", "src/apis/services/diachiservice.js", "src/apis/services/hoadonservice.js", "src/apis/services/khachhangservice.js", "src/apis/services/nhanvienservice.js", "src/stores/khachhangstore.js"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "src/apis/services/chucvu.js", "src/apis/services/khachhang.js", "src/routers/index.ts", "src/apis/services/sanphamservice.ts", "src/apis/services/chucvuservice.js", "src/apis/services/diachiservice.js", "src/apis/services/hoadonservice.js", "src/apis/services/khachhangservice.js", "src/apis/services/nhanvienservice.js", "src/stores/khachhangstore.js", "src/stores/sanphamstore.js"]
 }

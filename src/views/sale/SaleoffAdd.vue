@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, reactive, computed } from "vue";
-import { useSanPhamStore } from "../../stores/sanphamstore";
+import { useSanPhamStore } from "../../stores/sanphamstore.js";
 import { useSpctStore } from "../../stores/spctstore";
 import {
   createDotGiamGia,

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { useSpctStore } from "../../../stores/spctstore";
+import { useSanPhamStore } from "../../../stores/sanphamstore.js";
 
-const store = useSpctStore();
+const store = useSanPhamStore();
 
 onMounted(() => {
   store.fetchSpct();

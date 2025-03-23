@@ -36,7 +36,7 @@ import Employee from "../views/user/employee/Employee.vue";
 import EmployeeMain from "../views/user/employee/EmployeeMain.vue";
 import ProductDetail from "../views/product/laptop/ProductVariant.vue";
 import CustomerCRUD from "../views/user/customer/CustomerCRUD.vue";
-import EmployeeCRUD from "../views/user/employee/EmployeeCRUD.vue";
+import EmployeeCRUD from "../views/user/employee/EmployeeAdd.vue";
 import CustomerMain from "../views/user/customer/CustomerMain.vue";
 
 const routes = [

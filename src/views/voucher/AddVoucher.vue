@@ -1,269 +1,211 @@
 <template>
-  <div class="flex h-full w-full flex-col">
-    <!-- div-form -->
-    <div class="flex h-[650px] w-full items-center mb-4">
-      <!-- form -->
-      <div class="rounded-box bg-base-200 border-base-300 flex-1 border px-4 pb-4">
+  <section class="flex h-full w-full flex-col max-h-[500px] overflow-y-auto">
+    <section class="mb-4 flex h-[650px] w-full items-center">
+      <div class="rounded-box flex-1 border px-4 pb-4">
         <fieldset class="fieldset w-full">
-          <legend class="fieldset-legend">Thêm phiếu giảm giá</legend>
+          <legend class="fieldset-legend">Thêm Phiếu Giảm Giá</legend>
 
-          <label class="fieldset-label">Mã</label>
-          <input type="text" class="input w-full" placeholder="KM100..." />
+          <label class="fieldset-label">Mã Voucher:</label>
+          <input v-model="voucher.maPhieuGiamGia" type="text" class="input w-full" placeholder="Mã voucher..." />
 
-          <label class="fieldset-label">Giá trị giảm</label>
-          <input
-            type="text"
-            class="input w-full"
-            placeholder="100.000VND, 20%,..."
-          />
+          <label class="fieldset-label">Loại Giảm Giá:</label>
+          <select v-model="voucher.loaiGiamGia" class="input w-full">
+            <option :value="true">Theo tiền</option>
+            <option :value="false">Theo %</option>
+          </select>
 
-          <label class="fieldset-label">Giá trị đơn hàng tối thiểu</label>
-          <input
-            type="text"
-            class="input w-full"
-            placeholder="100.000VND,..."
-          />
+          <label class="fieldset-label">Giá Trị:</label>
+          <input v-model="voucher.giaTriGiam" type="number" class="input w-full" placeholder="100.000..." />
 
-          <label class="fieldset-label">Loại</label>
-          <input type="text" class="input w-full" placeholder="Name" />
-
-          <label class="fieldset-label">Số lượng</label>
-          <input type="number" class="input w-full" placeholder="" />
-
-          <label class="fieldset-label">Mô tả</label>
-          <textarea class="textarea w-full" placeholder="..."></textarea>
+          <label class="fieldset-label">Điều Kiện:</label>
+          <input v-model="voucher.giaTriDonHangToiThieu" type="number" class="input w-full" placeholder="100.000..." />
 
           <div class="flex gap-4">
             <fieldset class="fieldset flex-1">
-              <label class="fieldset-label">Ngày bắt đầu</label>
-              <input type="datetime-local" class="input w-full" />
+              <label class="fieldset-label">Ngày Bắt Đầu</label>
+              <input v-model="voucher.thoiGianBatDau" type="date" class="input w-full" />
             </fieldset>
 
             <fieldset class="fieldset flex-1">
-              <label class="fieldset-label">Ngày kết thúc</label>
-              <input type="datetime-local" class="input w-full" />
+              <label class="fieldset-label">Ngày Kết Thúc</label>
+              <input v-model="voucher.thoiGianKetThuc" type="date" class="input w-full" />
             </fieldset>
           </div>
 
-          <button class="btn btn-primary btn-soft mt-4">Thêm</button>
+          <label v-if="!isCustomerSelectionEnabled" class="fieldset-label">Số Lượng:</label>
+          <input v-if="!isCustomerSelectionEnabled" v-model="voucher.soLuong" type="number" class="input w-full" placeholder="Số lượng..." />
+
+          <label class="fieldset-label flex items-center gap-2">
+            <input type="checkbox" v-model="isCustomerSelectionEnabled" @change="handlePrivateSelection" />
+            Riêng tư (Chỉ dành cho khách hàng được chọn)
+          </label>
+
+          <button @click="submitVoucher" class="btn btn-primary btn-soft mt-4">Thêm</button>
+          <button @click="cancel" class="btn btn-error btn-soft mt-4">Hủy</button>
         </fieldset>
       </div>
 
       <div class="divider divider-primary divider-horizontal"></div>
 
-      <!-- div-table -->
-      <div
-        class="rounded-box bg-base-200 border-base-300 flex h-full flex-1 flex-col border p-4"
-      >
-        <!-- table -->
-        <div class="max-h-[600px] w-full overflow-auto mb-2">
-          <table class="table-pin-rows table w-full text-center">
+      <div v-if="isCustomerSelectionEnabled" class="rounded-box bg-base-200 border-base-300 flex h-full flex-1 flex-col border p-4">
+        <span class="text-base-content mb-2 text-2xl font-bold">Chọn Khách Hàng</span>
+        <div class="mb-2 max-h-[600px] w-full overflow-auto">
+          <table class="table w-full">
             <thead>
               <tr>
-                <th>STT</th>
-                <th>Tên</th>
-                <th>Giá trị</th>
-                <th>Thời gian</th>
-                <th>Trạng thái</th>
-                <th>Thao tác</th>
+                <th class="w-[20px]">
+                  <input type="checkbox" class="checkbox" @change="toggleAllCustomers" />
+                </th>
+                <th class="w-[20px]">STT</th>
+                <th>Tên Khách Hàng</th>
+                <th>Email</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Phieu1</td>
-                <td>100.000 đ</td>
-                <td>1/1/2025 - 1/1/2026</td>
+              <tr v-for="(customer, index) in customerList" :key="customer.id">
                 <td>
-                  <div class="badge badge-soft badge-success">Đang diễn ra</div>
+                  <input type="checkbox" class="checkbox" :checked="selectedCustomers.includes(customer.id)"
+                    @change="toggleCustomerSelection(customer.id)" />
                 </td>
-                <td>
-                  <div class="join">
-                    <button
-                      class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
-                    >
-                      <span
-                        class="icon-[heroicons-outline--pencil-alt] size-4 group-hover:hidden"
-                      ></span>
-                      <span
-                        class="icon-[heroicons-solid--pencil-alt] hidden size-4 group-hover:inline"
-                      ></span>
-                    </button>
-                    <button
-                      class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
-                    >
-                      <span
-                        class="icon-[mdi--bin-outline] size-4 group-hover:hidden"
-                      ></span>
-                      <span
-                        class="icon-[mdi--bin] hidden size-4 group-hover:inline"
-                      ></span>
-                    </button>
-                  </div>
-                </td>
+                <td>{{ index + 1 }}</td>
+                <td>{{ customer.hoTen }}</td>
+                <td>{{ customer.email }}</td>
               </tr>
             </tbody>
           </table>
         </div>
-
-        <!-- pagination -->
-        <div class="mt-auto flex justify-between">
-          <div class="flex items-center">
-            <label class="label">
-              <span>Xem</span>
-              <span class="badge badge-soft badge-primary">
-                <select class="focus:outline-none">
-                  <option>5</option>
-                  <option>10</option>
-                  <option>20</option>
-                </select>
-              </span>
-              <span>dòng 1 trang</span>
-            </label>
-          </div>
-
-          <div class="join gap-2">
-            <button
-              class="join-item btn btn-circle btn-sm btn-soft btn-primary"
-            >
-              <span class="icon-[ep--arrow-left-bold]"></span>
-            </button>
-            <button
-              class="join-item btn btn-circle btn-sm btn-soft btn-primary"
-            >
-              1
-            </button>
-            <button
-              class="join-item btn btn-circle btn-sm btn-soft btn-primary"
-            >
-              2
-            </button>
-            <button
-              class="join-item btn btn-circle btn-sm btn-soft btn-primary"
-            >
-              3
-            </button>
-            <button
-              class="join-item btn btn-circle btn-sm btn-soft btn-primary"
-            >
-              4
-            </button>
-            <button
-              class="join-item btn btn-circle btn-sm btn-soft btn-primary"
-            >
-              <span class="icon-[ep--arrow-right-bold]"></span>
-            </button>
-          </div>
-        </div>
       </div>
-    </div>
-
-    <span class="text-base-content text-2xl font-bold mb-2">Chi tiết sản phẩm</span>
-
-    <!-- div-table-detail -->
-    <div
-        class="rounded-box bg-base-200 border-base-300 flex max-h-[650px] flex-1 flex-col border p-4"
-      >
-        <!-- table -->
-        <div class="max-h-[600px] w-full overflow-auto">
-          <table class="table-pin-rows table w-full text-center">
-            <thead>
-              <tr>
-                <th>STT</th>
-                <th>Tên</th>
-                <th>Giá trị</th>
-                <th>Thời gian</th>
-                <th>Trạng thái</th>
-                <th>Thao tác</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Phieu1</td>
-                <td>100.000 đ</td>
-                <td>1/1/2025 - 1/1/2026</td>
-                <td>
-                  <div class="badge badge-soft badge-success">Đang diễn ra</div>
-                </td>
-                <td>
-                  <div class="join">
-                    <button
-                      class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
-                    >
-                      <span
-                        class="icon-[heroicons-outline--pencil-alt] size-4 group-hover:hidden"
-                      ></span>
-                      <span
-                        class="icon-[heroicons-solid--pencil-alt] hidden size-4 group-hover:inline"
-                      ></span>
-                    </button>
-                    <button
-                      class="join-item btn btn-soft btn-sm group hover:bg-primary border-none bg-transparent hover:text-white"
-                    >
-                      <span
-                        class="icon-[mdi--bin-outline] size-4 group-hover:hidden"
-                      ></span>
-                      <span
-                        class="icon-[mdi--bin] hidden size-4 group-hover:inline"
-                      ></span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- pagination -->
-        <div class="mt-auto flex justify-between">
-          <div class="flex items-center">
-            <label class="label">
-              <span>Xem</span>
-              <span class="badge badge-soft badge-primary">
-                <select class="focus:outline-none">
-                  <option>5</option>
-                  <option>10</option>
-                  <option>20</option>
-                </select>
-              </span>
-              <span>dòng 1 trang</span>
-            </label>
-          </div>
-
-          <div class="join gap-2">
-            <button
-              class="join-item btn btn-circle btn-sm btn-soft btn-primary"
-            >
-              <span class="icon-[ep--arrow-left-bold]"></span>
-            </button>
-            <button
-              class="join-item btn btn-circle btn-sm btn-soft btn-primary"
-            >
-              1
-            </button>
-            <button
-              class="join-item btn btn-circle btn-sm btn-soft btn-primary"
-            >
-              2
-            </button>
-            <button
-              class="join-item btn btn-circle btn-sm btn-soft btn-primary"
-            >
-              3
-            </button>
-            <button
-              class="join-item btn btn-circle btn-sm btn-soft btn-primary"
-            >
-              4
-            </button>
-            <button
-              class="join-item btn btn-circle btn-sm btn-soft btn-primary"
-            >
-              <span class="icon-[ep--arrow-right-bold]"></span>
-            </button>
-          </div>
-        </div>
-      </div>
-  </div>
+    </section>
+  </section>
 </template>
+
+<script setup>
+import { ref, onMounted, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import axios from "axios";
+import { useKhachHangStore } from "../../stores/khachhangstore.js";
+
+const route = useRoute();
+const router = useRouter();
+const khachHangStore = useKhachHangStore();
+
+const voucher = ref({
+  maPhieuGiamGia: "",
+  loaiGiamGia: true,
+  giaTriGiam: "",
+  giaTriDonHangToiThieu: "",
+  thoiGianBatDau: "",
+  thoiGianKetThuc: "",
+  soLuong: "",
+  trangThai: true
+});
+
+const customerList = ref([]);
+const selectedCustomers = ref([]);
+const isCustomerSelectionEnabled = ref(false);
+
+const cancel = async () => {
+  router.push('/admin/giam-gia');
+};
+
+onMounted(() => {
+  khachHangStore.initialize();
+  customerList.value = khachHangStore.khachHangList;
+});
+
+watch(
+  () => khachHangStore.khachHangList,
+  (newList) => {
+    customerList.value = newList;
+  }
+);
+
+watch(selectedCustomers, (newList) => {
+  if (isCustomerSelectionEnabled.value) {
+    voucher.value.soLuong = newList.length;
+  }
+});
+const handlePrivateSelection = () => {
+  if (isCustomerSelectionEnabled.value) {
+    voucher.value.soLuong = selectedCustomers.value.length;
+  } else {
+    voucher.value.soLuong = "";
+  }
+};
+
+const toggleCustomerSelection = (customerId) => {
+  const index = selectedCustomers.value.indexOf(customerId);
+  if (index === -1) {
+    selectedCustomers.value.push(customerId);
+  } else {
+    selectedCustomers.value.splice(index, 1);
+  }
+  if (isCustomerSelectionEnabled.value) {
+    voucher.value.soLuong = selectedCustomers.value.length; // Cập nhật số lượng
+  }
+};
+
+const toggleAllCustomers = (event) => {
+  if (event.target.checked) {
+    selectedCustomers.value = customerList.value.map((c) => c.id);
+  } else {
+    selectedCustomers.value = [];
+  }
+
+  if (isCustomerSelectionEnabled.value) {
+    voucher.value.soLuong = selectedCustomers.value.length;
+  }
+};
+
+// async function submitVoucher() {
+//     console.log("Dữ liệu gửi lên:", voucher.value);
+//     try {
+//         await axios.post("http://localhost:8080/api/phieu-giam-gia/add", voucher.value);
+//         console.log("Thêm phiếu giảm giá thành công!");
+//     } catch (error) {
+//         console.error("Lỗi khi thêm phiếu giảm giá:", error);
+//     }
+// };
+const fetchCustomersForVoucher = async (voucherId) => {
+  try {
+    const response = await axios.get(`http://localhost:8080/api/phieu-giam-gia/${voucherId}/khach-hang`);
+    customerList.value = response.data;
+  } catch (error) {
+    console.error("Lỗi khi lấy danh sách khách hàng:", error);
+  }
+};
+
+const submitVoucher = async () => {
+  try {
+    const requestData = { ...voucher.value };
+
+    if (isCustomerSelectionEnabled.value) {
+      // Chuyển đổi customerIds sang Long
+      requestData.customerIds = selectedCustomers.value.map(id => Number(id));
+    } else {
+      requestData.customerIds = [];
+    }
+
+    const response = await axios.post("http://localhost:8080/api/phieu-giam-gia/add", requestData);
+    alert("Thêm phiếu giảm giá thành công!");
+    router.push("/admin/giam-gia");
+  } catch (error) {
+    console.error("Lỗi khi thêm/gán phiếu giảm giá:", error);
+    alert("Thêm thất bại!");
+  }
+};
+
+const applyVoucher = async (voucherId, customerId) => {
+  try {
+    const response = await axios.post("http://localhost:8080/api/phieu-giam-gia/apply-voucher", {
+      voucherId,
+      customerId
+    });
+
+    alert(response.data); // Hiển thị kết quả
+  } catch (error) {
+    alert("Bạn không có quyền sử dụng voucher này!");
+  }
+};
+
+</script>

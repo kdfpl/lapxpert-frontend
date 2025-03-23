@@ -135,7 +135,7 @@ export async function createDotGiamGia(
 
 // Mutation thêm Chi Tiết Đợt Giảm Giá
 const UPDATE_DOT_GIAM_GIA = gql`
-  mutation updateDotGiamGia ($id: ID!, $input: DotGiamGiaInput!) {
+  mutation updateDotGiamGia($id: ID!, $input: DotGiamGiaInput!) {
     updateDotGiamGia(id: $id, input: $input) {
       maDot
       tenDot
@@ -157,9 +157,9 @@ export async function updateDotGiamGia(
 
     const response = await apolloClient.mutate({
       mutation: UPDATE_DOT_GIAM_GIA,
-      variables: { 
+      variables: {
         id: String(id), // Keep id for the mutation
-        input: inputData // Pass the rest of the data
+        input: inputData, // Pass the rest of the data
       },
     });
     console.log("Đã sửa:", response.data.updateDotGiamGia);
@@ -254,14 +254,44 @@ export async function updateDotGiamGiaChiTiet(dotGiamGiaChiTiet: any) {
 
     const response = await apolloClient.mutate({
       mutation: UPDATE_DOT_GIAM_GIA_CHI_TIET,
-      variables: { 
+      variables: {
         id: String(id), // Keep id for the mutation
-        input: inputData // Pass the rest of the data
+        input: inputData, // Pass the rest of the data
       },
     });
-    console.log("Đã cập nhật chi tiết đợt giảm giá:", response.data.updateDotGiamGiaChiTiet);
+    console.log(
+      "Đã cập nhật chi tiết đợt giảm giá:",
+      response.data.updateDotGiamGiaChiTiet,
+    );
   } catch (error) {
     console.error("Lỗi khi cập nhật chi tiết đợt giảm giá:", error);
     throw error;
+  }
+}
+
+const GET_DOT_GIAM_GIA_CHI_TIET_BY_DOT_GIAM_GIA_ID = gql`
+  query fetchDotGiamGiaChiTietByDotGiamGiaId($id: ID!) {
+    dotGiamGiaChiTietsByDotGiamGiaId(dotGiamGiaId: $id) {
+      id
+      maDotChiTiet
+      tinhTrang
+      sanPhamChiTiet {
+        id
+      }
+    }
+  }
+`;
+
+export async function fetchDotGiamGiaChiTietByDotGiamGiaId(dotGiamGiaId: string): Promise<DotGiamGiaChiTiet[]> {
+  try {
+    const response = await apolloClient.query({
+      query: GET_DOT_GIAM_GIA_CHI_TIET_BY_DOT_GIAM_GIA_ID,
+      variables: { id: dotGiamGiaId },
+    });
+    console.log("DotgiamgiaID:", response.data.id, response);
+    return response.data.dotGiamGiaChiTiets;
+  } catch (error) {
+    console.error("Lỗi khi fetch DotGiamGiaChiTiet:", error);
+    return [];
   }
 }
