@@ -13,7 +13,7 @@ export const useNhanVienStore = defineStore("nhanVien", {
     statusFilter: "all",
     showSuggestions: false,
     diaChiMacDinh: {},
-    nhanVien: { hoTen: "", email: "", sdt: "", vaiTro: null },
+    nhanVien: { hoTen: "", email: "", sdt: "", chucVu: null },
     diaChiList: [],
     cityData: [],
     citis: [],
@@ -185,7 +185,7 @@ export const useNhanVienStore = defineStore("nhanVien", {
             hoTen: response.data.hoTen || "",
             email: response.data.email || "",
             sdt: response.data.sdt || "",
-            vaiTro: response.data.chucVu || null,
+            chucVu: response.data.chucVu || null,
           };
     
           this.diaChiList = response.data.diaChiList

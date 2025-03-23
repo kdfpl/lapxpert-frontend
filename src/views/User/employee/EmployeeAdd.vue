@@ -47,7 +47,7 @@ onMounted(async () => {
       await fetchNhanVienById(staffId);
     } else {
       diaChiList.value = [createNewAddress(true)];
-      nhanVien.value.vaiTro = chucVuList.value[0]; 
+      nhanVien.value.chucVu = chucVuList.value[0]; 
     }
   } catch (error) {
     console.error("Lỗi khi tải dữ liệu:", error);
@@ -107,7 +107,7 @@ const handleSubmit = async () => {
             />
           </div>
           <div class="flex items-center border rounded-lg p-2 w-full">
-            <select v-model="nhanVien.vaiTro" class="w-full select border-0">
+            <select v-model="nhanVien.chucVu" class="w-full select border-0">
               <option
                 v-for="chucVu in chucVuList"
                 :key="chucVu.id"
@@ -211,7 +211,7 @@ const handleSubmit = async () => {
             <p>Họ tên: {{ nhanVien.hoTen }}</p>
             <p>Email: {{ nhanVien.email }}</p>
             <p>Số điện thoại: {{ nhanVien.sdt }}</p>
-            <p>Chức vụ: {{ nhanVien.vaiTro?.tenChucVu || "Không xác định" }}</p>
+            <p>Chức vụ: {{ nhanVien.chucVu?.tenChucVu || "Không xác định" }}</p>
           </div>
           <div class="p-6 rounded-lg shadow-md">
             <h2 class="text-lg font-semibold">Địa chỉ nhân viên</h2>
