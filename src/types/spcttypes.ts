@@ -96,7 +96,7 @@ export interface Pin {
   tinhTrang: boolean;
 }
 
-export interface MauSac {
+export interface Mau {
   id: number;
   maMau: string;
   tenMau: string;
@@ -143,7 +143,7 @@ export interface SPCT {
   ram: Ram;
   manHinh: ManHinh;
   pin: Pin;
-  mau: MauSac;
+  mau: Mau;
   gpu: GPU;
   cpu: CPU;
   seri: Seri;

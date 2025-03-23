@@ -7,7 +7,7 @@ import type {
 
 // Truy vấn danh sách DotGiamGia
 const GET_ALL_DOT_GIAM_GIA = gql`
-  query {
+  query fetchAllDotGiamGia {
     dotGiamGias {
       giaTriGiam
       id
@@ -37,13 +37,48 @@ export async function fetchAllDotGiamGia(): Promise<DotGiamGia[]> {
 
 // Truy vấn chi tiết DotGiamGia
 const GET_ALL_DOT_GIAM_GIA_CHI_TIET = gql`
-  query {
+  query fetchAllDotGiamGiaChiTiet {
     dotGiamGiaChiTiets {
       id
       maDotChiTiet
       tinhTrang
+      dotGiamGia {
+        id
+        maDot
+        tenDot
+      }
       sanPhamChiTiet {
         id
+        maChiTietSp
+        giaBan
+        sanPham {
+          id
+          tenSp
+        }
+        ram {
+          loaiRam {
+            tenLoaiRam
+          }
+        }
+        manHinh {
+          kichThuoc
+          tanSoQuet
+        }
+        pin {
+          dungLuongPin
+        }
+        mau {
+          tenMau
+        }
+        gpu {
+          tenGpu
+        }
+        cpu {
+          tenCpu
+        }
+        seri {
+          maSeri
+        }
       }
     }
   }
@@ -67,7 +102,7 @@ export async function fetchAllDotGiamGiaChiTiet(): Promise<
 
 // Mutation thêm Đợt Giảm Giá
 const ADD_DOT_GIAM_GIA = gql`
-  mutation ($input: DotGiamGiaInput!) {
+  mutation createDotGiamGia($input: DotGiamGiaInput!) {
     createDotGiamGia(input: $input) {
       id
       maDot
@@ -98,9 +133,46 @@ export async function createDotGiamGia(
   }
 }
 
+// Mutation thêm Chi Tiết Đợt Giảm Giá
+const UPDATE_DOT_GIAM_GIA = gql`
+  mutation updateDotGiamGia ($id: ID!, $input: DotGiamGiaInput!) {
+    updateDotGiamGia(id: $id, input: $input) {
+      maDot
+      tenDot
+      thoiGianBatDau
+      thoiGianKetThuc
+      giaTriGiam
+      loaiGiamGia
+      trangThai
+      moTa
+    }
+  }
+`;
+
+export async function updateDotGiamGia(
+  dotGiamGiaData: DotGiamGia,
+): Promise<DotGiamGia> {
+  try {
+    const { id, ...inputData } = dotGiamGiaData; // Destructure to exclude id
+
+    const response = await apolloClient.mutate({
+      mutation: UPDATE_DOT_GIAM_GIA,
+      variables: { 
+        id: String(id), // Keep id for the mutation
+        input: inputData // Pass the rest of the data
+      },
+    });
+    console.log("Đã sửa:", response.data.updateDotGiamGia);
+    return response.data.updateDotGiamGia;
+  } catch (error) {
+    console.error("Lỗi khi sửa:", error);
+    throw error;
+  }
+}
+
 // Mutation xóa Đợt Giảm Giá
 const DELETE_DOT_GIAM_GIA = gql`
-  mutation ($id: ID!) {
+  mutation deleteDotGiamGia($id: ID!) {
     deleteDotGiamGia(id: $id)
   }
 `;
@@ -124,7 +196,7 @@ export async function deleteDotGiamGia(id: number): Promise<boolean> {
 
 // Mutation thêm Chi Tiết Đợt Giảm Giá
 const ADD_DOT_GIAM_GIA_CHI_TIET = gql`
-  mutation ($input: DotGiamGiaChiTietInput!) {
+  mutation createDotGiamGiaChiTiet($input: DotGiamGiaChiTietInput!) {
     createDotGiamGiaChiTiet(input: $input) {
       dotGiamGia {
         id
@@ -136,7 +208,6 @@ const ADD_DOT_GIAM_GIA_CHI_TIET = gql`
     }
   }
 `;
-
 
 export async function createDotGiamGiaChiTiet(dotGiamGiaChiTiet: any) {
   try {
@@ -150,3 +221,47 @@ export async function createDotGiamGiaChiTiet(dotGiamGiaChiTiet: any) {
   }
 }
 
+// Mutation thêm Chi Tiết Đợt Giảm Giá
+const UPDATE_DOT_GIAM_GIA_CHI_TIET = gql`
+  mutation updateDotGiamGiaChiTiet($id: ID!, $input: DotGiamGiaChiTietInput!) {
+    updateDotGiamGiaChiTiet(id: $id, input: $input) {
+      dotGiamGia {
+        id
+      }
+      sanPhamChiTiet {
+        id
+      }
+      maDotChiTiet
+      tinhTrang
+    }
+  }
+`;
+
+export async function updateDotGiamGiaChiTiet(dotGiamGiaChiTiet: any) {
+  try {
+    const { id, ...inputData } = dotGiamGiaChiTiet; // Destructure to get id and input data
+
+    // Log the data being sent
+    console.log("Updating DotGiamGiaChiTiet with data:", {
+      id: String(id), // Ensure id is a string
+      input: inputData,
+    });
+
+    // Check if id is defined
+    if (!id) {
+      throw new Error("ID is required for updating DotGiamGiaChiTiet.");
+    }
+
+    const response = await apolloClient.mutate({
+      mutation: UPDATE_DOT_GIAM_GIA_CHI_TIET,
+      variables: { 
+        id: String(id), // Keep id for the mutation
+        input: inputData // Pass the rest of the data
+      },
+    });
+    console.log("Đã cập nhật chi tiết đợt giảm giá:", response.data.updateDotGiamGiaChiTiet);
+  } catch (error) {
+    console.error("Lỗi khi cập nhật chi tiết đợt giảm giá:", error);
+    throw error;
+  }
+}
