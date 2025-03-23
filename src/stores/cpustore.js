@@ -1,9 +1,13 @@
 import { defineStore } from "pinia";
-import { getAllCpu, addCpu, updateCpu, deleteCpu, getCpuById } from "@/api/service/spctservice";
+import {
+  getAllCpu,
+  addCpu,
+  updateCpu,
+  deleteCpu,
+  getCpuById,
+} from "@/api/service/spctservice";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
-import {  useRouter } from "vue-router";
-
 
 export const useCpuStore = defineStore("cpu", {
   state: () => ({
@@ -14,7 +18,8 @@ export const useCpuStore = defineStore("cpu", {
     statusFilter: "all", // Bộ lọc trạng thái
     showSuggestions: false, // Hiển thị gợi ý tìm kiếm
     initialized: false, // Trạng thái khởi tạo
-    cpuData: { // Dữ liệu CPU hiện tại
+    cpuData: {
+      // Dữ liệu CPU hiện tại
       maCpu: "",
       tenCpu: "",
       hangCpu: "Intel",
@@ -40,9 +45,9 @@ export const useCpuStore = defineStore("cpu", {
           cpu.hangCpu,
           cpu.tenCpu,
           cpu.theHeCpu,
-          cpu.soNhan?.toString(),
-          cpu.soLuong?.toString(),
-          cpu.xungNhip?.toString(),
+          `Nhân: ${cpu.soNhan.toString }`,
+          `Luồng: ${cpu.soLuong.toString}`,
+          `Xung nhịp: ${cpu.xungNhip.toString} GHz`,
         ].some((field) => field?.toLowerCase().includes(searchTerm));
 
         const matchStatus =
@@ -73,7 +78,10 @@ export const useCpuStore = defineStore("cpu", {
           { value: cpu.theHeCpu, label: `${cpu.theHeCpu}` },
           { value: cpu.soNhan?.toString(), label: `Nhân: ${cpu.soNhan}` },
           { value: cpu.soLuong?.toString(), label: `Luồng: ${cpu.soLuong}` },
-          { value: cpu.xungNhip?.toString(), label: `Xung nhịp: ${cpu.xungNhip} GHz` },
+          {
+            value: cpu.xungNhip?.toString(),
+            label: `Xung nhịp: ${cpu.xungNhip} GHz`,
+          },
         ];
 
         fields.forEach(({ value, label }) => {
@@ -159,9 +167,9 @@ export const useCpuStore = defineStore("cpu", {
     // Lấy CPU theo id
     async fetchCpuById(id) {
       try {
-        const cpu = await getCpuById(id); 
+        const cpu = await getCpuById(id);
         if (cpu) {
-          this.cpuData = { ...cpu }; 
+          this.cpuData = { ...cpu };
         }
       } catch (error) {
         console.error("Lỗi khi lấy thông tin CPU:", error);
@@ -174,7 +182,7 @@ export const useCpuStore = defineStore("cpu", {
       try {
         const response = await addCpu(cpuData);
         await this.fetchCpu(); // Cập nhật lại danh sách sau khi thêm
-        
+
         return response;
       } catch (error) {
         console.error("Lỗi khi thêm CPU:", error);

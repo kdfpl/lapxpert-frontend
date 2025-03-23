@@ -17,7 +17,7 @@
         </div>
       </div>
       <footer
-        class="sm:footer-horizontal gap-5 bg-base-100 shadow-[0_-1px_4px_rgba(0,0,0,0.2)] p-2 flex"
+        class="sm:footer-horizontal gap-5 bg-base-100  p-2 flex"
       >
         <aside>
           <img src="@/assets/img/logo.png" alt="" class="w-30 h-15">
