@@ -54,7 +54,7 @@
         <span class="icon-[ph--microsoft-excel-logo] size-5"></span>
         Xuất Excel
       </button>
-      <RouterLink to="/saleoff/add" class="btn btn-primary btn-soft">
+      <RouterLink to="/saleoff/crud" class="btn btn-primary btn-soft">
         <span class="icon-[icon-park-outline--add-four] size-5"></span>
         Thêm ổ cứng
       </RouterLink>

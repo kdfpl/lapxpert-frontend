@@ -1,9 +1,9 @@
-<script setup lang="ts">
+<script setup>
 import { onMounted, reactive } from "vue";
-import { useSpctStore } from "../../../stores/spctstore";
-import { useSanPhamStore } from "../../../stores/sanphamstore";
-import { addSanPham } from "../../../apis/services/sanphamservice";
-import { addSPCT } from "../../../apis/services/spctservice";
+import { useSpctStore } from "@/stores/spctstore";
+import { useSanPhamStore } from "@/stores/sanphamstore";
+import { addSanPham } from "@/apis/services/sanphamservice";
+import { addSPCT } from "@/apis/services/spctservice";
 
 const spctStore = useSpctStore();
 const sanPhamStore = useSanPhamStore();
@@ -53,7 +53,7 @@ const addNewSPCT = () => {
 
 const validateForm = () => {
   for (const key in sanPhamData) {
-    const value = sanPhamData[key as keyof typeof sanPhamData];
+    const value = sanPhamData[key];
 
     if (typeof value === "string" && value.trim() === "") {
       console.error(`Trường ${key} không được để trống`);
@@ -73,7 +73,7 @@ const validateSPCTList = () => {
     for (const key in spctData) {
       if (key === "sanPham") continue;
 
-      const value = spctData[key as keyof typeof spctData];
+      const value = spctData[key];
 
       if (typeof value === "string" && value.trim() === "") {
         console.error(`Trường ${key} trong SPCT không được để trống`);

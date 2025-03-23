@@ -47,7 +47,7 @@ onMounted(async () => {
       await fetchNhanVienById(staffId);
     } else {
       diaChiList.value = [createNewAddress(true)];
-      nhanVien.value.chucVu = chucVuList.value[0]; 
+      nhanVien.value.chucVu = chucVuList.value[0];
     }
   } catch (error) {
     console.error("Lỗi khi tải dữ liệu:", error);
@@ -61,7 +61,7 @@ onMounted(async () => {
 watch(
   () => diaChiList.value.map((dc) => [dc.thanhPho, dc.quanHuyen]),
   () => updateDistrictsAndWards(),
-  { deep: true }
+  { deep: true },
 );
 
 const handleProceed = async (nextTab) => {
@@ -80,34 +80,34 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <div class="w-[90%] mx-auto mt-10">
+  <div class="mx-auto mt-10 w-[90%]">
     <TabPanel :tabs="tabs" v-model:activeTab="activeTab">
       <!-- Panel 1: Thông tin nhân viên -->
       <template #panel1>
-        <form class="space-y-4 p-6 bg-base-100">
-          <div class="flex items-center border rounded-lg p-2 w-full">
+        <form class="bg-base-100 space-y-4 p-6">
+          <div class="flex w-full items-center rounded-lg border p-2">
             <input
               v-model="nhanVien.hoTen"
               placeholder="Họ tên"
               class="w-full border-0 focus:outline-none"
             />
           </div>
-          <div class="flex items-center border rounded-lg p-2 w-full">
+          <div class="flex w-full items-center rounded-lg border p-2">
             <input
               v-model="nhanVien.email"
               placeholder="Email"
               class="w-full border-0 focus:outline-none"
             />
           </div>
-          <div class="flex items-center border rounded-lg p-2 w-full">
+          <div class="flex w-full items-center rounded-lg border p-2">
             <input
               v-model="nhanVien.sdt"
               placeholder="Số điện thoại"
               class="w-full border-0 focus:outline-none"
             />
           </div>
-          <div class="flex items-center border rounded-lg p-2 w-full">
-            <select v-model="nhanVien.chucVu" class="w-full select border-0">
+          <div class="flex w-full items-center rounded-lg border p-2">
+            <select v-model="nhanVien.chucVu" class="select w-full border-0">
               <option
                 v-for="chucVu in chucVuList"
                 :key="chucVu.id"
@@ -128,7 +128,7 @@ const handleSubmit = async () => {
         <div
           v-for="(dc, index) in diaChiHienThi"
           :key="index"
-          class="p-6 rounded-lg border-base-300 shadow-md bg-base-200 mb-4"
+          class="border-base-300 bg-base-200 mb-4 rounded-lg p-6 shadow-md"
         >
           <div class="grid grid-cols-2 gap-4">
             <!-- Thành phố -->
@@ -162,7 +162,11 @@ const handleSubmit = async () => {
               class="select select-bordered"
             >
               <option value="">Chọn phường xã</option>
-              <option v-for="ward in dc.availableWards" :key="ward" :value="ward">
+              <option
+                v-for="ward in dc.availableWards"
+                :key="ward"
+                :value="ward"
+              >
                 {{ ward }}
               </option>
             </select>
@@ -174,7 +178,7 @@ const handleSubmit = async () => {
               class="input input-bordered focus:ring-primary"
             />
           </div>
-          <div class="flex justify-between mt-4">
+          <div class="mt-4 flex justify-between">
             <label class="flex items-center">
               <input
                 type="radio"
@@ -187,9 +191,9 @@ const handleSubmit = async () => {
             <button
               v-if="diaChiList.length > 1"
               @click="removeDiaChi(index)"
-              class="text-red-500 hover:text-red-700 flex items-center"
+              class="flex items-center text-red-500 hover:text-red-700"
             >
-              <Trash2 class="w-4 h-4 mr-1" /> Xóa
+              <span class="icon-[mdi--bin] mr-1 h-4 w-4">Xóa</span>
             </button>
           </div>
         </div>
@@ -206,14 +210,14 @@ const handleSubmit = async () => {
       <!-- Panel 3: Xác nhận thông tin -->
       <template #panel3>
         <div class="grid grid-cols-2 gap-6">
-          <div class="p-6 bg-base border rounded-lg shadow-md">
+          <div class="bg-base rounded-lg border p-6 shadow-md">
             <h2 class="text-lg font-semibold">Thông tin nhân viên</h2>
             <p>Họ tên: {{ nhanVien.hoTen }}</p>
             <p>Email: {{ nhanVien.email }}</p>
             <p>Số điện thoại: {{ nhanVien.sdt }}</p>
             <p>Chức vụ: {{ nhanVien.chucVu?.tenChucVu || "Không xác định" }}</p>
           </div>
-          <div class="p-6 rounded-lg shadow-md">
+          <div class="rounded-lg p-6 shadow-md">
             <h2 class="text-lg font-semibold">Địa chỉ nhân viên</h2>
             <table class="w-full border-collapse border">
               <thead>
@@ -235,9 +239,7 @@ const handleSubmit = async () => {
             </table>
           </div>
         </div>
-        <button @click="handleSubmit" class="btn btn-primary">
-          Xác nhận
-        </button>
+        <button @click="handleSubmit" class="btn btn-primary">Xác nhận</button>
       </template>
     </TabPanel>
   </div>

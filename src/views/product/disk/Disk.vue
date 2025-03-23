@@ -5,7 +5,7 @@
       class="tabs tabs-box mb-2 flex w-full justify-start gap-2"
     >
       <RouterLink to="/disk" role="tab" class="tab text-primary" :class="{ 'tab-active': $route.path === '/disk' }">Danh sách ổ cứng</RouterLink>
-      <RouterLink to="/disk/add" role="tab" class="tab text-primary" :class="{ 'tab-active': $route.path === '/disk/add' }">Thêm mới</RouterLink>
+      <RouterLink to="/disk/crud" role="tab" class="tab text-primary" :class="{ 'tab-active': $route.path === '/disk/crud' }">Thêm mới</RouterLink>
     </div>
     <div class="relative flex-1">
       <div class="absolute inset-0 overflow-auto">

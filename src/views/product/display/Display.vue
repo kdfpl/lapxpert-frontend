@@ -5,7 +5,7 @@
       class="tabs tabs-box mb-2 flex w-full justify-start gap-2"
     >
       <RouterLink to="/display" role="tab" class="tab text-primary" :class="{ 'tab-active': $route.path === '/display' }">Danh sách màn hình</RouterLink>
-      <RouterLink to="/display/add" role="tab" class="tab text-primary" :class="{ 'tab-active': $route.path === '/display/add' }">Thêm mới</RouterLink>
+      <RouterLink to="/display/crud" role="tab" class="tab text-primary" :class="{ 'tab-active': $route.path === '/display/crud' }">Thêm mới</RouterLink>
     </div>
     <div class="relative flex-1">
       <div class="absolute inset-0 overflow-auto">

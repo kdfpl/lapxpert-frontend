@@ -1,6 +1,6 @@
-<script setup lang="ts">
+<script setup>
 import { onMounted } from "vue";
-import { useSanPhamStore } from "../../../stores/sanphamstore.js";
+import { useSanPhamStore } from "@/stores/sanphamstore";
 
 const store = useSanPhamStore();
 

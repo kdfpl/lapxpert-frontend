@@ -1,6 +1,6 @@
-<script setup lang="ts">
+<script setup>
 import { onMounted, watch, ref } from "vue";
-import { useSanPhamStore } from "../../../stores/sanphamstore.js";
+import { useSanPhamStore } from "@/stores/sanphamstore";
 import { storeToRefs } from "pinia";
 import { Icon } from "@iconify/vue";
 
@@ -47,7 +47,7 @@ const hideSuggestions = () => {
   toggleSuggestions(false);
 };
 
-const selectSuggestion = (suggestion: string) => {
+const selectSuggestion = (suggestion) => {
   setSearch(suggestion);
   toggleSuggestions(false);
 };

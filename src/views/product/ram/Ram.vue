@@ -5,7 +5,7 @@
       class="tabs tabs-box mb-2 flex w-full justify-start gap-2"
     >
       <RouterLink to="/ram" role="tab" class="tab text-primary" :class="{ 'tab-active': $route.path === '/ram' }">Danh sách RAM</RouterLink>
-      <RouterLink to="/ram/add" role="tab" class="tab text-primary" :class="{ 'tab-active': $route.path === '/ram/add' }">Thêm mới</RouterLink>
+      <RouterLink to="/ram/crud" role="tab" class="tab text-primary" :class="{ 'tab-active': $route.path === '/ram/crud' }">Thêm mới</RouterLink>
     </div>
     <div class="relative flex-1">
       <div class="absolute inset-0 overflow-auto">

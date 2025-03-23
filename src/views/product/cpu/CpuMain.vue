@@ -4,7 +4,7 @@
     <section class="mb-5 flex w-full items-center justify-between">
       <h1 class="text-3xl text-primary font-bold">DANH SÁCH CPU</h1>
       <div class="flex gap-2">
-        <RouterLink to="/cpu/add" class="btn btn-primary btn-soft">
+        <RouterLink to="/cpu/crud" class="btn btn-primary btn-soft">
           <Icon icon="icon-park-outline:add-four" class="size-5" />
           Thêm CPU
         </RouterLink>
@@ -81,7 +81,7 @@
     <!-- Loading Overlay -->
     <div
       v-if="!store.initialized"
-      class="fixed inset-0 bg-base-300 bg-opacity-50 flex items-center justify-center z-50"
+      class="fixed inset-0 bg-base-300 bg-opacity-50 flex items-center justify-center z-[999]"
     >
       <div class="fixed inset-0 flex items-center justify-center bg-base-200">
         <div class="relative flex items-center justify-center">
@@ -153,7 +153,7 @@
               <td>
                 <div class="join">
                   <RouterLink
-                    :to="`/admin/cpu-crud/${cpu.id}`"
+                    :to="`/cpu/crud/${cpu.id}`"
                     class="join-item btn btn-soft btn-sm"
                   >
                     <Icon

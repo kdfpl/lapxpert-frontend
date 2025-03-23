@@ -1,6 +1,6 @@
-import api from "../index";
+import api from "../axiosAPI";
 
-const API_URL ="/nhan-vien"
+const API_URL = "/nhan-vien";
 
 const staffService = {
   async getAllStaff() {
@@ -16,7 +16,7 @@ const staffService = {
   async getStaffById(id) {
     try {
       const response = await api.get(`${API_URL}/get-one/${id}`);
-      return response.data;
+      return response;
     } catch (error) {
       console.error(`Lỗi khi lấy nhân viên ID ${id}:`, error);
       throw error;
@@ -53,7 +53,7 @@ const staffService = {
     }
   },
 
-  async checkDuplicate(email, sdt, id ) {
+  async checkDuplicate(email, sdt, id) {
     try {
       return await api.get(`${API_URL}/check-duplicate/${id}/${email}/${sdt}`);
     } catch (error) {
@@ -61,7 +61,14 @@ const staffService = {
       throw error;
     }
   },
-};
 
+  async getAddressById(id) {
+    try {
+      return await api.get(`${API_URL}/dia-chi/get-one/${id}`);
+    } catch (error) {
+      console.error(`Lỗi khi lấy địa chỉ nhân viên ID ${id}:`, error.response?.data || error.message);
+      throw error;
+    }
+  },
+}
 export default staffService;
-  

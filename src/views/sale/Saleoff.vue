@@ -5,7 +5,7 @@
       class="tabs tabs-box mb-2 flex w-full justify-start gap-2"
     >
       <RouterLink to="/saleoff" role="tab" class="tab text-primary" :class="{ 'tab-active': $route.path === '/saleoff' }">Danh sách đợt</RouterLink>
-      <RouterLink to="/saleoff/add" role="tab" class="tab text-primary" :class="{ 'tab-active': $route.path === '/saleoff/add' }">Thêm mới</RouterLink>
+      <RouterLink to="/saleoff/crud" role="tab" class="tab text-primary" :class="{ 'tab-active': $route.path === '/saleoff/crud' }">Thêm mới</RouterLink>
     </div>
     <div class="relative flex-1">
       <div class="absolute inset-0 overflow-auto">

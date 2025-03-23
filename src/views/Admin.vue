@@ -2,7 +2,7 @@
 import { DotLottieVue } from "@lottiefiles/dotlottie-vue";
 </script>
 <template>
-  <div class="grid h-screen grid-cols-[256px_1fr] grid-rows-[70px_1fr]">
+  <div class="grid h-screen grid-cols-[256px_1fr] grid-rows-[70px_1fr] -z-10">
     <!-- sidebar -->
     <aside
       class="sidebar bg-base-100 sticky top-0 col-span-1 row-span-2 flex h-screen flex-col self-start"
@@ -108,6 +108,16 @@ import { DotLottieVue } from "@lottiefiles/dotlottie-vue";
                   <RouterLink to="/display">
                     <span class="icon-[solar--display-broken] size-5"></span>
                     Màn hình
+                  </RouterLink>
+                </li>
+                <li>
+                  <RouterLink to="/battery">
+                    <span :class="
+                  $route.path.startsWith('/battery')
+                    ? 'icon-[ph--battery-charging-fill] size-5'
+                    : 'icon-[ph--battery-charging] size-5'
+                "></span>
+                    Pin
                   </RouterLink>
                 </li>
                 <li>
@@ -217,7 +227,7 @@ import { DotLottieVue } from "@lottiefiles/dotlottie-vue";
 
     <!-- navbar -->
     <nav
-      class="bg-base-100 sticky top-0 z-3 col-span-1 flex items-center justify-end px-3"
+      class="bg-base-100 sticky top-0 col-span-1 flex items-center justify-end px-3"
     >
       <div
         class="rounded-box hover:bg-primary mr-auto flex items-center border-0 p-1 hover:text-white"
@@ -268,7 +278,7 @@ import { DotLottieVue } from "@lottiefiles/dotlottie-vue";
         </div>
 
         <!-- content -->
-        <div class="z-2 h-full">
+        <div class="h-full">
           <RouterView></RouterView>
         </div>
       </div>

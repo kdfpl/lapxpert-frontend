@@ -1,21 +1,21 @@
-<script setup lang="ts">
+<script setup>
 import { onMounted, reactive, computed } from "vue";
-import { useDotGiamGiaStore } from "../../stores/dotgiamgiastore";
-import { useSanPhamStore } from "../../stores/sanphamstore.js";
-import { useSpctStore } from "../../stores/spctstore";
-import { deleteDotGiamGia } from "../../apis/graphql/dotgiamgia";
-import type { DotGiamGia } from "../../types/dotgiamgiatypes";
-import type { SPCT } from "../../types/spcttypes";
+import { useDotGiamGiaStore } from "@/stores/dotgiamgiastore";
+import { useSanPhamStore } from "@/stores/sanphamstore";
+import { useSpctStore } from "@/stores/spctstore";
+import { deleteDotGiamGia } from "@/apis/graphql/dotgiamgia";
+import { DotGiamGia } from "@/types/dotgiamgiatypes";
+import { SPCT } from "@/types/spcttypes";
 import {
   updateDotGiamGiaChiTiet,
   updateDotGiamGia,
-} from "../../apis/graphql/dotgiamgia";
+} from "@/apis/graphql/dotgiamgia";
 
 const store = useDotGiamGiaStore();
 const sanPhamStore = useSanPhamStore();
 const sanPhamChiTietStore = useSpctStore();
-const selectedSanPhams = reactive<number[]>([]);
-const selectedSanPhamChiTietIds = reactive(new Set<number>());
+const selectedSanPhams = reactive([]);
+const selectedSanPhamChiTietIds = reactive(new Set());
 
 onMounted(async () => {
   await store.fetchDotGiamGiaList();
@@ -24,7 +24,7 @@ onMounted(async () => {
   await sanPhamChiTietStore.fetchSpct();
 });
 
-const deleteRow = async (id: number) => {
+const deleteRow = async (id) => {
   await deleteDotGiamGia(id);
 };
 
@@ -53,7 +53,7 @@ const thoiGianKetThucUTC = computed(() =>
 );
 
 // Utility function to format date
-const formatDateForInput = (dateString: string) => {
+const formatDateForInput = (dateString) => {
   const date = new Date(dateString);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
@@ -65,7 +65,7 @@ const formatDateForInput = (dateString: string) => {
 };
 
 // Khi checkbox thay đổi, thêm hoặc xóa sản phẩm khỏi danh sách
-const toggleSanPhamSelection = (sanPhamId: number) => {
+const toggleSanPhamSelection = (sanPhamId) => {
   const index = selectedSanPhams.indexOf(sanPhamId);
   if (index === -1) {
     selectedSanPhams.push(sanPhamId);
@@ -74,7 +74,7 @@ const toggleSanPhamSelection = (sanPhamId: number) => {
   }
 };
 
-const toggleSanPhamChiTiet = (id: number) => {
+const toggleSanPhamChiTiet = (id) => {
   if (selectedSanPhamChiTietIds.has(id)) {
     selectedSanPhamChiTietIds.delete(id);
   } else {
@@ -90,7 +90,7 @@ const selectedSanPhamChiTietList = computed(() => {
 });
 
 const isDetailVisible = computed(() => selectedSanPhams.length > 0);
-const openModal = (dotGiamGia: DotGiamGia) => {
+const openModal = (dotGiamGia) => {
   console.log("Opening modal with DotGiamGia:", dotGiamGia);
   dotGiamGiaData.id = dotGiamGia.id;
   dotGiamGiaData.maDot = dotGiamGia.maDot;
@@ -108,7 +108,7 @@ const openModal = (dotGiamGia: DotGiamGia) => {
   dotGiamGiaData.trangThai = dotGiamGia.trangThai;
 
   // Open the modal
-  const modal = document.getElementById("saleoff_details") as HTMLDialogElement;
+  const modal = document.getElementById("saleoff_details");
   if (modal) {
     modal.showModal();
   }
@@ -208,7 +208,7 @@ const submitForm = async () => {
         <span class="icon-[ph--microsoft-excel-logo] size-5"></span>
         Xuất Excel
       </button>
-      <RouterLink to="/saleoff/add" class="btn btn-primary btn-soft">
+      <RouterLink to="/saleoff/crud" class="btn btn-primary btn-soft">
         <span class="icon-[icon-park-outline--add-four] size-5"></span>
         Thêm đợt giảm giá
       </RouterLink>
