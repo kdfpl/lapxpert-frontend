@@ -6,7 +6,7 @@ import LaptopPT from "./ThongKe/LaptopPT.vue";
 import TTKH from "./ThongKe/TTKH.vue";
 import axios from "axios";
 import { ref, computed, onMounted } from "vue";
-import GlassTable from "../components/customTable.vue";
+import GlassTable from "../components/customTable.vue"; 
 
 // Danh sách tiêu đề bảng
 const headers = [
@@ -257,7 +257,6 @@ export default {
             <option value="Đã hủy">Đã Hủy</option>
           </select>
         </div>
-
         <!-- Lọc theo khoảng thời gian -->
         <!-- <div class="mb-2">
           <label class="block text-gray-700">Từ ngày:</label>
@@ -270,7 +269,36 @@ export default {
       </div>
     </div>
 
-        <GlassTable :headers="headers" :data="filteredHoaDon" />
+
+    <div class="overflow-auto rounded-lg shadow-md">
+      <!-- <table class="table-auto w-full  border-collapse"> 
+      <thead >
+        <tr>
+          <th>STT</th>
+          <th>Tên Khách hàng</th>
+          <th>Số điện thoại</th>
+          <th>Địa chỉ</th>
+          <th>Tổng tiền</th>
+          <th>Ngày đặt</th>
+          <th>Trạng thái</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(hoaDon,index) in filteredHoaDon" :key="hoaDon.id">
+          <td>{{ index +1 }}</td>
+          <td>{{ hoaDon.tenKhachHang }}</td>
+          <td>{{ hoaDon.soDienThoai }}</td>
+          <td>{{ hoaDon.diaChi }}</td>
+          <td>{{ hoaDon.tongTien }}</td>
+          <td>{{ hoaDon.ngayDat }}</td>
+          <td>{{ hoaDon.trangThai }}</td>
+          
+        </tr>
+      </tbody>
+    </table> -->
+     <GlassTable :headers="headers" :data="filteredHoaDon" />
+    </div>
+   
       </div>
     </div>
   </div>
