@@ -1,7 +1,5 @@
 <template>
   <div class="p-6 w-full shadow-xl border border-gray-200" :class="round">
- 
-
     <div class="overflow-auto rounded-lg shadow-md">
       <table class="w-full  border-collapse">
         <thead>

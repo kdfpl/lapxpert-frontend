@@ -242,7 +242,11 @@ export default {
       </div>
       
       <div class="bg-white  p-2 basis-2/3 mr-3">
-        <h1 class="mb-6 mt-2 ml-2">Đơn hàng gần đây</h1>
+        <div class="flex flex-row">
+          <h1 class="mb-3 mt-2 ml-2">Đơn hàng gần đây</h1>
+        </div>
+        <a href="/order" class="ml-2 text-[#696969]">See more...</a>
+
         <div class="p-3 flex flex-row bg-gray-100">
       <div class="bg-white p-4 rounded shadow-lg mb-4 w-full">
         <h2 class="text-lg font-semibold mb-2">Bộ lọc</h2>
@@ -297,6 +301,7 @@ export default {
       </tbody>
     </table> -->
      <GlassTable :headers="headers" :data="filteredHoaDon" />
+     
     </div>
    
       </div>
